@@ -1,5 +1,14 @@
 # Soorin Inventory — Warehouse & Project Management System
 
+<p>
+  <img alt="Laravel 12" src="https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white">
+  <img alt="Filament 4" src="https://img.shields.io/badge/Filament-4-FDAE4B">
+  <img alt="PHP 8.3+" src="https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white">
+  <img alt="Self-hosted" src="https://img.shields.io/badge/self--hosted-yes-2ea44f">
+  <img alt="Languages" src="https://img.shields.io/badge/i18n-8%20languages%20(RTL%2FLTR)-14b8a6">
+  <a href="https://github.com/soorintec/Soorin_Inventory/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/soorintec/Soorin_Inventory?style=social"></a>
+</p>
+
 **A modern, self-hosted inventory and warehouse management system** for small and
 mid-size businesses. Multi-warehouse stock, purchasing & currency imports, FIFO
 landed cost, Bill of Materials (BOM), projects, and deployed-system tracking — in
