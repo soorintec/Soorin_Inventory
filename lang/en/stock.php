@@ -1,0 +1,63 @@
+<?php
+
+return [
+    'label'     => 'Stock transaction',
+    'plural'    => 'Stock transactions',
+    'nav_group' => 'Warehouse',
+
+    'item_version' => 'Item version',
+    'warehouse'    => 'Warehouse',
+    'direction'    => 'Direction',
+    'directions' => ['in' => 'In', 'out' => 'Out'],
+    'reason'       => 'Reason',
+    'reasons' => [
+        'purchase'   => 'Purchase',
+        'project'    => 'Project',
+        'ticket'     => 'Ticket',
+        'return'     => 'Return',
+        'transfer'   => 'Transfer',
+        'adjustment' => 'Adjustment',
+        'initial'    => 'Initial stock',
+        'scrap'      => 'Scrap',
+    ],
+    'quantity'   => 'Quantity',
+    'unit_cost'  => 'Unit cost',
+    'notes'      => 'Note',
+    'user'       => 'Recorded by',
+    'lot'        => 'Lot',
+
+    'record_in'  => 'Stock in',
+    'record_out' => 'Stock out',
+    'record_transfer' => 'Transfer between warehouses',
+    'from_warehouse' => 'Source warehouse',
+    'to_warehouse'   => 'Destination warehouse',
+
+    'item'            => 'Item',
+    'item_hint'       => 'Select the item first; its versions appear in the next field.',
+    'version_hint'    => 'If the item has only one version, it is selected automatically.',
+    'quantity_hint'   => 'Quantity in this item\'s unit.',
+    'no_version'      => 'This item has no versions yet — create one from "Edit item".',
+    'unit_cost_hint'  => 'Landed unit cost in Rial. Enter zero if unknown.',
+
+    'catalogue'          => 'Operations',
+    'new_item'           => 'New item',
+    'new_category'       => 'New category',
+    'manage_items'       => 'Edit items',
+    'edit_item'          => 'Edit item',
+    'first_version_hint' => 'Every item has at least one version; if it has no versioning, keep this "Main".',
+    'item_created'       => 'Item ":name" was created.',
+    'item_created_hint'  => 'Record its stock with "Stock in".',
+
+    'insufficient_stock' => 'Not enough stock.',
+    'empty' => 'No transactions recorded yet.',
+    'movements_intro' => 'Warehouse change log: every stock-in, stock-out and transfer recorded so far, with the recorder\'s name and date. This log is read-only and no row is ever deleted or edited — corrections are made only by recording a reversing document so the history stays intact. Recording stock in/out is done from the "Warehouse management" page.',
+
+    'balance_label'   => 'Stock balance',
+    'balance_plural'  => 'Warehouse balances',
+    // Menu label — this is the home of warehouse operations: in, out, transfer,
+    // creating items and categories, reports and stocktake.
+    'manage_nav'      => 'Warehouse management',
+    'manage_intro'    => 'Warehouse operations: stock in and out, transfers between warehouses, creating items and categories, reporting and stocktake.',
+    'available'       => 'Available stock',
+    'reserved'        => 'Reserved',
+];

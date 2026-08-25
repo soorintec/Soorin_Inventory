@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'label' => 'Inventario', 'plural' => 'Inventari', 'nav_group' => 'Magazzino',
+    'intro' => 'Consegna il foglio di conta (senza la colonna della giacenza di sistema) all\'addetto, così il numero di sistema non influenzi la conta. Poi inserisci i risultati; il sistema mostra le differenze. «Finalizza» chiude la conta e «Aggiorna giacenza» allinea la giacenza alla conta reale.',
+    'code' => 'Codice', 'warehouse' => 'Magazzino', 'status' => 'Stato',
+    'statuses' => ['open' => 'Aperto', 'counting' => 'Conta in corso', 'closed' => 'Finalizzato', 'cancelled' => 'Annullato'],
+    'started_by' => 'Avviato da', 'started_at' => 'Data inizio', 'closed_by' => 'Finalizzato da', 'closed_at' => 'Data fine',
+    'applied_at' => 'Giacenza aggiornata', 'applied_never' => 'Giacenza non aggiornata', 'notes' => 'Nota',
+    'start' => 'Avvia inventario', 'start_heading' => 'Avvia un nuovo inventario', 'start_hint' => 'Viene scattata un\'istantanea della giacenza attuale e generato un foglio di conta.',
+    'started' => 'Inventario :code avviato — :lines righe da contare.',
+    'sheet' => 'Foglio di conta', 'sheet_download' => 'Scarica foglio di conta', 'sheet_hint' => 'Questo foglio non ha volutamente la colonna della giacenza.', 'sheet_counted' => 'Conta',
+    'lines' => 'Righe di conta', 'item' => 'Articolo', 'version' => 'Versione', 'location' => 'Ubicazione',
+    'system_qty' => 'Giacenza di sistema', 'counted_qty' => 'Conta reale', 'difference' => 'Differenza', 'not_counted' => 'Non contato', 'surplus' => 'Eccedenza', 'shortage' => 'Mancanza',
+    'summary' => 'Riepilogo inventario', 'total_lines' => 'Righe totali', 'counted_lines' => 'Contate', 'discrepancy_lines' => 'Con differenza', 'total_surplus' => 'Eccedenza totale', 'total_shortage' => 'Mancanza totale',
+    'close' => 'Finalizza', 'close_heading' => 'Finalizza inventario',
+    'close_warning' => 'Dopo la finalizzazione la conta viene chiusa e non è più modificabile. La giacenza di sistema non cambia qui; applicala eventualmente più tardi con «Aggiorna giacenza».',
+    'close_confirm' => 'Capisco che la conta sarà chiusa e non più modificabile.', 'closed' => 'Inventario finalizzato.', 'close_uncounted' => 'Nota: :count righe non sono ancora state contate.',
+    'apply' => 'Aggiorna giacenza', 'apply_heading' => 'Aggiorna la giacenza con il risultato dell\'inventario',
+    'apply_warning' => 'Per ogni differenza viene registrato un documento di rettifica e la giacenza viene allineata alla conta reale (:count differenze). Irreversibile ed eseguito una sola volta.',
+    'apply_confirm' => 'Capisco che la giacenza di sistema sarà rettificata.', 'apply_button' => 'Sì, aggiorna la giacenza',
+    'applied' => 'Giacenza aggiornata: :adjusted righe rettificate.', 'already_applied' => 'La giacenza è già stata aggiornata con questo inventario.',
+    'cancel' => 'Annulla inventario', 'cancel_heading' => 'Annulla inventario', 'cancel_warning' => 'L\'inventario viene annullato e non può proseguire. La giacenza non cambia.', 'cancelled' => 'Inventario annullato.',
+    'adjustment_note' => 'Rettifica giacenza secondo inventario :code', 'mark_matching' => 'Reale = giacenza di sistema',
+    'report' => 'Report inventario', 'print' => 'Stampa', 'empty' => 'Nessun inventario.', 'empty_lines' => 'Questo inventario non ha righe.',
+];

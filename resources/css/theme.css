@@ -1,0 +1,281 @@
+/* ------------------------------------------------------------------
+   تم سامانه انبار و پروژه — سورین
+   دو حالت: ocean (آبی نفتی و فیروزه‌ای) و night (شب)
+   انتخاب هر کاربر در ستون users.theme ذخیره می‌شود و روی <html> می‌نشیند.
+------------------------------------------------------------------- */
+
+/* ---------- فونت وزیرمتن — محلی، بدون CDN ----------
+   سرور ممکن است به اینترنت دسترسی نداشته باشد، پس فونت داخل پروژه است. */
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('/fonts/vazirmatn/Vazirmatn-300.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('/fonts/vazirmatn/Vazirmatn-400.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('/fonts/vazirmatn/Vazirmatn-500.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('/fonts/vazirmatn/Vazirmatn-700.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root,
+[data-theme="ocean"] {
+    --nav:          #0f2d4d;
+    --nav-text:     #93b4c9;
+    --nav-on:       #ffffff;
+    --nav-active:   #14b8a6;
+
+    --bg:           #eef4f6;
+    --card:         #ffffff;
+    --border:       #dde8ec;
+    --text:         #0b2b3f;
+    --muted:        #5f7d8c;
+
+    --accent:       #14b8a6;
+    --accent-soft:  #ccfbf1;
+    --accent-text:  #0f766e;
+
+    --success:      #059669;
+    --warning:      #b45309;
+    --danger:       #dc2626;
+
+    --radius:       12px;
+    --shadow:       0 1px 3px rgba(11, 43, 63, .07);
+}
+
+/* حالت شب.
+   کلاس .dark را خود فیلامنت روی <html> می‌گذارد و تمام رنگ‌های پنل (نوار
+   کناری، کارت، جدول، دکمه) به آن وابسته‌اند. متغیرهای ما هم باید به همان
+   کلاس گوش بدهند، وگرنه فقط پس‌زمینه بدنه تیره می‌شود و بقیه پنل روشن
+   می‌ماند — همان اشکالی که گزارش شد.
+
+   [data-theme="night"] برای صفحه‌های بیرون از فیلامنت (مثل صفحه خطا) می‌ماند. */
+.dark,
+[data-theme="night"] {
+    --nav:          #0b1220;
+    --nav-text:     #7b8ca3;
+    --nav-on:       #ffffff;
+    --nav-active:   #34d399;
+
+    --bg:           #111a2b;
+    --card:         #182338;
+    --border:       #25314a;
+    --text:         #e6edf7;
+    --muted:        #8ea0b8;
+
+    --accent:       #34d399;
+    --accent-soft:  #12372c;
+    --accent-text:  #6ee7b7;
+
+    --success:      #34d399;
+    --warning:      #fbbf24;
+    --danger:       #f87171;
+
+    --shadow:       0 1px 3px rgba(0, 0, 0, .35);
+}
+
+html { font-family: Vazirmatn, system-ui, sans-serif; }
+body { background: var(--bg); color: var(--text); }
+
+/* ---------- لوگو ----------
+   ارتفاع پایه از brandLogoHeight در AdminPanelProvider می‌آید (۲.۵rem) و
+   فیلامنت آن را به‌صورت style درون‌خطی روی <img> می‌گذارد. اینجا فقط کارهایی
+   انجام می‌شود که آن تنظیم از پسشان برنمی‌آید. */
+
+/* نسبت تصویر حفظ شود؛ لوگوی سورین ۸۸۹×۶۰۷ است و کشیده‌شدنش زشت می‌شود. */
+.fi-logo {
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+/* نشان برند: لوگو + نام سامانه. ارتفاع از .fi-logo والد می‌آید. */
+.app-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    height: 100%;
+}
+.app-brand__logo {
+    height: 100%;
+    width: auto;
+}
+.app-brand__text {
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.25;
+    white-space: nowrap;
+    color: var(--text);
+}
+
+/* در صفحه ورود لوگو بزرگ است و نام سامانه کنارش سطر را خیلی پهن می‌کند؛
+   آنجا نام در فوتر دیده می‌شود، پس تکرارش لازم نیست. */
+.fi-simple-layout .app-brand__text {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    /* روی صفحه باریک نام کامل جا نمی‌شود و لوگو را له می‌کند. */
+    .app-brand__text {
+        display: none;
+    }
+}
+
+/* نوار بالا و سربرگ نوار کناری با هم بلندتر می‌شوند — اگر فقط یکی بزرگ شود،
+   خط افقی بین نوار کناری و محتوا از هم می‌افتد. ۴.۷۵rem یعنی ۱۴px فاصله
+   بالا و پایین لوگوی ۳rem. */
+.fi-topbar > nav,
+.fi-sidebar-header {
+    min-height: 4.75rem;
+}
+
+.fi-sidebar-header-logo-ctn {
+    display: flex;
+    align-items: center;
+}
+
+/* صفحه ورود جا دارد و لوگو آنجا نقش نشان اصلی را بازی می‌کند، پس بزرگ‌تر
+   می‌نشیند. !important لازم است چون فیلامنت ارتفاع را درون‌خطی می‌گذارد. */
+.fi-simple-layout .fi-logo {
+    height: 4.5rem !important;
+    margin-inline: auto;
+}
+
+@media (max-width: 640px) {
+    /* روی موبایل نوار بالا تنگ است؛ لوگو کمی جمع‌تر می‌شود ولی باز هم از
+       پیش‌فرض فیلامنت بزرگ‌تر می‌ماند. */
+    .fi-topbar .fi-logo {
+        height: 2rem !important;
+    }
+    .fi-simple-layout .fi-logo {
+        height: 3.5rem !important;
+    }
+}
+
+/* ---------- سرستون چسبان و ثابت‌ماندن نوار بالای جدول ----------
+   خواسته مالک پروژه: وقتی پایین می‌رود، عنوان ستون‌ها (کالا/ورژن/انبار/…)
+   و عنوان صفحه و دکمه‌ها و جستجو بالا ثابت بمانند، مثل لوگو.
+
+   راه‌حل: خودِ محتوای جدول ارتفاع محدود می‌گیرد و داخل خودش عمودی اسکرول
+   می‌شود. در نتیجه:
+     ۱. سرستون با position:sticky به بالای همین ناحیه می‌چسبد و می‌ماند.
+     ۲. چون صفحه دیگر پایین نمی‌رود (جدول داخل خودش اسکرول می‌شود)، عنوان
+        صفحه، دکمه‌های ورود/خروج/عملیات و جعبه جستجو که بالای جدول‌اند سرجای
+        خود می‌مانند.
+   CSS ساده روی thead کار نمی‌کرد چون کانتینر جدول overflow دارد و sticky را
+   نسبت به خودش می‌سنجد، نه صفحه.
+
+   فقط روی دسکتاپ (≥۷۶۸px): روی موبایل ارتفاع محدود و اسکرول داخلی باعث
+   می‌شد جدول‌ها (به‌خصوص انبارگردانی و صفحه‌بندی) ناقص یا سخت‌استفاده لود
+   شوند. روی گوشی جدول مثل حالت عادی، تمام‌قد و با اسکرول خود صفحه است. */
+@media (min-width: 768px) {
+    .fi-ta-content-ctn {
+        max-height: calc(100vh - 15rem);
+        overflow-y: auto;
+    }
+
+    .fi-ta-content-ctn .fi-ta-table thead {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+    }
+
+    /* سرستون پس‌زمینه مات می‌خواهد تا سطرهای زیرش از پشتش دیده نشوند. */
+    .fi-ta-content-ctn .fi-ta-table thead .fi-ta-header-cell {
+        background: var(--card);
+    }
+}
+
+/* ---------- فوتر ---------- */
+.app-footer {
+    border-top: 1px solid var(--border);
+    margin-top: 28px;
+    padding: 16px 0 22px;
+}
+.app-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    margin-inline: auto;
+    padding-inline: 22px;
+}
+.app-footer__copy {
+    font-size: 12px;
+    color: var(--muted);
+}
+.app-footer__meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    color: var(--muted);
+}
+.app-footer__meta a {
+    color: var(--accent-text);
+    text-decoration: none;
+    font-weight: 600;
+}
+.app-footer__meta a:hover { text-decoration: underline; }
+
+@media (max-width: 640px) {
+    .app-footer__inner { flex-direction: column; align-items: flex-start; }
+}
+
+/* ---------- سوییچ زبان (دراپ‌داون) ---------- */
+.fi-locale-switcher { display: inline-flex; align-items: center; }
+.fi-locale-select {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.2;
+    padding: 6px 30px 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    /* فلش دراپ‌داون به‌صورت SVG درون‌خطی */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235f7d8c' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 9px center;
+}
+/* در چیدمان راست‌به‌چپ، فلش و فاصله‌ها آینه شوند */
+[dir="rtl"] .fi-locale-select { padding: 6px 12px 6px 30px; background-position: left 9px center; }
+.fi-locale-select:hover { border-color: var(--accent); }
+.fi-locale-select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+/* روی صفحهٔ ورود، سوییچ وسط‌چین و با فاصله از فرم بنشیند */
+.fi-simple-main .fi-locale-switcher { margin: 1rem auto 0; display: flex; justify-content: center; }
+
+/* ---------- دسترس‌پذیری ---------- */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+    }
+}

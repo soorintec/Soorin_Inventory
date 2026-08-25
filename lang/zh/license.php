@@ -1,0 +1,30 @@
+<?php
+
+return [
+    'nav_group' => '管理与报表', 'label' => '许可证', 'title' => '产品许可证',
+    'intro' => '本软件按许可证提供。请输入许可证密钥以完整激活。',
+    'status_title' => '许可证状态', 'status_licensed' => '已激活', 'status_unlicensed' => '未授权',
+    'licensed_to' => '签发给', 'hwid' => '硬件 ID', 'transferable' => '可转移', 'expires' => '到期', 'perpetual' => '永久',
+    'this_hwid' => '本服务器的硬件 ID', 'copy_hint' => '请复制此 ID 并发送给卖家。',
+    'grace_title' => '试用期', 'grace_left' => '试用期还剩 :days 天。之后需输入许可证才能继续。',
+    'locked_title' => '试用期已结束', 'locked_body' => '请输入有效许可证密钥以继续使用系统。在此之前，创建和编辑被锁定。',
+    'clock_title' => '检测到系统时钟被篡改', 'clock_body' => '服务器日期相比上次运行被向后调整。请将服务器时钟设为正确日期，或输入有效许可证。',
+    'enter_title' => '输入许可证密钥', 'key_label' => '许可证密钥', 'key_hint' => '将购买后从卖家处收到的密钥粘贴到此处。',
+    'activate' => '激活', 'activated' => '许可证激活成功。', 'invalid' => '许可证密钥无效。',
+    'reasons' => [
+        'no_key' => '未输入密钥。', 'no_public_key' => '此版本未配置用于验证许可证（未设置公钥）。',
+        'malformed' => '密钥格式无效。', 'bad_signature' => '密钥签名无效（伪造或被篡改）。',
+        'expired' => '此密钥已过期。', 'hwid_mismatch' => '此密钥是为另一台服务器（硬件）签发的。',
+        'clock_tampered' => '服务器时钟被向后调整。',
+    ],
+    'purchase_title' => '购买许可证',
+    'purchase_intro' => '要获取密钥，请将金额发送到下方 USDT 钱包，然后将交易凭证发给卖家以签发你的许可证密钥。',
+    'price' => '价格', 'usdt_address' => 'USDT 钱包地址', 'usdt_network' => '网络', 'contact' => '联系卖家',
+    'no_payment_info' => '卖家尚未设置付款信息。',
+    'steps_title' => '购买步骤', 'step_pay' => '将金额发送到上方钱包地址（在指定网络上）。',
+    'step_send' => '将交易哈希/凭证和本服务器的硬件 ID（如上所示）发给卖家。', 'step_receive' => '收到许可证密钥并在本页面输入。',
+    'about_title' => '关于与支持',
+    'about_body' => '本系统由一位独立开发者倾注大量心血打造，旨在让仓库管理简单、快速、省心。希望对你有用。',
+    'pricing_note' => '前六个月完全免费且无限制。之后仅需一次性支付 5 USDT 即可永久激活——一次付费，永久拥有。',
+    'donate_note' => '此价格特意定得很低。若本应用对你有价值并愿支持其持续开发，欢迎向同一地址发送任意金额。感谢你的善意。🙏',
+];

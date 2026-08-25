@@ -1,0 +1,81 @@
+<?php
+
+return [
+    'label'      => 'Stocktake',
+    'plural'     => 'Stocktakes',
+    'nav_group'  => 'Warehouse',
+    'intro'      => 'Give the counting sheet (without the system-stock column) to the person doing the count, so the system number does not bias their count. Then enter the counts; the system shows the discrepancies. "Finalize stocktake" closes the count, and if you want, "Update stock" brings the system stock in line with the actual count.',
+
+    'code'        => 'Code',
+    'warehouse'   => 'Warehouse',
+    'status'      => 'Status',
+    'statuses'    => [
+        'open'      => 'Open',
+        'counting'  => 'Counting',
+        'closed'    => 'Finalized',
+        'cancelled' => 'Cancelled',
+    ],
+    'started_by'  => 'Started by',
+    'started_at'  => 'Start date',
+    'closed_by'   => 'Finalized by',
+    'closed_at'   => 'End date',
+    'applied_at'  => 'Stock updated',
+    'applied_never' => 'Stock not updated',
+    'notes'       => 'Note',
+
+    'start'          => 'Start stocktake',
+    'start_heading'  => 'Start a new stocktake',
+    'start_hint'     => 'A snapshot of this warehouse\'s current stock is taken and a counting sheet is built.',
+    'started'        => 'Stocktake :code started — :lines rows to count.',
+
+    'sheet'          => 'Counting sheet',
+    'sheet_download' => 'Download counting sheet',
+    'sheet_hint'     => 'This sheet deliberately has no stock column.',
+    'sheet_counted'  => 'Count',
+
+    'lines'          => 'Count rows',
+    'item'           => 'Item',
+    'version'        => 'Version',
+    'location'       => 'Location',
+    'system_qty'     => 'System stock',
+    'counted_qty'    => 'Actual count',
+    'difference'     => 'Difference',
+    'not_counted'    => 'Not counted',
+    'surplus'        => 'Surplus',
+    'shortage'       => 'Shortage',
+
+    'summary'            => 'Stocktake summary',
+    'total_lines'        => 'Total rows',
+    'counted_lines'      => 'Counted',
+    'discrepancy_lines'  => 'With discrepancy',
+    'total_surplus'      => 'Total surplus',
+    'total_shortage'     => 'Total shortage',
+
+    'close'          => 'Finalize stocktake',
+    'close_heading'  => 'Finalize stocktake',
+    'close_warning'  => 'Finalizing closes the count and it can no longer be edited. The system stock is not changed here; apply it later with "Update stock" if you want.',
+    'close_confirm'  => 'I understand the count will be closed and can no longer be edited.',
+    'closed'         => 'Stocktake finalized.',
+    'close_uncounted' => 'Note: :count rows have not been counted yet.',
+
+    'apply'           => 'Update stock',
+    'apply_heading'   => 'Update warehouse stock with the stocktake result',
+    'apply_warning'   => 'A stock-adjustment document is recorded for each discrepancy and the system stock is brought in line with the actual count (:count discrepancies). This is irreversible and done only once.',
+    'apply_confirm'   => 'I understand the system stock will be adjusted.',
+    'apply_button'    => 'Yes, update the stock',
+    'applied'         => 'Warehouse stock updated: :adjusted rows adjusted.',
+    'already_applied' => 'The warehouse stock has already been updated with this stocktake.',
+
+    'cancel'          => 'Cancel stocktake',
+    'cancel_heading'  => 'Cancel stocktake',
+    'cancel_warning'  => 'The stocktake is cancelled and can no longer be continued. The system stock is not changed.',
+    'cancelled'       => 'Stocktake cancelled.',
+
+    'adjustment_note' => 'Stock adjustment per stocktake :code',
+
+    'mark_matching' => 'Count = system stock',
+    'report'        => 'Stocktake report',
+    'print'         => 'Print',
+    'empty'         => 'No stocktakes recorded yet.',
+    'empty_lines'   => 'This stocktake has no rows.',
+];

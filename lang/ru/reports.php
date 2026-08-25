@@ -1,0 +1,21 @@
+<?php
+
+return [
+    'label' => 'Отчёты', 'nav_group' => 'Управление и отчёты',
+    'from_date' => 'С даты', 'to_date' => 'По дату',
+    'by_user' => 'Движение склада по пользователям', 'col_user' => 'Пользователь',
+    'col_in_count' => 'Документов прихода', 'col_out_count' => 'Документов расхода', 'col_in_qty' => 'Всего приход', 'col_out_qty' => 'Всего расход',
+    'system_costs' => 'Себестоимость внедрённых систем', 'col_code' => 'Код', 'col_system' => 'Система', 'col_customer' => 'Клиент', 'col_cost' => 'Себестоимость (риал)',
+    'stock_levels' => 'Текущий остаток склада', 'col_item' => 'Товар', 'col_version' => 'Версия', 'col_qty' => 'Остаток', 'col_value' => 'Стоимость',
+    'stock_value_total' => 'Общая стоимость запасов (:currency)',
+    'purchases' => 'Сводка импорта за период', 'purchase_count' => 'Полученных документов', 'purchase_goods' => 'Стоимость товара', 'purchase_total' => 'Полная себестоимость',
+    'export_excel' => 'Экспорт в Excel', 'export_pdf' => 'Экспорт в PDF', 'print' => 'Предпросмотр печати', 'print_save' => 'Печать / Сохранить PDF',
+    'range_this_month' => 'Этот месяц', 'range_this_year' => 'Этот год', 'range_custom' => 'Свой период',
+    'empty' => 'Нет данных за этот период.',
+    'pdf_title' => 'Отчёт по складу и проектам', 'period' => 'Период: с :from по :to',
+    'stock_list_title' => 'Печать остатков склада', 'stock_flow_title' => 'Отчёт прихода и расхода', 'printed_at' => 'Дата печати',
+    'row_no' => '№', 'all_warehouses' => 'Все склады', 'both_directions' => 'Приход и расход', 'include_zero' => 'Включать товары с нулевым остатком',
+    'jalali_hint' => 'Дата — пусто означает с начала периода по сегодня.', 'date_from_ph' => '2026-08-01', 'date_to_ph' => '2026-08-31',
+    'warehouse' => 'Склад', 'total_items' => 'Кол-во товаров', 'total_versions' => 'Кол-во версий', 'total_quantity' => 'Всего на складе',
+    'net_change' => 'Чистое изменение', 'rows' => 'Кол-во строк',
+];

@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'label' => '盘点', 'plural' => '盘点', 'nav_group' => '仓库',
+    'intro' => '将盘点表（不含系统库存列）交给盘点人，以免系统数字影响其清点。然后录入结果；系统会显示差异。“完成盘点”关闭清点，“更新库存”将库存调整为实际数。',
+    'code' => '编号', 'warehouse' => '仓库', 'status' => '状态',
+    'statuses' => ['open' => '进行中', 'counting' => '清点中', 'closed' => '已完成', 'cancelled' => '已取消'],
+    'started_by' => '开始人', 'started_at' => '开始日期', 'closed_by' => '完成人', 'closed_at' => '完成日期',
+    'applied_at' => '库存已更新', 'applied_never' => '库存未更新', 'notes' => '备注',
+    'start' => '开始盘点', 'start_heading' => '开始新盘点', 'start_hint' => '将对该仓库当前库存拍照并生成盘点表。',
+    'started' => '盘点 :code 已开始——待清点 :lines 行。',
+    'sheet' => '盘点表', 'sheet_download' => '下载盘点表', 'sheet_hint' => '此表故意不含库存列。', 'sheet_counted' => '清点',
+    'lines' => '清点行', 'item' => '商品', 'version' => '版本', 'location' => '存放位置',
+    'system_qty' => '系统库存', 'counted_qty' => '实际清点', 'difference' => '差异', 'not_counted' => '未清点', 'surplus' => '盘盈', 'shortage' => '盘亏',
+    'summary' => '盘点汇总', 'total_lines' => '总行数', 'counted_lines' => '已清点', 'discrepancy_lines' => '有差异', 'total_surplus' => '盘盈合计', 'total_shortage' => '盘亏合计',
+    'close' => '完成盘点', 'close_heading' => '完成盘点',
+    'close_warning' => '完成后清点将关闭且不可编辑。此处不更改系统库存；如需可稍后用“更新库存”应用。',
+    'close_confirm' => '我明白清点将关闭且不可编辑。', 'closed' => '盘点已完成。', 'close_uncounted' => '注意：:count 行尚未清点。',
+    'apply' => '更新库存', 'apply_heading' => '用盘点结果更新仓库库存',
+    'apply_warning' => '将为每处差异登记一张调整单，并把库存调整为实际数（差异 :count 处）。此操作不可逆且只执行一次。',
+    'apply_confirm' => '我明白系统库存将被调整。', 'apply_button' => '是的，更新库存',
+    'applied' => '仓库库存已更新：调整 :adjusted 行。', 'already_applied' => '此盘点已更新过仓库库存。',
+    'cancel' => '取消盘点', 'cancel_heading' => '取消盘点', 'cancel_warning' => '盘点将被取消且无法继续。系统库存不变。', 'cancelled' => '盘点已取消。',
+    'adjustment_note' => '按盘点 :code 调整库存', 'mark_matching' => '实际 = 系统库存',
+    'report' => '盘点报表', 'print' => '打印', 'empty' => '尚无盘点。', 'empty_lines' => '此盘点无行。',
+];

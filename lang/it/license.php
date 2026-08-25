@@ -1,0 +1,30 @@
+<?php
+
+return [
+    'nav_group' => 'Gestione e report', 'label' => 'Licenza', 'title' => 'Licenza del prodotto',
+    'intro' => 'Questo software è fornito su licenza. Inserisci la tua chiave di licenza per l\'attivazione completa.',
+    'status_title' => 'Stato della licenza', 'status_licensed' => 'Attiva', 'status_unlicensed' => 'Senza licenza',
+    'licensed_to' => 'Rilasciata a', 'hwid' => 'ID hardware', 'transferable' => 'Trasferibile', 'expires' => 'Scade il', 'perpetual' => 'Perpetua',
+    'this_hwid' => 'ID hardware di questo server', 'copy_hint' => 'Copia questo ID e invialo al venditore.',
+    'grace_title' => 'Periodo di prova', 'grace_left' => 'Restano :days giorni di prova. Dopo, per continuare occorre inserire una licenza.',
+    'locked_title' => 'Il periodo di prova è terminato', 'locked_body' => 'Inserisci una chiave di licenza valida per continuare a usare il sistema. Creazione e modifica sono bloccate fino ad allora.',
+    'clock_title' => 'Rilevata manomissione dell\'orologio di sistema', 'clock_body' => 'La data del server è stata riportata indietro rispetto all\'ultimo avvio. Imposta l\'orologio del server alla data corretta o inserisci una licenza valida.',
+    'enter_title' => 'Inserisci la chiave di licenza', 'key_label' => 'Chiave di licenza', 'key_hint' => 'Incolla qui la chiave ricevuta dal venditore dopo l\'acquisto.',
+    'activate' => 'Attiva', 'activated' => 'Licenza attivata con successo.', 'invalid' => 'La chiave di licenza non è valida.',
+    'reasons' => [
+        'no_key' => 'Nessuna chiave inserita.', 'no_public_key' => 'Questa build non è configurata per verificare le licenze (chiave pubblica non impostata).',
+        'malformed' => 'Formato della chiave non valido.', 'bad_signature' => 'Firma della chiave non valida (falsificata o manomessa).',
+        'expired' => 'Questa chiave è scaduta.', 'hwid_mismatch' => 'Questa chiave è stata rilasciata per un altro server (hardware).',
+        'clock_tampered' => 'L\'orologio del server è stato riportato indietro.',
+    ],
+    'purchase_title' => 'Acquista una licenza',
+    'purchase_intro' => 'Per ottenere una chiave, invia l\'importo al wallet USDT qui sotto, poi invia al venditore la ricevuta della transazione per l\'emissione della tua chiave di licenza.',
+    'price' => 'Prezzo', 'usdt_address' => 'Indirizzo wallet USDT', 'usdt_network' => 'Rete', 'contact' => 'Contatta il venditore',
+    'no_payment_info' => 'Il venditore non ha ancora impostato le informazioni di pagamento.',
+    'steps_title' => 'Passi per l\'acquisto', 'step_pay' => 'Invia l\'importo all\'indirizzo del wallet qui sopra (sulla rete indicata).',
+    'step_send' => 'Invia l\'hash/ricevuta della transazione e l\'ID hardware di questo server (mostrato sopra) al venditore.', 'step_receive' => 'Ricevi la chiave di licenza e inseriscila in questa pagina.',
+    'about_title' => 'Informazioni e supporto',
+    'about_body' => 'Questo sistema è stato realizzato con grande impegno da uno sviluppatore indipendente per rendere la gestione del magazzino semplice, veloce e senza problemi. Ci auguriamo ti sia utile.',
+    'pricing_note' => 'I primi sei mesi sono completamente gratuiti e senza limiti. Dopodiché, un pagamento una tantum di soli 5 USDT lo attiva per sempre — paghi una volta, lo tieni per sempre.',
+    'donate_note' => 'Questo prezzo è volutamente contenuto. Se l\'app ti è utile e vuoi sostenerne lo sviluppo, invia l\'importo che preferisci allo stesso indirizzo. Grazie per la tua generosità. 🙏',
+];

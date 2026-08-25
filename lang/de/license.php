@@ -1,0 +1,30 @@
+<?php
+
+return [
+    'nav_group' => 'Verwaltung & Berichte', 'label' => 'Lizenz', 'title' => 'Produktlizenz',
+    'intro' => 'Diese Software wird unter Lizenz bereitgestellt. Geben Sie Ihren Lizenzschlüssel zur vollständigen Aktivierung ein.',
+    'status_title' => 'Lizenzstatus', 'status_licensed' => 'Aktiv', 'status_unlicensed' => 'Ohne Lizenz',
+    'licensed_to' => 'Ausgestellt für', 'hwid' => 'Hardware-ID', 'transferable' => 'Übertragbar', 'expires' => 'Läuft ab', 'perpetual' => 'Unbefristet',
+    'this_hwid' => 'Hardware-ID dieses Servers', 'copy_hint' => 'Kopieren Sie diese ID und senden Sie sie an den Verkäufer.',
+    'grace_title' => 'Testzeitraum', 'grace_left' => 'Noch :days Tage im Testzeitraum. Danach muss eine Lizenz eingegeben werden, um fortzufahren.',
+    'locked_title' => 'Der Testzeitraum ist abgelaufen', 'locked_body' => 'Geben Sie einen gültigen Lizenzschlüssel ein, um das System weiter zu nutzen. Erstellen und Bearbeiten sind bis dahin gesperrt.',
+    'clock_title' => 'Manipulation der Systemuhr erkannt', 'clock_body' => 'Das Serverdatum wurde gegenüber dem letzten Start zurückgestellt. Stellen Sie die Serveruhr auf das richtige Datum oder geben Sie eine gültige Lizenz ein.',
+    'enter_title' => 'Lizenzschlüssel eingeben', 'key_label' => 'Lizenzschlüssel', 'key_hint' => 'Fügen Sie hier den nach dem Kauf vom Verkäufer erhaltenen Schlüssel ein.',
+    'activate' => 'Aktivieren', 'activated' => 'Lizenz erfolgreich aktiviert.', 'invalid' => 'Der Lizenzschlüssel ist ungültig.',
+    'reasons' => [
+        'no_key' => 'Kein Schlüssel eingegeben.', 'no_public_key' => 'Dieser Build ist nicht zur Lizenzprüfung konfiguriert (kein öffentlicher Schlüssel gesetzt).',
+        'malformed' => 'Ungültiges Schlüsselformat.', 'bad_signature' => 'Ungültige Schlüsselsignatur (gefälscht oder manipuliert).',
+        'expired' => 'Dieser Schlüssel ist abgelaufen.', 'hwid_mismatch' => 'Dieser Schlüssel wurde für einen anderen Server (Hardware) ausgestellt.',
+        'clock_tampered' => 'Die Serveruhr wurde zurückgestellt.',
+    ],
+    'purchase_title' => 'Lizenz kaufen',
+    'purchase_intro' => 'Um einen Schlüssel zu erhalten, senden Sie den Betrag an die untenstehende USDT-Wallet und senden Sie dann dem Verkäufer den Transaktionsbeleg, damit Ihr Lizenzschlüssel ausgestellt wird.',
+    'price' => 'Preis', 'usdt_address' => 'USDT-Wallet-Adresse', 'usdt_network' => 'Netzwerk', 'contact' => 'Verkäufer kontaktieren',
+    'no_payment_info' => 'Der Verkäufer hat noch keine Zahlungsdaten hinterlegt.',
+    'steps_title' => 'Kaufschritte', 'step_pay' => 'Senden Sie den Betrag an die obige Wallet-Adresse (im angegebenen Netzwerk).',
+    'step_send' => 'Senden Sie den Transaktions-Hash/-Beleg und die Hardware-ID dieses Servers (oben angezeigt) an den Verkäufer.', 'step_receive' => 'Erhalten Sie Ihren Lizenzschlüssel und geben Sie ihn auf dieser Seite ein.',
+    'about_title' => 'Über & Unterstützung',
+    'about_body' => 'Dieses System wurde mit viel Mühe von einem unabhängigen Entwickler erstellt, um die Lagerverwaltung einfach, schnell und unkompliziert zu machen. Wir hoffen, es ist nützlich für Sie.',
+    'pricing_note' => 'Die ersten sechs Monate sind völlig kostenlos und ohne Einschränkungen. Danach aktiviert eine einmalige Zahlung von nur 5 USDT es dauerhaft – einmal zahlen, für immer behalten.',
+    'donate_note' => 'Dieser Preis ist bewusst niedrig. Wenn die App für Sie wertvoll ist und Sie die weitere Entwicklung unterstützen möchten, senden Sie einen beliebigen Betrag an dieselbe Adresse. Danke für Ihre Freundlichkeit. 🙏',
+];

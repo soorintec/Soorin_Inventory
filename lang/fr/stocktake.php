@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'label' => 'Inventaire', 'plural' => 'Inventaires', 'nav_group' => 'Entrepôt',
+    'intro' => 'Remettez la feuille de comptage (sans la colonne du stock système) à la personne chargée du comptage, afin que le chiffre système ne l\'influence pas. Saisissez ensuite les résultats ; le système affiche les écarts. « Finaliser » clôt le comptage, et « Mettre à jour le stock » aligne le stock sur le comptage réel.',
+    'code' => 'Code', 'warehouse' => 'Entrepôt', 'status' => 'Statut',
+    'statuses' => ['open' => 'Ouvert', 'counting' => 'Comptage', 'closed' => 'Finalisé', 'cancelled' => 'Annulé'],
+    'started_by' => 'Démarré par', 'started_at' => 'Date de début', 'closed_by' => 'Finalisé par', 'closed_at' => 'Date de fin',
+    'applied_at' => 'Stock mis à jour', 'applied_never' => 'Stock non mis à jour', 'notes' => 'Note',
+    'start' => 'Démarrer l\'inventaire', 'start_heading' => 'Démarrer un nouvel inventaire', 'start_hint' => 'Un instantané du stock actuel est pris et une feuille de comptage est générée.',
+    'started' => 'Inventaire :code démarré — :lines lignes à compter.',
+    'sheet' => 'Feuille de comptage', 'sheet_download' => 'Télécharger la feuille de comptage', 'sheet_hint' => 'Cette feuille n\'a volontairement pas de colonne de stock.', 'sheet_counted' => 'Comptage',
+    'lines' => 'Lignes de comptage', 'item' => 'Article', 'version' => 'Version', 'location' => 'Emplacement',
+    'system_qty' => 'Stock système', 'counted_qty' => 'Comptage réel', 'difference' => 'Écart', 'not_counted' => 'Non compté', 'surplus' => 'Excédent', 'shortage' => 'Manquant',
+    'summary' => 'Résumé de l\'inventaire', 'total_lines' => 'Total des lignes', 'counted_lines' => 'Comptées', 'discrepancy_lines' => 'Avec écart', 'total_surplus' => 'Excédent total', 'total_shortage' => 'Manquant total',
+    'close' => 'Finaliser', 'close_heading' => 'Finaliser l\'inventaire',
+    'close_warning' => 'Après finalisation, le comptage est clos et non modifiable. Le stock système ne change pas ici ; appliquez-le plus tard via « Mettre à jour le stock » si besoin.',
+    'close_confirm' => 'Je comprends que le comptage sera clos et non modifiable.', 'closed' => 'Inventaire finalisé.', 'close_uncounted' => 'Note : :count lignes ne sont pas encore comptées.',
+    'apply' => 'Mettre à jour le stock', 'apply_heading' => 'Mettre à jour le stock avec le résultat de l\'inventaire',
+    'apply_warning' => 'Pour chaque écart, un document d\'ajustement est enregistré et le stock est aligné sur le comptage réel (:count écarts). Irréversible et exécuté une seule fois.',
+    'apply_confirm' => 'Je comprends que le stock système sera ajusté.', 'apply_button' => 'Oui, mettre à jour le stock',
+    'applied' => 'Stock mis à jour : :adjusted lignes ajustées.', 'already_applied' => 'Le stock a déjà été mis à jour avec cet inventaire.',
+    'cancel' => 'Annuler l\'inventaire', 'cancel_heading' => 'Annuler l\'inventaire', 'cancel_warning' => 'L\'inventaire est annulé et ne peut être poursuivi. Le stock ne change pas.', 'cancelled' => 'Inventaire annulé.',
+    'adjustment_note' => 'Ajustement de stock selon l\'inventaire :code', 'mark_matching' => 'Réel = stock système',
+    'report' => 'Rapport d\'inventaire', 'print' => 'Imprimer', 'empty' => 'Aucun inventaire.', 'empty_lines' => 'Cet inventaire n\'a pas de lignes.',
+];

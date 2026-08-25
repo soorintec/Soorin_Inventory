@@ -1,0 +1,30 @@
+<?php
+
+return [
+    'nav_group' => 'Gestion et rapports', 'label' => 'Licence', 'title' => 'Licence du produit',
+    'intro' => 'Ce logiciel est fourni sous licence. Saisissez votre clé de licence pour l\'activation complète.',
+    'status_title' => 'État de la licence', 'status_licensed' => 'Active', 'status_unlicensed' => 'Sans licence',
+    'licensed_to' => 'Délivrée à', 'hwid' => 'ID matériel', 'transferable' => 'Transférable', 'expires' => 'Expire le', 'perpetual' => 'Perpétuelle',
+    'this_hwid' => 'ID matériel de ce serveur', 'copy_hint' => 'Copiez cet ID et envoyez-le au vendeur.',
+    'grace_title' => 'Période d\'essai', 'grace_left' => 'Il reste :days jours d\'essai. Ensuite, il faut saisir une licence pour continuer.',
+    'locked_title' => 'La période d\'essai est terminée', 'locked_body' => 'Saisissez une clé de licence valide pour continuer à utiliser le système. La création et la modification sont bloquées jusque-là.',
+    'clock_title' => 'Manipulation de l\'horloge système détectée', 'clock_body' => 'La date du serveur a été reculée par rapport au dernier lancement. Réglez l\'horloge du serveur à la bonne date ou saisissez une licence valide.',
+    'enter_title' => 'Saisir la clé de licence', 'key_label' => 'Clé de licence', 'key_hint' => 'Collez ici la clé reçue du vendeur après l\'achat.',
+    'activate' => 'Activer', 'activated' => 'Licence activée avec succès.', 'invalid' => 'La clé de licence est invalide.',
+    'reasons' => [
+        'no_key' => 'Aucune clé saisie.', 'no_public_key' => 'Cette version n\'est pas configurée pour vérifier les licences (clé publique non définie).',
+        'malformed' => 'Format de clé invalide.', 'bad_signature' => 'Signature de clé invalide (falsifiée ou altérée).',
+        'expired' => 'Cette clé a expiré.', 'hwid_mismatch' => 'Cette clé a été délivrée pour un autre serveur (matériel).',
+        'clock_tampered' => 'L\'horloge du serveur a été reculée.',
+    ],
+    'purchase_title' => 'Acheter une licence',
+    'purchase_intro' => 'Pour obtenir une clé, envoyez le montant au portefeuille USDT ci-dessous, puis envoyez le reçu de la transaction au vendeur afin qu\'il délivre votre clé de licence.',
+    'price' => 'Prix', 'usdt_address' => 'Adresse du portefeuille USDT', 'usdt_network' => 'Réseau', 'contact' => 'Contacter le vendeur',
+    'no_payment_info' => 'Le vendeur n\'a pas encore renseigné les informations de paiement.',
+    'steps_title' => 'Étapes d\'achat', 'step_pay' => 'Envoyez le montant à l\'adresse du portefeuille ci-dessus (sur le réseau indiqué).',
+    'step_send' => 'Envoyez le hash/reçu de la transaction et l\'ID matériel de ce serveur (affiché ci-dessus) au vendeur.', 'step_receive' => 'Recevez votre clé de licence et saisissez-la sur cette page.',
+    'about_title' => 'À propos et soutien',
+    'about_body' => 'Ce système a été créé avec beaucoup d\'efforts par un développeur indépendant afin de rendre la gestion d\'entrepôt simple, rapide et sans souci. Nous espérons qu\'il vous sera utile.',
+    'pricing_note' => 'Les six premiers mois sont entièrement gratuits et sans limite. Ensuite, un paiement unique de seulement 5 USDT l\'active définitivement — payez une fois, gardez pour toujours.',
+    'donate_note' => 'Ce prix est volontairement modeste. Si l\'application vous est utile et que vous souhaitez soutenir son développement, envoyez le montant de votre choix à la même adresse. Merci de votre générosité. 🙏',
+];

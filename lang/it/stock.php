@@ -1,0 +1,19 @@
+<?php
+
+return [
+    'label' => 'Movimento di magazzino', 'plural' => 'Movimenti di magazzino', 'nav_group' => 'Magazzino',
+    'item_version' => 'Versione articolo', 'warehouse' => 'Magazzino', 'direction' => 'Direzione',
+    'directions' => ['in' => 'Carico', 'out' => 'Scarico'], 'reason' => 'Motivo',
+    'reasons' => ['purchase' => 'Acquisto', 'project' => 'Progetto', 'ticket' => 'Ticket', 'return' => 'Reso', 'transfer' => 'Trasferimento', 'adjustment' => 'Rettifica', 'initial' => 'Giacenza iniziale', 'scrap' => 'Rottamazione'],
+    'quantity' => 'Quantità', 'unit_cost' => 'Costo unitario', 'notes' => 'Nota', 'user' => 'Registrato da', 'lot' => 'Lotto',
+    'record_in' => 'Carico', 'record_out' => 'Scarico', 'record_transfer' => 'Trasferimento tra magazzini', 'from_warehouse' => 'Magazzino di origine', 'to_warehouse' => 'Magazzino di destinazione',
+    'item' => 'Articolo', 'item_hint' => 'Scegli prima l\'articolo; le sue versioni appariranno nel campo successivo.', 'version_hint' => 'Se l\'articolo ha una sola versione, viene selezionata automaticamente.',
+    'quantity_hint' => 'Quantità nell\'unità di questo articolo.', 'no_version' => 'Questo articolo non ha ancora versioni — creane una da «Modifica articolo».', 'unit_cost_hint' => 'Costo unitario finale in rial. Se sconosciuto, inserisci 0.',
+    'catalogue' => 'Operazioni', 'new_item' => 'Nuovo articolo', 'new_category' => 'Nuova categoria', 'manage_items' => 'Modifica articoli', 'edit_item' => 'Modifica articolo',
+    'first_version_hint' => 'Ogni articolo ha almeno una versione; senza versioni lascia «Principale».', 'item_created' => 'Articolo «:name» creato.', 'item_created_hint' => 'Registra la giacenza con «Carico».',
+    'insufficient_stock' => 'Giacenza insufficiente.', 'empty' => 'Nessun movimento.',
+    'movements_intro' => 'Registro delle modifiche di magazzino: ogni carico, scarico e trasferimento, con nome e data. Il registro è di sola lettura; nessuna riga viene eliminata o modificata — le correzioni si fanno solo con un documento di storno, per mantenere intatta la cronologia. Carico/scarico avvengono nella pagina «Gestione magazzino».',
+    'balance_label' => 'Giacenza', 'balance_plural' => 'Giacenze magazzini', 'manage_nav' => 'Gestione magazzino',
+    'manage_intro' => 'Operazioni di magazzino: carichi e scarichi, trasferimenti, creazione di articoli e categorie, report e inventario.',
+    'available' => 'Disponibile', 'reserved' => 'Riservato',
+];

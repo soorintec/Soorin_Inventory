@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'label' => 'Inventur', 'plural' => 'Inventuren', 'nav_group' => 'Lager',
+    'intro' => 'Geben Sie die Zählliste (ohne Systembestandsspalte) an die zählende Person, damit die Systemzahl die Zählung nicht beeinflusst. Erfassen Sie dann die Ergebnisse; das System zeigt Abweichungen. „Abschließen“ schließt die Zählung, „Bestand aktualisieren“ gleicht den Bestand an die Ist-Zählung an.',
+    'code' => 'Code', 'warehouse' => 'Lager', 'status' => 'Status',
+    'statuses' => ['open' => 'Offen', 'counting' => 'Zählung läuft', 'closed' => 'Abgeschlossen', 'cancelled' => 'Abgebrochen'],
+    'started_by' => 'Gestartet von', 'started_at' => 'Startdatum', 'closed_by' => 'Abgeschlossen von', 'closed_at' => 'Enddatum',
+    'applied_at' => 'Bestand aktualisiert', 'applied_never' => 'Bestand nicht aktualisiert', 'notes' => 'Notiz',
+    'start' => 'Inventur starten', 'start_heading' => 'Neue Inventur starten', 'start_hint' => 'Es wird eine Momentaufnahme des aktuellen Bestands erstellt und eine Zählliste generiert.',
+    'started' => 'Inventur :code gestartet – :lines Zeilen zu zählen.',
+    'sheet' => 'Zählliste', 'sheet_download' => 'Zählliste herunterladen', 'sheet_hint' => 'Diese Liste hat bewusst keine Bestandsspalte.', 'sheet_counted' => 'Zählung',
+    'lines' => 'Zählzeilen', 'item' => 'Artikel', 'version' => 'Version', 'location' => 'Lagerort',
+    'system_qty' => 'Systembestand', 'counted_qty' => 'Ist-Zählung', 'difference' => 'Differenz', 'not_counted' => 'Nicht gezählt', 'surplus' => 'Überschuss', 'shortage' => 'Fehlmenge',
+    'summary' => 'Inventurzusammenfassung', 'total_lines' => 'Gesamtzeilen', 'counted_lines' => 'Gezählt', 'discrepancy_lines' => 'Mit Abweichung', 'total_surplus' => 'Überschuss gesamt', 'total_shortage' => 'Fehlmenge gesamt',
+    'close' => 'Abschließen', 'close_heading' => 'Inventur abschließen',
+    'close_warning' => 'Nach dem Abschluss wird die Zählung geschlossen und ist nicht mehr bearbeitbar. Der Systembestand ändert sich hier nicht; wenden Sie ihn ggf. später über „Bestand aktualisieren“ an.',
+    'close_confirm' => 'Ich verstehe, dass die Zählung geschlossen und nicht mehr bearbeitbar ist.', 'closed' => 'Inventur abgeschlossen.', 'close_uncounted' => 'Hinweis: :count Zeilen sind noch nicht gezählt.',
+    'apply' => 'Bestand aktualisieren', 'apply_heading' => 'Lagerbestand mit dem Inventurergebnis aktualisieren',
+    'apply_warning' => 'Für jede Abweichung wird ein Korrekturbeleg erfasst und der Bestand an die Ist-Zählung angeglichen (:count Abweichungen). Unumkehrbar und nur einmal ausführbar.',
+    'apply_confirm' => 'Ich verstehe, dass der Systembestand korrigiert wird.', 'apply_button' => 'Ja, Bestand aktualisieren',
+    'applied' => 'Lagerbestand aktualisiert: :adjusted Zeilen korrigiert.', 'already_applied' => 'Der Lagerbestand wurde mit dieser Inventur bereits aktualisiert.',
+    'cancel' => 'Inventur abbrechen', 'cancel_heading' => 'Inventur abbrechen', 'cancel_warning' => 'Die Inventur wird abgebrochen und kann nicht fortgesetzt werden. Der Bestand ändert sich nicht.', 'cancelled' => 'Inventur abgebrochen.',
+    'adjustment_note' => 'Bestandskorrektur gemäß Inventur :code', 'mark_matching' => 'Ist = Systembestand',
+    'report' => 'Inventurbericht', 'print' => 'Drucken', 'empty' => 'Noch keine Inventuren.', 'empty_lines' => 'Diese Inventur hat keine Zeilen.',
+];

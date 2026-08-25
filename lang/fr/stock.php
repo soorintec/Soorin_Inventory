@@ -1,0 +1,19 @@
+<?php
+
+return [
+    'label' => 'Mouvement de stock', 'plural' => 'Mouvements de stock', 'nav_group' => 'Entrepôt',
+    'item_version' => 'Version de l\'article', 'warehouse' => 'Entrepôt', 'direction' => 'Sens',
+    'directions' => ['in' => 'Entrée', 'out' => 'Sortie'], 'reason' => 'Motif',
+    'reasons' => ['purchase' => 'Achat', 'project' => 'Projet', 'ticket' => 'Ticket', 'return' => 'Retour', 'transfer' => 'Transfert', 'adjustment' => 'Ajustement', 'initial' => 'Stock initial', 'scrap' => 'Rebut'],
+    'quantity' => 'Quantité', 'unit_cost' => 'Coût unitaire', 'notes' => 'Note', 'user' => 'Enregistré par', 'lot' => 'Lot',
+    'record_in' => 'Entrée', 'record_out' => 'Sortie', 'record_transfer' => 'Transfert entre entrepôts', 'from_warehouse' => 'Entrepôt source', 'to_warehouse' => 'Entrepôt destination',
+    'item' => 'Article', 'item_hint' => 'Choisissez d\'abord l\'article ; ses versions apparaîtront dans le champ suivant.', 'version_hint' => 'Si l\'article n\'a qu\'une version, elle est sélectionnée automatiquement.',
+    'quantity_hint' => 'Quantité dans l\'unité de cet article.', 'no_version' => 'Cet article n\'a pas encore de versions — créez-en une via « Modifier l\'article ».', 'unit_cost_hint' => 'Coût de revient unitaire en rials. Si inconnu, saisissez 0.',
+    'catalogue' => 'Opérations', 'new_item' => 'Nouvel article', 'new_category' => 'Nouvelle catégorie', 'manage_items' => 'Modifier les articles', 'edit_item' => 'Modifier l\'article',
+    'first_version_hint' => 'Chaque article a au moins une version ; sans versionnage, laissez « Principale ».', 'item_created' => 'Article « :name » créé.', 'item_created_hint' => 'Enregistrez son stock via « Entrée ».',
+    'insufficient_stock' => 'Stock insuffisant.', 'empty' => 'Aucun mouvement.',
+    'movements_intro' => 'Journal des modifications de l\'entrepôt : chaque entrée, sortie et transfert, avec le nom et la date. Ce journal est en lecture seule ; aucune ligne n\'est supprimée ni modifiée — les corrections se font uniquement par un document d\'annulation, afin que l\'historique reste intact. Les entrées/sorties se font sur la page « Gestion de l\'entrepôt ».',
+    'balance_label' => 'Stock', 'balance_plural' => 'Stocks des entrepôts', 'manage_nav' => 'Gestion de l\'entrepôt',
+    'manage_intro' => 'Opérations d\'entrepôt : entrées et sorties, transferts, création d\'articles et de catégories, rapports et inventaire.',
+    'available' => 'Disponible', 'reserved' => 'Réservé',
+];

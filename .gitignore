@@ -1,0 +1,38 @@
+/vendor
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+# کلید خصوصیِ امضای لایسنس — هرگز نباید توزیع یا کامیت شود (هرجا که باشد)
+/storage/license
+keygen-private.key
+**/keygen-private.key
+/keygen/keygen.exe
+/storage/backups/*
+!/storage/backups/.gitkeep
+# فایل پشتیبان کل داده شرکت است و هرگز نباید کامیت شود
+/storage/app/private/backups/*
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+/.idea
+/.vscode
+.DS_Store
+Thumbs.db
+
+# قفل نصب — مخصوص هر استقرار، نباید کامیت شود
+/storage/installed
+
+# ابزار محلی Claude Code — کامیت نشود
+/.claude/
