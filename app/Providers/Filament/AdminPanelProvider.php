@@ -68,7 +68,9 @@ class AdminPanelProvider extends PanelProvider
             )
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
-                fn () => '<link rel="stylesheet" href="' . route('theme.css') . '">',
+                // ?v=نسخه تا بعد از هر به‌روزرسانی، مرورگر CSSِ تازه را بگیرد و
+                // نسخهٔ کش‌شدهٔ قدیمی را نشان ندهد.
+                fn () => '<link rel="stylesheet" href="' . route('theme.css') . '?v=' . \App\Support\AppVersion::current() . '">',
             )
             ->renderHook(
                 PanelsRenderHook::FOOTER,

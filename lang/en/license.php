@@ -60,5 +60,5 @@ return [
     'about_title'  => 'About & Support',
     'about_body'   => 'This system was built with a lot of effort by an independent developer to make warehouse management simple, fast and hassle-free. We hope you find it useful.',
     'pricing_note' => 'The first six months are completely free with no limits. After that, a one-time payment of just 5 USDT activates it permanently — pay once, keep forever.',
-    'donate_note'  => 'This price is intentionally small. If the app is valuable to you and you would like to support its continued development, feel free to send any amount to the same address. Thank you for your kindness. 🙏',
+    'donate_note'  => 'This price is intentionally small. If the app is valuable to you and you would like to support its continued development, you can donate any amount to the same address. Thank you for your kindness. 🙏',
 ];
