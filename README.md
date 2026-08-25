@@ -17,12 +17,19 @@ one clean, fast panel.
 > 🎁 **6 months free, full features.** After that, a **one-time 5 USDT** activates it
 > forever. No subscription, no cloud lock-in — it runs on **your own server**.
 
-> 🤖 **Built with the help of AI.** This project is actively improved based on your
-> feedback — please [open an issue](https://github.com/soorintec/Soorin_Inventory/issues)
-> with ideas, bugs, or feature requests. **And if you find Soorin useful, please give it a ⭐ star** — it truly helps and lets others discover it.
+> **Built with care — and a little help from AI.** Soorin is developed hands-on, with
+> AI as a co-pilot along the way. It grows sharper with every piece of real-world
+> feedback, so if something feels off or you have an idea, I'd genuinely love to hear
+> it — just [open an issue](https://github.com/soorintec/Soorin_Inventory/issues).
+> And if Soorin makes your day a little easier, a ⭐ **star** means a lot and helps
+> more people find it.
 >
-> 🤖 **این پروژه با کمکِ هوش مصنوعی ساخته شده.** برای بهبودِ برنامه خوشحال می‌شوم
-> [فیدبک بدهید](https://github.com/soorintec/Soorin_Inventory/issues) (ایده، باگ یا درخواستِ قابلیت). و اگر راضی بودید، لطفاً به پروژه ⭐ **استار** بدهید — خیلی کمک می‌کند.
+> **با دقت ساخته شده — و کمی هم با کمکِ هوش مصنوعی.** سورین دستی و با وسواس توسعه داده
+> می‌شود و هوش مصنوعی در این مسیر نقشِ همراه را دارد. این برنامه با هر بازخوردِ واقعی
+> پخته‌تر می‌شود؛ پس اگر جایی ایرادی دیدی یا ایده‌ای داشتی، از شنیدنش واقعاً خوشحال
+> می‌شوم — کافی است یک [issue باز کنی](https://github.com/soorintec/Soorin_Inventory/issues).
+> و اگر سورین کارَت را کمی راحت‌تر کرد، یک ⭐ **ستاره** برایم ارزشِ زیادی دارد و کمک
+> می‌کند دیگران هم پیدایش کنند.
 
 ![Dashboard](docs/screenshots/dashboard-en.png)
 
