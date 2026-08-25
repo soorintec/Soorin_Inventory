@@ -110,7 +110,7 @@ Details: [docs/LICENSING.md](docs/LICENSING.md).
 
 - [Debian install](docs/DEBIAN-INSTALL.md) · [General install](docs/INSTALL.md)
 - [Licensing / selling](docs/LICENSING.md) · [Translations](docs/TRANSLATIONS.md)
-- [License / EULA](LICENSE.md) · [Changelog](CHANGELOG.md)
+- [License / EULA](LICENSE.md) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
 ## 🧪 Tests
 
