@@ -9,6 +9,8 @@
   <a href="https://github.com/soorintec/Soorin_Inventory/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/soorintec/Soorin_Inventory?style=social"></a>
 </p>
 
+![Soorin Inventory](docs/social-preview.png)
+
 **A modern, self-hosted inventory and warehouse management system** for small and
 mid-size businesses. Multi-warehouse stock, purchasing & currency imports, FIFO
 landed cost, Bill of Materials (BOM), projects, and deployed-system tracking — in
@@ -17,19 +19,17 @@ one clean, fast panel.
 > 🎁 **6 months free, full features.** After that, a **one-time 5 USDT** activates it
 > forever. No subscription, no cloud lock-in — it runs on **your own server**.
 
-> **Built with care — and a little help from AI.** Soorin is developed hands-on, with
-> AI as a co-pilot along the way. It grows sharper with every piece of real-world
-> feedback, so if something feels off or you have an idea, I'd genuinely love to hear
-> it — just [open an issue](https://github.com/soorintec/Soorin_Inventory/issues).
-> And if Soorin makes your day a little easier, a ⭐ **star** means a lot and helps
-> more people find it.
+> **Built with care — and a little help from AI.** Soorin keeps getting better with
+> real feedback from the people who use it. If you hit a bug or have an idea, I'd love
+> to hear it — just [open an issue](https://github.com/soorintec/Soorin_Inventory/issues).
+> And if Soorin makes your work easier, a ⭐ **star** means a lot and helps more people
+> find it.
 >
-> **با دقت ساخته شده — و کمی هم با کمکِ هوش مصنوعی.** سورین دستی و با وسواس توسعه داده
-> می‌شود و هوش مصنوعی در این مسیر نقشِ همراه را دارد. این برنامه با هر بازخوردِ واقعی
-> پخته‌تر می‌شود؛ پس اگر جایی ایرادی دیدی یا ایده‌ای داشتی، از شنیدنش واقعاً خوشحال
-> می‌شوم — کافی است یک [issue باز کنی](https://github.com/soorintec/Soorin_Inventory/issues).
-> و اگر سورین کارَت را کمی راحت‌تر کرد، یک ⭐ **ستاره** برایم ارزشِ زیادی دارد و کمک
-> می‌کند دیگران هم پیدایش کنند.
+> **با دقت ساخته شده — و کمی هم با کمکِ هوش مصنوعی.** سورین با بازخوردِ کسانی که از آن
+> استفاده می‌کنند مدام بهتر می‌شود. اگر به باگی برخوردی یا ایده‌ای داشتی، خوشحال می‌شوم
+> بشنوم — کافی است یک [issue باز کنی](https://github.com/soorintec/Soorin_Inventory/issues).
+> و اگر سورین کارَت را راحت‌تر کرد، یک ⭐ **ستاره** برایم ارزشِ زیادی دارد و کمک می‌کند
+> دیگران هم پیدایش کنند.
 
 ![Dashboard](docs/screenshots/dashboard-en.png)
 

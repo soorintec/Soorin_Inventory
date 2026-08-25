@@ -115,6 +115,9 @@
     <x-filament::section>
         <x-slot name="heading">{{ __('license.about_title') }}</x-slot>
 
+        <img src="{{ asset('images/soorin-banner.png') }}" alt="Soorin Inventory"
+             class="mx-auto mb-5 w-full max-w-xl rounded-xl shadow-sm">
+
         <div class="space-y-3 text-sm leading-relaxed">
             <p class="text-gray-600 dark:text-gray-300">{{ __('license.about_body') }}</p>
 
