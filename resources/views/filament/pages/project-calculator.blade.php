@@ -43,7 +43,7 @@
                 <x-slot name="heading">{{ __('calculator.result_title') }}</x-slot>
 
                 <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
+                    <table class="calc-parts w-full text-sm">
                         <thead>
                             <tr class="border-b border-gray-200 dark:border-gray-700">
                                 <th class="px-6 py-5 text-start font-medium">{{ __('calculator.col_row') }}</th>

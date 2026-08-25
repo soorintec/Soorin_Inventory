@@ -203,6 +203,19 @@ body { background: var(--bg); color: var(--text); }
     }
 }
 
+/* ---------- ماشین‌حساب پروژه: فاصلهٔ عمودیِ ردیف‌های جدولِ «قطعات موردنیاز» ----------
+   کلاس‌های py-* تیلویند در CSSِ کامپایل‌شدهٔ فیلامنت برای این بلید وجود نداشتند و
+   هیچ اثری نداشتند (تغییر py-4 به py-6 هم بی‌فایده بود). فاصله را اینجا مستقیم و
+   قطعی می‌دهیم؛ این فایل روی همهٔ صفحات پنل لود می‌شود. */
+.calc-parts th,
+.calc-parts td {
+    padding-block: 1.15rem !important;
+    padding-inline: 1.25rem !important;
+    vertical-align: middle;
+}
+/* کمی فاصلهٔ بیشتر بین خودِ ردیف‌ها برای خوانایی */
+.calc-parts tbody tr { line-height: 1.7; }
+
 /* ---------- فوتر ---------- */
 .app-footer {
     border-top: 1px solid var(--border);

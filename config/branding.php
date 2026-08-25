@@ -5,20 +5,21 @@
 | هویت برند — سورین
 |--------------------------------------------------------------------------
 | این مقادیر در فوتر، سربرگ فاکتور PDF، عنوان مرورگر و ایمیل‌ها استفاده
-| می‌شوند. مقادیر قابل تغییر توسط مدیر، از جدول settings خوانده می‌شوند و
-| این فایل فقط مقدار پیش‌فرض را تعیین می‌کند. (خریدار این‌ها را از صفحهٔ
-| «شخصی‌سازی» به نام کسب‌وکار خودش تغییر می‌دهد.)
+| می‌شوند. مقادیرِ قابل‌تغییرِ مدیر از جدول settings خوانده می‌شوند و این فایل
+| فقط «پیش‌فرضِ کارخانه» را تعیین می‌کند — خریدار برندش را از صفحهٔ «شخصی‌سازی»
+| تنظیم می‌کند و «بازگردانی به پیش‌فرض» دقیقاً به همین مقادیرِ سورین برمی‌گردد.
+| عمداً از .env خوانده نمی‌شوند تا «پیش‌فرض» همیشه هویتِ اصلیِ محصول بماند.
 */
 
 return [
     'company' => [
-        'name'         => env('COMPANY_NAME', 'سورین'),
-        'name_en'      => env('COMPANY_NAME_EN', 'Soorin'),
-        'website'      => env('COMPANY_WEBSITE', 'https://yoursite.com'),
-        'website_label'=> env('COMPANY_WEBSITE_LABEL', 'yoursite.com'),
-        'founded_year' => (int) env('COMPANY_FOUNDED_YEAR', 1400),
-        'phone'        => env('COMPANY_PHONE'),
-        'address'      => env('COMPANY_ADDRESS'),
+        'name'         => 'سورین',
+        'name_en'      => 'Soorin',
+        'website'      => 'https://yoursite.com',
+        'website_label'=> 'yoursite.com',
+        'founded_year' => 1400,
+        'phone'        => null,
+        'address'      => null,
     ],
 
     'app' => [
