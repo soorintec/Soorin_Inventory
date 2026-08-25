@@ -8,6 +8,13 @@ one clean, fast panel.
 > 🎁 **6 months free, full features.** After that, a **one-time 5 USDT** activates it
 > forever. No subscription, no cloud lock-in — it runs on **your own server**.
 
+> 🤖 **Built with the help of AI.** This project is actively improved based on your
+> feedback — please [open an issue](https://github.com/soorintec/Soorin_Inventory/issues)
+> with ideas, bugs, or feature requests. **And if you find Soorin useful, please give it a ⭐ star** — it truly helps and lets others discover it.
+>
+> 🤖 **این پروژه با کمکِ هوش مصنوعی ساخته شده.** برای بهبودِ برنامه خوشحال می‌شوم
+> [فیدبک بدهید](https://github.com/soorintec/Soorin_Inventory/issues) (ایده، باگ یا درخواستِ قابلیت). و اگر راضی بودید، لطفاً به پروژه ⭐ **استار** بدهید — خیلی کمک می‌کند.
+
 ![Dashboard](docs/screenshots/dashboard-en.png)
 
 ---
