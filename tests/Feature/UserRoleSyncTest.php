@@ -25,7 +25,7 @@ class UserRoleSyncTest extends TestCase
     public function test_new_staff_receives_role_and_permissions(): void
     {
         $user = User::create([
-            'name' => 'کارشناس تازه', 'email' => 'new@dpst.ir',
+            'name' => 'کارشناس تازه', 'email' => 'new@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
 
@@ -37,7 +37,7 @@ class UserRoleSyncTest extends TestCase
     public function test_new_admin_gets_full_permissions(): void
     {
         $user = User::create([
-            'name' => 'مدیر تازه', 'email' => 'admin2@dpst.ir',
+            'name' => 'مدیر تازه', 'email' => 'admin2@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
 
@@ -48,7 +48,7 @@ class UserRoleSyncTest extends TestCase
     public function test_changing_user_type_updates_the_role(): void
     {
         $user = User::create([
-            'name' => 'کاربر', 'email' => 'u@dpst.ir',
+            'name' => 'کاربر', 'email' => 'u@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
         $this->assertFalse($user->can(Permission::ManageUsers->value));
@@ -64,7 +64,7 @@ class UserRoleSyncTest extends TestCase
     public function test_new_staff_can_actually_see_panel_resources(): void
     {
         $user = User::create([
-            'name' => 'کارشناس', 'email' => 's@dpst.ir',
+            'name' => 'کارشناس', 'email' => 's@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
 

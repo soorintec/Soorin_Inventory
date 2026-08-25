@@ -30,12 +30,12 @@ class UserPermissionsFormTest extends TestCase
         Filament::setCurrentPanel('admin');
 
         $this->admin = User::create([
-            'name' => 'مدیر', 'email' => 'admin@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
+            'name' => 'مدیر', 'email' => 'admin@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
         $this->admin->syncPermissions(Perm::values());
 
         $this->target = User::create([
-            'name' => 'هدف', 'email' => 't@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
+            'name' => 'هدف', 'email' => 't@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
         $this->target->syncPermissions(Perm::values());
     }

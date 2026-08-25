@@ -31,7 +31,7 @@ class BrandingTest extends TestCase
         Filament::setCurrentPanel('admin');
 
         $this->admin = User::create([
-            'name' => 'مدیر', 'email' => 'admin@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
+            'name' => 'مدیر', 'email' => 'admin@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
         $this->admin->syncPermissions(Perm::values());
     }
@@ -71,7 +71,7 @@ class BrandingTest extends TestCase
     public function test_page_requires_settings_permission(): void
     {
         $staff = User::create([
-            'name' => 'کارشناس', 'email' => 's@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
+            'name' => 'کارشناس', 'email' => 's@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
         $staff->syncPermissions([Perm::ViewStock->value]);
 

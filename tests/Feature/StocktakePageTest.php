@@ -36,7 +36,7 @@ class StocktakePageTest extends TestCase
         $this->seed(RolePermissionSeeder::class);
 
         $this->admin = User::create([
-            'name' => 'مدیر', 'email' => 'admin@dpst.ir',
+            'name' => 'مدیر', 'email' => 'admin@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
         $this->admin->assignRole(User::TYPE_ADMIN);
@@ -107,7 +107,7 @@ class StocktakePageTest extends TestCase
     public function test_a_user_without_the_stocktake_permission_cannot_finish(): void
     {
         $staff = User::create([
-            'name' => 'کارشناس', 'email' => 'staff@dpst.ir',
+            'name' => 'کارشناس', 'email' => 'staff@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
         $staff->syncPermissions([Permission::ViewStock->value]);

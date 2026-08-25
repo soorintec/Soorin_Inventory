@@ -26,7 +26,7 @@ class BackupDownloadRouteTest extends TestCase
     private function admin(): User
     {
         return User::create([
-            'name' => 'مدیر', 'email' => 'a@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
+            'name' => 'مدیر', 'email' => 'a@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
     }
 
@@ -52,7 +52,7 @@ class BackupDownloadRouteTest extends TestCase
         $name = app(DatabaseBackupService::class)->create();
 
         $staff = User::create([
-            'name' => 'کارشناس', 'email' => 's@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
+            'name' => 'کارشناس', 'email' => 's@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
         $staff->syncPermissions([Permission::ViewStock->value]);
 

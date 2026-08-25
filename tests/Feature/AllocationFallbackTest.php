@@ -28,7 +28,7 @@ class AllocationFallbackTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $user = User::create(['name' => 'انباردار', 'email' => 'w@dpst.ir', 'password' => 'secret123']);
+        $user = User::create(['name' => 'انباردار', 'email' => 'w@yoursite.com', 'password' => 'secret123']);
         $this->actingAs($user);
 
         $this->wh = Warehouse::create(['name' => 'مرکزی', 'code' => 'MAIN']);

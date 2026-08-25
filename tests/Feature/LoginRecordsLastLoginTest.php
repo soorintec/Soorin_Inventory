@@ -21,7 +21,7 @@ class LoginRecordsLastLoginTest extends TestCase
     public function test_the_login_event_stamps_last_login_at(): void
     {
         $user = User::create([
-            'name' => 'کاربر', 'email' => 'u@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
+            'name' => 'کاربر', 'email' => 'u@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
 
         $this->assertNull($user->last_login_at);
@@ -34,7 +34,7 @@ class LoginRecordsLastLoginTest extends TestCase
     public function test_it_does_not_reset_permissions_on_login(): void
     {
         $user = User::create([
-            'name' => 'کارشناس', 'email' => 's@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
+            'name' => 'کارشناس', 'email' => 's@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
         // مجوز دلخواه که مدیر داده باشد
         $user->syncPermissions([\App\Enums\Permission::ManageStocktakes->value]);

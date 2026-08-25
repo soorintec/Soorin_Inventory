@@ -30,7 +30,7 @@ class DashboardTest extends TestCase
         $this->seed(RolePermissionSeeder::class);
 
         $this->admin = User::create([
-            'name' => 'مدیر انبار', 'email' => 'admin@dpst.ir',
+            'name' => 'مدیر انبار', 'email' => 'admin@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
         $this->admin->forceFill(['last_login_at' => now()])->save();
@@ -102,7 +102,7 @@ class DashboardTest extends TestCase
     public function test_the_logins_box_is_hidden_without_the_users_permission(): void
     {
         $staff = User::create([
-            'name' => 'کارشناس', 'email' => 'staff@dpst.ir',
+            'name' => 'کارشناس', 'email' => 'staff@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
 
@@ -115,7 +115,7 @@ class DashboardTest extends TestCase
     public function test_widgets_are_hidden_from_a_user_without_stock_access(): void
     {
         $outsider = User::create([
-            'name' => 'بیرونی', 'email' => 'x@dpst.ir',
+            'name' => 'بیرونی', 'email' => 'x@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
         $outsider->syncPermissions([Perm::ViewReports->value]);

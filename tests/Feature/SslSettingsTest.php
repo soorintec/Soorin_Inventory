@@ -32,7 +32,7 @@ class SslSettingsTest extends TestCase
     private function admin(): User
     {
         $admin = User::create([
-            'name' => 'مدیر', 'email' => 'a@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
+            'name' => 'مدیر', 'email' => 'a@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
         $admin->syncPermissions(Perm::values());
 
@@ -44,7 +44,7 @@ class SslSettingsTest extends TestCase
         $this->assertFalse(SslSettings::canAccess()); // مهمان
 
         $staff = User::create([
-            'name' => 'کارشناس', 'email' => 's@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
+            'name' => 'کارشناس', 'email' => 's@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
         $staff->syncPermissions([Perm::ViewStock->value]);
         $this->actingAs($staff);

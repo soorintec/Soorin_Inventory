@@ -30,7 +30,7 @@ class InventoryReportsTest extends TestCase
         parent::setUp();
         $this->seed(RolePermissionSeeder::class);
 
-        $this->user = User::create(['name' => 'انباردار', 'email' => 'w@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN]);
+        $this->user = User::create(['name' => 'انباردار', 'email' => 'w@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN]);
         $this->user->assignRole(User::TYPE_ADMIN);
         $this->actingAs($this->user);
 

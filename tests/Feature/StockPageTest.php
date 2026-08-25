@@ -34,7 +34,7 @@ class StockPageTest extends TestCase
         $this->seed(RolePermissionSeeder::class);
 
         $this->admin = User::create([
-            'name' => 'مدیر انبار', 'email' => 'admin@dpst.ir',
+            'name' => 'مدیر انبار', 'email' => 'admin@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
         $this->admin->assignRole(User::TYPE_ADMIN);

@@ -49,7 +49,7 @@ class InstallerTest extends TestCase
     {
         // یک مدیر بساز → سامانه «نصب‌شده» حساب می‌شود
         User::create([
-            'name' => 'مدیر', 'email' => 'a@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
+            'name' => 'مدیر', 'email' => 'a@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
 
         $this->assertTrue(Installation::isInstalled());
@@ -72,7 +72,7 @@ class InstallerTest extends TestCase
         $response = $this->post('/install', [
             'db_host' => '127.0.0.1', 'db_port' => '1', 'db_database' => 'nope',
             'db_username' => 'nobody', 'db_password' => 'x',
-            'admin_name' => 'مدیر', 'admin_email' => 'a@dpst.ir', 'admin_password' => 'secret123',
+            'admin_name' => 'مدیر', 'admin_email' => 'a@yoursite.com', 'admin_password' => 'secret123',
         ]);
 
         $response->assertRedirect();

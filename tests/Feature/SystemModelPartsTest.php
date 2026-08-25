@@ -40,7 +40,7 @@ class SystemModelPartsTest extends TestCase
 
     private function admin(): User
     {
-        $u = User::create(['name' => 'مدیر', 'email' => 'admin@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN]);
+        $u = User::create(['name' => 'مدیر', 'email' => 'admin@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN]);
         // hook کاربر خودش مجوزها را می‌دهد؛ فقط کش اسپتی را تازه می‌کنیم تا
         // اولین تست هم مجوزها را ببیند (وگرنه بسته به ترتیب اجرا نوسان دارد).
         app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
@@ -89,7 +89,7 @@ class SystemModelPartsTest extends TestCase
     /** بازدیدکننده بدون مجوز مدیریت، قطعات را می‌بیند ولی افزودن نمی‌بیند. */
     public function test_a_viewer_sees_parts_read_only(): void
     {
-        $staff = User::create(['name' => 'کارشناس', 'email' => 's@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF]);
+        $staff = User::create(['name' => 'کارشناس', 'email' => 's@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF]);
         $staff->syncPermissions([Permission::ViewProjects->value]);
         $this->actingAs($staff);
 

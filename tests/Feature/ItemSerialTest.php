@@ -48,7 +48,7 @@ class ItemSerialTest extends TestCase
     private function admin(): User
     {
         $u = User::create([
-            'name' => 'مدیر', 'email' => 'admin@dpst.ir',
+            'name' => 'مدیر', 'email' => 'admin@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
         $u->assignRole(User::TYPE_ADMIN);

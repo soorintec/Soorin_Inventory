@@ -32,7 +32,7 @@ class StocktakeTest extends TestCase
     {
         parent::setUp();
 
-        $this->actingAs(User::create(['name' => 'انباردار', 'email' => 'w@dpst.ir', 'password' => 'secret123']));
+        $this->actingAs(User::create(['name' => 'انباردار', 'email' => 'w@yoursite.com', 'password' => 'secret123']));
 
         $category = ItemCategory::create(['name' => 'ورودی و کنترل']);
         $trackballItem = Item::create(['item_category_id' => $category->id, 'code' => 'INP-1', 'name' => 'ترکبال بزرگ']);

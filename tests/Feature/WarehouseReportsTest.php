@@ -33,7 +33,7 @@ class WarehouseReportsTest extends TestCase
         $this->seed(RolePermissionSeeder::class);
 
         $this->admin = User::create([
-            'name' => 'مدیر انبار', 'email' => 'admin@dpst.ir',
+            'name' => 'مدیر انبار', 'email' => 'admin@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
         $this->admin->assignRole(User::TYPE_ADMIN);
@@ -112,7 +112,7 @@ class WarehouseReportsTest extends TestCase
     public function test_warehouse_staff_can_print(): void
     {
         $staff = User::create([
-            'name' => 'کارشناس انبار', 'email' => 'staff@dpst.ir',
+            'name' => 'کارشناس انبار', 'email' => 'staff@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
 
@@ -129,7 +129,7 @@ class WarehouseReportsTest extends TestCase
     public function test_a_user_without_stock_permission_is_refused(): void
     {
         $outsider = User::create([
-            'name' => 'بی‌مجوز', 'email' => 'no@dpst.ir', 'password' => 'secret123',
+            'name' => 'بی‌مجوز', 'email' => 'no@yoursite.com', 'password' => 'secret123',
         ]);
         $outsider->syncRoles([]);
         $outsider->syncPermissions([]);

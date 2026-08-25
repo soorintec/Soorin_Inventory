@@ -102,7 +102,7 @@ class LocalizationTest extends TestCase
     {
         $this->seed(RolePermissionSeeder::class);
         $user = User::create([
-            'name' => 'کاربر', 'email' => 'u@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
+            'name' => 'کاربر', 'email' => 'u@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
 
         $this->actingAs($user)
@@ -148,7 +148,7 @@ class LocalizationTest extends TestCase
         \Filament\Facades\Filament::setCurrentPanel('admin');
 
         $user = User::create([
-            'name' => 'Admin', 'email' => 'en@dpst.ir', 'password' => 'secret123',
+            'name' => 'Admin', 'email' => 'en@yoursite.com', 'password' => 'secret123',
             'user_type' => User::TYPE_ADMIN, 'locale' => 'en',
         ]);
         $user->syncPermissions(\App\Enums\Permission::values());
@@ -164,7 +164,7 @@ class LocalizationTest extends TestCase
     {
         $this->seed(RolePermissionSeeder::class);
         $user = User::create([
-            'name' => 'کاربر', 'email' => 'u2@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
+            'name' => 'کاربر', 'email' => 'u2@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
 
         $this->actingAs($user)

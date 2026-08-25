@@ -22,7 +22,7 @@ class AdminPanelTest extends TestCase
 
     private function admin(): User
     {
-        $u = User::create(['name' => 'مدیر', 'email' => 'admin@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN]);
+        $u = User::create(['name' => 'مدیر', 'email' => 'admin@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN]);
         $u->assignRole(User::TYPE_ADMIN);
 
         return $u;
@@ -30,7 +30,7 @@ class AdminPanelTest extends TestCase
 
     private function staff(): User
     {
-        $u = User::create(['name' => 'کارشناس', 'email' => 'staff@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF]);
+        $u = User::create(['name' => 'کارشناس', 'email' => 'staff@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF]);
         $u->assignRole(User::TYPE_STAFF);
 
         return $u;

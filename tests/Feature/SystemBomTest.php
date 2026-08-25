@@ -32,7 +32,7 @@ class SystemBomTest extends TestCase
     {
         parent::setUp();
 
-        $this->actingAs(User::create(['name' => 'انباردار', 'email' => 'w@dpst.ir', 'password' => 'secret123']));
+        $this->actingAs(User::create(['name' => 'انباردار', 'email' => 'w@yoursite.com', 'password' => 'secret123']));
 
         $category = ItemCategory::create(['name' => 'ورودی و کنترل']);
         $trackballItem = Item::create(['item_category_id' => $category->id, 'code' => 'INP-1', 'name' => 'ترکبال کوچک']);
@@ -163,7 +163,7 @@ class SystemBomTest extends TestCase
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
 
         $admin = User::create([
-            'name' => 'مدیر', 'email' => 'a@dpst.ir', 'password' => 'secret123',
+            'name' => 'مدیر', 'email' => 'a@yoursite.com', 'password' => 'secret123',
             'user_type' => User::TYPE_ADMIN,
         ]);
         $admin->assignRole(User::TYPE_ADMIN);

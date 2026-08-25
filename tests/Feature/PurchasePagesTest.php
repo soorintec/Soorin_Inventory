@@ -20,7 +20,7 @@ class PurchasePagesTest extends TestCase
         parent::setUp();
         $this->seed(RolePermissionSeeder::class);
 
-        $admin = User::create(['name' => 'مدیر', 'email' => 'admin@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN]);
+        $admin = User::create(['name' => 'مدیر', 'email' => 'admin@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN]);
         $admin->assignRole(User::TYPE_ADMIN);
         $this->actingAs($admin);
     }

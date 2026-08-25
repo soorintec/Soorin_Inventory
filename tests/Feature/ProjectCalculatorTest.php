@@ -111,7 +111,7 @@ class ProjectCalculatorTest extends TestCase
     {
         Filament::setCurrentPanel('admin');
 
-        $admin = User::create(['name' => 'مدیر', 'email' => 'a@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN]);
+        $admin = User::create(['name' => 'مدیر', 'email' => 'a@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN]);
 
         Livewire::actingAs($admin)
             ->test(ProjectCalculator::class)
@@ -121,7 +121,7 @@ class ProjectCalculatorTest extends TestCase
 
     public function test_access_requires_project_view_permission(): void
     {
-        $outsider = User::create(['name' => 'x', 'email' => 'x@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF]);
+        $outsider = User::create(['name' => 'x', 'email' => 'x@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF]);
         $outsider->syncPermissions([Permission::ViewStock->value]);
         $this->actingAs($outsider);
 

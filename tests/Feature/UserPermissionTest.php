@@ -29,7 +29,7 @@ class UserPermissionTest extends TestCase
         $this->seed(RolePermissionSeeder::class);
 
         $this->admin = User::create([
-            'name' => 'مدیر', 'email' => 'admin@dpst.ir',
+            'name' => 'مدیر', 'email' => 'admin@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
         $this->actingAs($this->admin);
@@ -55,7 +55,7 @@ class UserPermissionTest extends TestCase
     public function test_a_new_staff_gets_the_staff_defaults_only(): void
     {
         $staff = User::create([
-            'name' => 'کارشناس', 'email' => 'staff@dpst.ir',
+            'name' => 'کارشناس', 'email' => 'staff@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
 
@@ -69,7 +69,7 @@ class UserPermissionTest extends TestCase
     public function test_revoking_a_permission_actually_removes_access(): void
     {
         $staff = User::create([
-            'name' => 'کارشناس', 'email' => 'staff@dpst.ir',
+            'name' => 'کارشناس', 'email' => 'staff@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
 
@@ -97,7 +97,7 @@ class UserPermissionTest extends TestCase
             ->test(\App\Filament\Resources\Users\Pages\CreateUser::class)
             ->fillForm([
                 'name'      => 'انباردار محدود',
-                'email'     => 'limited@dpst.ir',
+                'email'     => 'limited@yoursite.com',
                 'password'  => 'secret123',
                 'user_type' => User::TYPE_STAFF,
                 // فرم با پیش‌فرض «کارشناس» باز می‌شود، پس گروه‌های دیگر هم
@@ -113,7 +113,7 @@ class UserPermissionTest extends TestCase
             ->call('create')
             ->assertHasNoFormErrors();
 
-        $created = User::where('email', 'limited@dpst.ir')->firstOrFail();
+        $created = User::where('email', 'limited@yoursite.com')->firstOrFail();
 
         $this->assertTrue($created->can(Perm::ViewStock->value));
         $this->assertFalse($created->can(Perm::ManageStock->value), 'تیک نخورده نباید داده شود');
@@ -135,7 +135,7 @@ class UserPermissionTest extends TestCase
     public function test_editing_a_user_can_take_a_permission_away(): void
     {
         $staff = User::create([
-            'name' => 'کارشناس', 'email' => 'staff@dpst.ir',
+            'name' => 'کارشناس', 'email' => 'staff@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
         $this->assertTrue($staff->can(Perm::ManageStock->value));
@@ -165,7 +165,7 @@ class UserPermissionTest extends TestCase
     public function test_the_edit_form_shows_the_current_permissions(): void
     {
         $staff = User::create([
-            'name' => 'کارشناس', 'email' => 'staff@dpst.ir',
+            'name' => 'کارشناس', 'email' => 'staff@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
         $staff->syncPermissions([Perm::ViewStock->value, Perm::ViewReports->value]);
@@ -182,7 +182,7 @@ class UserPermissionTest extends TestCase
     public function test_backup_permissions_are_separate(): void
     {
         $user = User::create([
-            'name' => 'پشتیبان‌گیر', 'email' => 'b@dpst.ir',
+            'name' => 'پشتیبان‌گیر', 'email' => 'b@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
         $user->syncPermissions([Perm::ViewBackups->value, Perm::CreateBackups->value]);
@@ -195,7 +195,7 @@ class UserPermissionTest extends TestCase
     public function test_a_user_without_backup_view_cannot_open_the_page(): void
     {
         $user = User::create([
-            'name' => 'بدون پشتیبان', 'email' => 'nb@dpst.ir',
+            'name' => 'بدون پشتیبان', 'email' => 'nb@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
 
@@ -206,7 +206,7 @@ class UserPermissionTest extends TestCase
     public function test_a_user_with_only_view_backups_cannot_delete(): void
     {
         $user = User::create([
-            'name' => 'فقط بیننده', 'email' => 'v@dpst.ir',
+            'name' => 'فقط بیننده', 'email' => 'v@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
         $user->syncPermissions([Perm::ViewBackups->value, Perm::CreateBackups->value]);
@@ -227,7 +227,7 @@ class UserPermissionTest extends TestCase
     public function test_project_pages_are_hidden_without_the_permission(): void
     {
         $user = User::create([
-            'name' => 'انباردار', 'email' => 'w@dpst.ir',
+            'name' => 'انباردار', 'email' => 'w@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
         $user->syncPermissions([Perm::ViewStock->value, Perm::ViewItems->value]);

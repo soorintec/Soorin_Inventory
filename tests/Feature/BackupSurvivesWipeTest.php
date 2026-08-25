@@ -55,7 +55,7 @@ class BackupSurvivesWipeTest extends TestCase
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
 
         $admin = User::create([
-            'name' => 'مدیر انبار', 'email' => 'admin@dpst.ir',
+            'name' => 'مدیر انبار', 'email' => 'admin@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
         $admin->forceFill(['last_login_at' => now()])->save();

@@ -58,7 +58,7 @@ class LicenseTest extends TestCase
     private function admin(): User
     {
         $u = User::create([
-            'name' => 'مدیر', 'email' => 'a@dpst.ir', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
+            'name' => 'مدیر', 'email' => 'a@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
         $u->syncPermissions(Perm::values());
 

@@ -27,7 +27,7 @@ class StockMovementServiceTest extends TestCase
     {
         parent::setUp();
 
-        $user = User::create(['name' => 'انباردار', 'email' => 'w@dpst.ir', 'password' => 'secret123']);
+        $user = User::create(['name' => 'انباردار', 'email' => 'w@yoursite.com', 'password' => 'secret123']);
         $this->actingAs($user);
 
         $category = ItemCategory::create(['name' => 'ترک‌بال']);

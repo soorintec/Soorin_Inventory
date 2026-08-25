@@ -152,13 +152,13 @@ class DatabaseBackupTest extends TestCase
         $this->seed(RolePermissionSeeder::class);
 
         $admin = User::create([
-            'name' => 'مدیر', 'email' => 'admin@dpst.ir',
+            'name' => 'مدیر', 'email' => 'admin@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_ADMIN,
         ]);
         $admin->assignRole(User::TYPE_ADMIN);
 
         $staff = User::create([
-            'name' => 'کارشناس', 'email' => 'staff@dpst.ir',
+            'name' => 'کارشناس', 'email' => 'staff@yoursite.com',
             'password' => 'secret123', 'user_type' => User::TYPE_STAFF,
         ]);
         $staff->assignRole(User::TYPE_STAFF);
