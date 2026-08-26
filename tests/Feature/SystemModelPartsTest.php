@@ -48,6 +48,43 @@ class SystemModelPartsTest extends TestCase
         return $u->fresh();
     }
 
+    /** رگرسیون: کاربری با فقط «تعریف مدل سامانه» باید بخش (و قطعات) را ببیند، حتی بدون «مشاهده پروژه». */
+    public function test_manage_system_models_alone_grants_view_access(): void
+    {
+        $staff = User::create(['name' => 'کارشناس', 'email' => 'sm@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF]);
+        $staff->syncPermissions([Permission::ManageSystemModels->value]);
+        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
+        $this->actingAs($staff->fresh());
+
+        $this->assertTrue(\App\Filament\Resources\SystemModels\SystemModelResource::canViewAny());
+        $this->assertTrue(\App\Filament\Resources\SystemVersions\SystemVersionResource::canViewAny());
+    }
+
+    /** «مشاهده پروژه‌ها» هم به‌تنهایی برای دیدنِ مدل سامانه کافی است (فقط خواندن). */
+    public function test_view_projects_alone_grants_view_access(): void
+    {
+        $staff = User::create(['name' => 'بیننده', 'email' => 'vp@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF]);
+        $staff->syncPermissions([Permission::ViewProjects->value]);
+        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
+        $this->actingAs($staff->fresh());
+
+        $this->assertTrue(\App\Filament\Resources\SystemModels\SystemModelResource::canViewAny());
+    }
+
+    /** کاربر بدونِ هیچ‌یک از دو مجوز نباید بخش را ببیند. */
+    public function test_without_either_permission_access_is_denied(): void
+    {
+        $staff = User::create(['name' => 'بی‌مجوز', 'email' => 'none@yoursite.com', 'password' => 'secret123', 'user_type' => User::TYPE_STAFF]);
+        $staff->syncPermissions([Permission::ViewStock->value]);
+        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
+        $this->actingAs($staff->fresh());
+
+        $this->assertFalse(\App\Filament\Resources\SystemModels\SystemModelResource::canViewAny());
+    }
+
     /** ساخت نسخه با قطعاتش در همان فرم — قطعات باید ذخیره شوند. */
     public function test_a_version_can_be_created_with_its_parts_inline(): void
     {

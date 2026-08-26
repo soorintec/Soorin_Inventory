@@ -66,7 +66,12 @@ class SystemVersionResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()?->can(Permission::ViewProjects->value) ?? false;
+        // مثل SystemModelResource: «تعریف مدل سامانه» هم باید بتواند ورژن و قطعات
+        // (BOM) را ببیند، نه فقط «مشاهده پروژه‌ها».
+        $user = auth()->user();
+
+        return (bool) ($user?->can(Permission::ManageSystemModels->value)
+            || $user?->can(Permission::ViewProjects->value));
     }
 
     public static function canView(mixed $record): bool

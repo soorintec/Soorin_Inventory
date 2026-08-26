@@ -98,7 +98,13 @@ class SystemModelResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()?->can(Permission::ViewProjects->value) ?? false;
+        // دیدنِ بخش با «تعریف مدل سامانه» یا «مشاهده پروژه‌ها» ممکن است — پیش‌تر فقط
+        // به «مشاهده پروژه‌ها» وابسته بود، پس کاربری که فقط مجوز تعریف مدل داشت
+        // اصلاً این بخش را نمی‌دید (باگ گزارش‌شده). ساخت/ویرایش همچنان مجوز تعریف می‌خواهد.
+        $user = auth()->user();
+
+        return (bool) ($user?->can(Permission::ManageSystemModels->value)
+            || $user?->can(Permission::ViewProjects->value));
     }
 
     public static function canCreate(): bool
