@@ -42,10 +42,3 @@ published only to let customers self-host and evaluate it.
    استفاده می‌گیرید، نه مالکیت نرم‌افزار.
 ۶. **بدون ضمانت.** نرم‌افزار «همان‌طور که هست» ارائه می‌شود، بدون هیچ ضمانتی.
    نویسنده مسئول خساراتِ ناشی از استفاده نیست. حتماً پشتیبان نگه دارید.
-
----
-
-> این متن یک الگوی عمومی است و مشاورهٔ حقوقی محسوب نمی‌شود؛ پیش از فروش گسترده،
-> بهتر است با یک مشاور حقوقی بازبینی شود.
-> This text is a general template and is not legal advice; consider a legal review
-> before selling at scale.

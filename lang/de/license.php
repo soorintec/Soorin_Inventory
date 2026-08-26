@@ -26,5 +26,5 @@ return [
     'about_title' => 'Über & Unterstützung',
     'about_body' => 'Dieses System wurde mit viel Mühe von einem unabhängigen Entwickler erstellt, um die Lagerverwaltung einfach, schnell und unkompliziert zu machen. Wir hoffen, es ist nützlich für Sie.',
     'pricing_note' => 'Die ersten sechs Monate sind völlig kostenlos und ohne Einschränkungen. Danach aktiviert eine einmalige Zahlung von nur 5 USDT es dauerhaft – einmal zahlen, für immer behalten.',
-    'donate_note' => 'Dieser Preis ist bewusst niedrig. Wenn die App für Sie wertvoll ist und Sie die weitere Entwicklung unterstützen möchten, senden Sie einen beliebigen Betrag an dieselbe Adresse. Danke für Ihre Freundlichkeit. 🙏',
+    'donate_note' => 'Dieser Preis ist bewusst niedrig. Wenn die App für Sie wertvoll ist und Sie die weitere Entwicklung unterstützen möchten, können Sie einen beliebigen Betrag an dieselbe Adresse spenden. Danke für Ihre Freundlichkeit. 🙏',
 ];

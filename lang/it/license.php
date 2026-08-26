@@ -26,5 +26,5 @@ return [
     'about_title' => 'Informazioni e supporto',
     'about_body' => 'Questo sistema è stato realizzato con grande impegno da uno sviluppatore indipendente per rendere la gestione del magazzino semplice, veloce e senza problemi. Ci auguriamo ti sia utile.',
     'pricing_note' => 'I primi sei mesi sono completamente gratuiti e senza limiti. Dopodiché, un pagamento una tantum di soli 5 USDT lo attiva per sempre — paghi una volta, lo tieni per sempre.',
-    'donate_note' => 'Questo prezzo è volutamente contenuto. Se l\'app ti è utile e vuoi sostenerne lo sviluppo, invia l\'importo che preferisci allo stesso indirizzo. Grazie per la tua generosità. 🙏',
+    'donate_note' => 'Questo prezzo è volutamente contenuto. Se l\'app ti è utile e vuoi sostenerne lo sviluppo, puoi donare l\'importo che preferisci allo stesso indirizzo. Grazie per la tua generosità. 🙏',
 ];

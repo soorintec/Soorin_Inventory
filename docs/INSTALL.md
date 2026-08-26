@@ -186,6 +186,3 @@ php artisan inventory:import-anbar "مسیر/Anbar.xlsx"
      بزنی و بعد کل دیتابیس را روی هاست وارد کنی.
    - DocumentRoot را روی `public/` تنظیم کن (در cPanel از «Domains» یا با
      یک `index.php` هدایت‌کننده).
-
-اگر خواستی، بگو تا یک بستهٔ آمادهٔ نصب (کد + vendor + یک فایل SQL آمادهٔ
-جدول‌ها) برایت بسازم.

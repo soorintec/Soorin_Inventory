@@ -26,5 +26,5 @@ return [
     'about_title' => 'À propos et soutien',
     'about_body' => 'Ce système a été créé avec beaucoup d\'efforts par un développeur indépendant afin de rendre la gestion d\'entrepôt simple, rapide et sans souci. Nous espérons qu\'il vous sera utile.',
     'pricing_note' => 'Les six premiers mois sont entièrement gratuits et sans limite. Ensuite, un paiement unique de seulement 5 USDT l\'active définitivement — payez une fois, gardez pour toujours.',
-    'donate_note' => 'Ce prix est volontairement modeste. Si l\'application vous est utile et que vous souhaitez soutenir son développement, envoyez le montant de votre choix à la même adresse. Merci de votre générosité. 🙏',
+    'donate_note' => 'Ce prix est volontairement modeste. Si l\'application vous est utile et que vous souhaitez soutenir son développement, vous pouvez faire un don du montant de votre choix à la même adresse. Merci de votre générosité. 🙏',
 ];

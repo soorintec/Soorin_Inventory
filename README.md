@@ -101,7 +101,7 @@ Panel: <http://127.0.0.1:8001/admin> — demo login `admin@yoursite.com` / `pass
 - **Pay (USDT · TRC20):** `TVQAup75WmDrhhn3UPzGVjS2ekkbLRsjPK`
 - **Then contact us on Telegram** with your transaction hash + server Hardware ID (shown on the in-app License page) to receive your key: **[t.me/Soorin_Support](https://t.me/Soorin_Support)**
 
-Details: [docs/LICENSING.md](docs/LICENSING.md).
+Full license terms: [LICENSE / EULA](LICENSE.md).
 
 ## 📸 Screenshots
 
@@ -116,7 +116,7 @@ Details: [docs/LICENSING.md](docs/LICENSING.md).
 ## 📚 Documentation
 
 - [Debian install](docs/DEBIAN-INSTALL.md) · [General install](docs/INSTALL.md)
-- [Licensing / selling](docs/LICENSING.md) · [Translations](docs/TRANSLATIONS.md)
+- [Translations](docs/TRANSLATIONS.md)
 - [License / EULA](LICENSE.md) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
 ## 🧪 Tests
