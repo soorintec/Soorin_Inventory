@@ -216,6 +216,25 @@ body { background: var(--bg); color: var(--text); }
 /* کمی فاصلهٔ بیشتر بین خودِ ردیف‌ها برای خوانایی */
 .calc-parts tbody tr { line-height: 1.7; }
 
+/* محفظهٔ اسکرول — چون کلاس overflow-x-auto تیلویند ممکن است کامپایل نشده باشد،
+   اینجا صریح می‌دهیم تا جدولِ پهن روی صفحهٔ باریک اسکرولِ افقی بخورد نه اینکه بشکند. */
+.calc-parts-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* موبایل: جدولِ ۷ ستونه در عرضِ گوشی جا نمی‌شود. به‌جای له‌شدنِ ستون‌ها و شکستنِ
+   متن به چند خط (که ردیف‌ها را غول‌پیکر و درهم می‌کرد)، جدول فشرده و تک‌خطی می‌شود
+   و افقی اسکرول می‌خورد تا خوانا بماند. */
+@media (max-width: 640px) {
+    .calc-parts { min-width: 40rem; }
+    .calc-parts th,
+    .calc-parts td {
+        padding-block: 0.6rem !important;
+        padding-inline: 0.65rem !important;
+        font-size: 0.78rem;
+        white-space: nowrap;
+    }
+    .calc-parts tbody tr { line-height: 1.5; }
+}
+
 /* ---------- فوتر ---------- */
 .app-footer {
     border-top: 1px solid var(--border);

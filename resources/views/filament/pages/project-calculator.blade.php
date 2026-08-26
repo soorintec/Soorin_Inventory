@@ -42,7 +42,7 @@
             <x-filament::section>
                 <x-slot name="heading">{{ __('calculator.result_title') }}</x-slot>
 
-                <div class="overflow-x-auto">
+                <div class="calc-parts-scroll overflow-x-auto">
                     <table class="calc-parts w-full text-sm">
                         <thead>
                             <tr class="border-b border-gray-200 dark:border-gray-700">
