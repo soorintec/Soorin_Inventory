@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'add_item' => 'Add item',
     'nav_group' => 'Purchasing & Imports',
 
     'supplier_label'  => 'Supplier',

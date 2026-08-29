@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'kardex' => 'Fiche de stock',
+    'balance' => 'Solde',
+    'kardex_empty' => 'Aucun mouvement enregistré pour cet article.',
     'label' => 'Mouvement de stock', 'plural' => 'Mouvements de stock', 'nav_group' => 'Entrepôt',
     'item_version' => 'Version de l\'article', 'warehouse' => 'Entrepôt', 'direction' => 'Sens',
     'directions' => ['in' => 'Entrée', 'out' => 'Sortie'], 'reason' => 'Motif',

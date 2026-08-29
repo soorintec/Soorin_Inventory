@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Items\Tables;
 
+use App\Filament\Resources\Items\Pages\ItemKardex;
 use App\Models\Item;
 use App\Models\Warehouse;
 use App\Support\Jalali;
@@ -81,6 +82,13 @@ class ItemsTable
                     ->modalContent(fn (Item $record) => view('filament.tables.item-versions-modal', ['item' => $record]))
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel(__('common.close')),
+
+                // کاردکس: دفترِ کاملِ ورود/خروجِ همین کالا با ماندهٔ در حرکت.
+                Action::make('kardex')
+                    ->label(__('stock.kardex'))
+                    ->icon(Heroicon::OutlinedClipboardDocumentList)
+                    ->color('gray')
+                    ->url(fn (Item $record) => ItemKardex::getUrl(['record' => $record])),
             ])
             ->filters([
                 SelectFilter::make('item_category_id')

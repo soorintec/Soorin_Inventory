@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'kardex' => 'Kardex',
+    'balance' => 'Balance',
+    'kardex_empty' => 'No transactions recorded for this item yet.',
     'label'     => 'Stock transaction',
     'plural'    => 'Stock transactions',
     'nav_group' => 'Warehouse',

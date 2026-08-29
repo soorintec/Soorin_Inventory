@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'add_item' => 'Ajouter une ligne',
     'nav_group' => 'Achats et import',
     'supplier_label' => 'Fournisseur', 'supplier_plural' => 'Fournisseurs', 'country' => 'Pays',
     'currency_label' => 'Devise', 'currency_plural' => 'Devises', 'currency_code' => 'Code devise', 'currency_name' => 'Nom de la devise',

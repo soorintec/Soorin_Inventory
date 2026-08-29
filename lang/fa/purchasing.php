@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'add_item' => 'افزودن ردیف',
     'nav_group' => 'خرید و واردات',
 
     'supplier_label'  => 'تأمین‌کننده',

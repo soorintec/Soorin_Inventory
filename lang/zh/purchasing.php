@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'add_item' => '添加条目',
     'nav_group' => '采购与进口',
     'supplier_label' => '供应商', 'supplier_plural' => '供应商', 'country' => '国家',
     'currency_label' => '币种', 'currency_plural' => '币种', 'currency_code' => '币种代码', 'currency_name' => '币种名称',

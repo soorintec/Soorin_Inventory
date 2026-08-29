@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'add_item' => 'Aggiungi riga',
     'nav_group' => 'Acquisti e import',
     'supplier_label' => 'Fornitore', 'supplier_plural' => 'Fornitori', 'country' => 'Paese',
     'currency_label' => 'Valuta', 'currency_plural' => 'Valute', 'currency_code' => 'Codice valuta', 'currency_name' => 'Nome valuta',

@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'kardex' => '库存卡',
+    'balance' => '结存',
+    'kardex_empty' => '该商品暂无交易记录。',
     'label' => '库存交易', 'plural' => '库存交易', 'nav_group' => '仓库',
     'item_version' => '商品版本', 'warehouse' => '仓库', 'direction' => '方向',
     'directions' => ['in' => '入库', 'out' => '出库'], 'reason' => '原因',

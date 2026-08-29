@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'add_item' => 'إضافة صنف',
     'nav_group' => 'المشتريات والاستيراد',
 
     'supplier_label'  => 'مورّد',

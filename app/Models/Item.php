@@ -92,6 +92,16 @@ class Item extends Model
         return $this->hasManyThrough(StockBalance::class, ItemVersion::class);
     }
 
+    /**
+     * همهٔ حرکت‌های انبارِ این کالا (ورود/خروجِ همهٔ ورژن‌هایش) — منبعِ «کاردکس».
+     * صریح تعریف شده تا حتی ورژن‌های حذف‌نرم‌شده هم در تاریخچه بمانند (کوئری در
+     * صفحهٔ کاردکس withTrashed می‌زند؛ این رابطه برای مصرف‌های عادی است).
+     */
+    public function movements(): HasManyThrough
+    {
+        return $this->hasManyThrough(StockMovement::class, ItemVersion::class, 'item_id', 'item_version_id', 'id', 'id');
+    }
+
     public const STATUS_OUT = 'out';    // موجودی صفر
     public const STATUS_LOW = 'low';    // روی حد هشدار یا کمتر
     public const STATUS_OK  = 'ok';     // بالاتر از حد هشدار

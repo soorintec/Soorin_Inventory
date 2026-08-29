@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Items;
 use App\Enums\Permission;
 use App\Filament\Resources\Items\Pages\CreateItem;
 use App\Filament\Resources\Items\Pages\EditItem;
+use App\Filament\Resources\Items\Pages\ItemKardex;
 use App\Filament\Resources\Items\Pages\ListItems;
 use App\Filament\Resources\Items\RelationManagers\SerialsRelationManager;
 use App\Filament\Resources\Items\RelationManagers\VersionsRelationManager;
@@ -68,6 +69,7 @@ class ItemResource extends Resource
             'index'  => ListItems::route('/'),
             'create' => CreateItem::route('/create'),
             'edit'   => EditItem::route('/{record}/edit'),
+            'kardex' => ItemKardex::route('/{record}/kardex'),
         ];
     }
 

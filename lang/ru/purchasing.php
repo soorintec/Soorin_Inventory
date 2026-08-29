@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'add_item' => 'Добавить позицию',
     'nav_group' => 'Закупки и импорт',
     'supplier_label' => 'Поставщик', 'supplier_plural' => 'Поставщики', 'country' => 'Страна',
     'currency_label' => 'Валюта', 'currency_plural' => 'Валюты', 'currency_code' => 'Код валюты', 'currency_name' => 'Название валюты',

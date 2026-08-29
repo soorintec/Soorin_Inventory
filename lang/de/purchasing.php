@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'add_item' => 'Position hinzufügen',
     'nav_group' => 'Einkauf & Import',
     'supplier_label' => 'Lieferant', 'supplier_plural' => 'Lieferanten', 'country' => 'Land',
     'currency_label' => 'Währung', 'currency_plural' => 'Währungen', 'currency_code' => 'Währungscode', 'currency_name' => 'Währungsname',

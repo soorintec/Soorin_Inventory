@@ -3,9 +3,11 @@
 namespace App\Filament\Resources\Purchases\Schemas;
 
 use App\Models\Currency;
+use App\Models\ItemVersion;
 use App\Models\Supplier;
 use App\Models\Warehouse;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -81,6 +83,32 @@ class PurchaseForm
                         ->default('value')
                         ->required()
                         ->native(false),
+                ]),
+
+            // ردیف‌های کالا همین‌جا (هنگام ساخت و ویرایش) انتخاب می‌شوند — پیش‌تر
+            // فقط در صفحهٔ ویرایش و به‌صورت جدولِ رابطه بود، برای همین موقع «ساختِ
+            // خرید» جایی برای انتخاب کالا دیده نمی‌شد. قیمت تمام‌شده هنگام «دریافت»
+            // خودکار محاسبه می‌شود؛ اینجا فقط کالا، تعداد، قیمت ارزی و وزن.
+            Section::make(__('purchasing.items'))
+                ->schema([
+                    Repeater::make('items')
+                        ->relationship()
+                        ->hiddenLabel()
+                        ->addActionLabel(__('purchasing.add_item'))
+                        ->columns(4)
+                        ->defaultItems(1)
+                        ->schema([
+                            Select::make('item_version_id')
+                                ->label(__('purchasing.item_version'))
+                                ->options(fn () => ItemVersion::with('item')->get()
+                                    ->mapWithKeys(fn (ItemVersion $v) => [$v->id => $v->displayName()]))
+                                ->searchable()
+                                ->required()
+                                ->columnSpan(2),
+                            TextInput::make('quantity')->label(__('purchasing.quantity'))->numeric()->required()->minValue(0.01),
+                            TextInput::make('fx_unit_price')->label(__('purchasing.fx_unit_price'))->numeric()->required(),
+                            TextInput::make('weight_kg')->label(__('purchasing.weight_kg'))->numeric()->columnSpan(2),
+                        ]),
                 ]),
 
             Textarea::make('notes')->label(__('common.notes'))->rows(2)->columnSpanFull(),

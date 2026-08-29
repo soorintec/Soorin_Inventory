@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'kardex' => 'Scheda articolo',
+    'balance' => 'Saldo',
+    'kardex_empty' => 'Nessun movimento registrato per questo articolo.',
     'label' => 'Movimento di magazzino', 'plural' => 'Movimenti di magazzino', 'nav_group' => 'Magazzino',
     'item_version' => 'Versione articolo', 'warehouse' => 'Magazzino', 'direction' => 'Direzione',
     'directions' => ['in' => 'Carico', 'out' => 'Scarico'], 'reason' => 'Motivo',

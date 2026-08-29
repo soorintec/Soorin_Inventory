@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'kardex' => 'Lagerkarte',
+    'balance' => 'Bestand',
+    'kardex_empty' => 'Für diesen Artikel wurden noch keine Bewegungen erfasst.',
     'label' => 'Lagerbewegung', 'plural' => 'Lagerbewegungen', 'nav_group' => 'Lager',
     'item_version' => 'Artikelversion', 'warehouse' => 'Lager', 'direction' => 'Richtung',
     'directions' => ['in' => 'Zugang', 'out' => 'Abgang'], 'reason' => 'Grund',
