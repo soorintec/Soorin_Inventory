@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'price_hint' => 'If set, updates this item’s price; leave empty to keep the current price.',
+    'price' => 'Price',
     'kardex' => 'Kardex',
     'balance' => 'Balance',
     'kardex_empty' => 'No transactions recorded for this item yet.',

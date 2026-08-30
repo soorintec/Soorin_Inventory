@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'price_hint' => '若填写，将更新该商品价格；留空则保持当前价格。',
+    'price' => '价格',
     'kardex' => '库存卡',
     'balance' => '结存',
     'kardex_empty' => '该商品暂无交易记录。',

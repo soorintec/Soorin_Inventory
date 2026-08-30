@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'price_hint' => 'Si renseigné, met à jour le prix de cet article ; laisser vide pour conserver le prix actuel.',
+    'price' => 'Prix',
     'kardex' => 'Fiche de stock',
     'balance' => 'Solde',
     'kardex_empty' => 'Aucun mouvement enregistré pour cet article.',
