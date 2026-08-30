@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'default_version' => 'Principale',
+    'stock_state' => 'Stato scorte',
+    'image' => 'Foto',
     'category_label' => 'Categoria articolo', 'category_plural' => 'Categorie', 'category_parent' => 'Categoria superiore',
     'spec_template' => 'Modello di specifiche tecniche',
     'spec_template_hint' => 'Campi da registrare per questa categoria (es.: CPU, RAM, disco). Da questo modello viene creato un modulo dinamico per ogni versione.',

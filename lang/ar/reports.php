@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'reorder_empty' => 'كل الأصناف فوق حد التنبيه.',
+    'col_suggested' => 'الكمية المقترحة',
+    'col_min_stock' => 'حد التنبيه',
+    'col_current_stock' => 'المخزون الحالي',
+    'reorder_title' => 'أصناف تحتاج إعادة طلب',
     'label'     => 'التقارير',
     'nav_group' => 'الإدارة والتقارير',
 

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Items\Schemas;
 
 use App\Models\ItemCategory;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -34,6 +35,15 @@ class ItemForm
                 ->helperText(__('items.track_serial_hint')),
 
             Toggle::make('is_active')->label(__('common.active'))->default(true),
+
+            FileUpload::make('image')
+                ->label(__('items.image'))
+                ->image()
+                ->imageEditor()
+                ->disk('items')
+                ->visibility('public')
+                ->maxSize(2048)
+                ->columnSpanFull(),
 
             Textarea::make('description')->label(__('items.description'))->columnSpanFull()->rows(2),
         ])->columns(2);

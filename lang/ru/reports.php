@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'reorder_empty' => 'Все товары выше порога.',
+    'col_suggested' => 'Рекомендуемое кол-во',
+    'col_min_stock' => 'Порог',
+    'col_current_stock' => 'Текущий запас',
+    'reorder_title' => 'Товары к дозаказу',
     'label' => 'Отчёты', 'nav_group' => 'Управление и отчёты',
     'from_date' => 'С даты', 'to_date' => 'По дату',
     'by_user' => 'Движение склада по пользователям', 'col_user' => 'Пользователь',

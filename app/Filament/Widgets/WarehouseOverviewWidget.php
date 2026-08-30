@@ -50,7 +50,11 @@ class WarehouseOverviewWidget extends StatsOverviewWidget
             Stat::make(__('dashboard.out_of_stock'), Jalali::quantity($outOfStock))
                 ->description(__('dashboard.low_stock_hint', ['count' => Jalali::quantity($lowStock)]))
                 ->descriptionIcon('heroicon-o-exclamation-triangle')
-                ->color($outOfStock > 0 ? 'danger' : 'success'),
+                ->color($outOfStock > 0 ? 'danger' : 'success')
+                // کلیک روی این عدد → فهرستِ همان کالاهای تمام‌شده در «موجودی انبار».
+                ->url(\App\Filament\Resources\Items\ItemResource::getUrl('index', [
+                    'tableFilters' => ['stock_state' => ['value' => 'out']],
+                ])),
 
             Stat::make(__('dashboard.movements_today'), Jalali::quantity($today))
                 ->description(__('dashboard.movements_today_hint'))

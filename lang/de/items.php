@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'default_version' => 'Standard',
+    'stock_state' => 'Bestandsstatus',
+    'image' => 'Foto',
     'category_label' => 'Artikelkategorie', 'category_plural' => 'Kategorien', 'category_parent' => 'Übergeordnete Kategorie',
     'spec_template' => 'Vorlage für technische Daten',
     'spec_template_hint' => 'Felder, die für diese Kategorie erfasst werden sollen (z. B. CPU, RAM, Festplatte). Für jede Version wird daraus ein dynamisches Formular erstellt.',

@@ -116,6 +116,11 @@ class ListStockBalances extends ListRecords
                     'warehouse' => $data['warehouse'] ?? null,
                 ])))),
 
+            Action::make('printReorder')
+                ->label(__('reports.reorder_title'))
+                ->icon(Heroicon::OutlinedShoppingCart)
+                ->action(fn () => $this->openPrintTab(route('warehouse.print.reorder'))),
+
             Action::make('stocktakes')
                 ->label(__('stocktake.plural'))
                 ->icon(Heroicon::OutlinedClipboardDocumentCheck)
@@ -143,22 +148,55 @@ class ListStockBalances extends ListRecords
      *
      * @return array<int, \Filament\Forms\Components\Component>
      */
-    private function itemAndVersionFields(): array
+    private function itemAndVersionFields(bool $allowCreate = false): array
     {
+        $itemSelect = Select::make('item_id')
+            ->label(__('stock.item'))
+            ->helperText(__('stock.item_hint'))
+            ->options(fn () => Item::query()->orderBy('name')->pluck('name', 'id'))
+            ->searchable()
+            ->preload()
+            ->required()
+            ->live()
+            ->afterStateUpdated(function ($state, $set) {
+                // اگر کالا فقط یک ورژن دارد، انتخابش را از کاربر نپرسیم
+                $versions = ItemVersion::where('item_id', $state)->pluck('id');
+                $set('item_version_id', $versions->count() === 1 ? $versions->first() : null);
+            });
+
+        // «تعریف کالای جدید» درجا — فقط در «ورود کالا» و برای کسی که مجوزِ مدیریتِ
+        // کالا دارد. اگر کالا هنوز ثبت نشده، بدونِ ترکِ این فرم ساخته می‌شود
+        // (کالا + در صورت نیاز دستهٔ نو + ورژنِ اول). خواسته: «همین‌جا دکمهٔ تعریف کالا».
+        if ($allowCreate) {
+            $itemSelect
+                ->createOptionForm([
+                    TextInput::make('name')->label(__('items.name'))->required()->maxLength(255),
+                    TextInput::make('code')->label(__('items.code'))->required()->maxLength(30)->unique('items', 'code'),
+                    Select::make('item_category_id')
+                        ->label(__('items.category_label'))
+                        ->options(fn () => ItemCategory::orderBy('name')->pluck('name', 'id'))
+                        ->searchable()
+                        ->required()
+                        ->createOptionForm([TextInput::make('name')->label(__('items.category_label'))->required()])
+                        ->createOptionUsing(fn (array $data) => ItemCategory::create(['name' => $data['name']])->id),
+                    TextInput::make('unit')->label(__('items.unit'))->default(__('items.unit_default'))->required(),
+                    TextInput::make('version_code')->label(__('items.version_label'))->default(__('items.default_version'))->required(),
+                ])
+                ->createOptionUsing(function (array $data): int {
+                    $item = Item::create([
+                        'item_category_id' => $data['item_category_id'],
+                        'code'             => $data['code'],
+                        'name'             => $data['name'],
+                        'unit'             => $data['unit'] ?? __('items.unit_default'),
+                    ]);
+                    $item->versions()->create(['version_code' => $data['version_code']]);
+
+                    return $item->id;
+                });
+        }
+
         return [
-            Select::make('item_id')
-                ->label(__('stock.item'))
-                ->helperText(__('stock.item_hint'))
-                ->options(fn () => Item::query()->orderBy('name')->pluck('name', 'id'))
-                ->searchable()
-                ->preload()
-                ->required()
-                ->live()
-                ->afterStateUpdated(function ($state, $set) {
-                    // اگر کالا فقط یک ورژن دارد، انتخابش را از کاربر نپرسیم
-                    $versions = ItemVersion::where('item_id', $state)->pluck('id');
-                    $set('item_version_id', $versions->count() === 1 ? $versions->first() : null);
-                }),
+            $itemSelect,
 
             Select::make('item_version_id')
                 ->label(__('items.version_label'))
@@ -230,7 +268,7 @@ class ListStockBalances extends ListRecords
             ->color('success')
             ->visible(fn () => $this->canManageStock())
             ->schema([
-                ...$this->itemAndVersionFields(),
+                ...$this->itemAndVersionFields($this->canManageItems()),
 
                 // قیمت دیگر «ریالیِ پنهان» نیست: همان قیمتِ خود قطعه است با ارز
                 // انتخابی. اگر پر شود، قیمت روی ورژن به‌روز می‌شود (یک قیمت واحد

@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'reorder_empty' => 'Alle Artikel sind über dem Meldebestand.',
+    'col_suggested' => 'Vorgeschlagene Menge',
+    'col_min_stock' => 'Meldebestand',
+    'col_current_stock' => 'Aktueller Bestand',
+    'reorder_title' => 'Nachzubestellende Artikel',
     'label' => 'Berichte', 'nav_group' => 'Verwaltung & Berichte',
     'from_date' => 'Von Datum', 'to_date' => 'Bis Datum',
     'by_user' => 'Lagerbewegung nach Benutzer', 'col_user' => 'Benutzer', 'col_in_count' => 'Zugangsbelege', 'col_out_count' => 'Abgangsbelege', 'col_in_qty' => 'Zugang gesamt', 'col_out_qty' => 'Abgang gesamt',

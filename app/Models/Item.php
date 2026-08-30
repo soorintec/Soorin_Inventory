@@ -18,7 +18,7 @@ class Item extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'item_category_id', 'code', 'name', 'brand', 'unit',
+        'item_category_id', 'code', 'name', 'image', 'brand', 'unit',
         'track_serial', 'is_active', 'description',
     ];
 
@@ -61,6 +61,16 @@ class Item extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(ItemCategory::class, 'item_category_id');
+    }
+
+    /** آدرسِ عکسِ کالا (روی دیسکِ item-images) یا null اگر عکسی نیست. */
+    public function imageUrl(): ?string
+    {
+        if (blank($this->image)) {
+            return null;
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('items')->url($this->image);
     }
 
     public function versions(): HasMany

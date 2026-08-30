@@ -8,6 +8,7 @@ use App\Models\Warehouse;
 use App\Support\Jalali;
 use Filament\Actions\Action;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -40,6 +41,13 @@ class ItemsTable
             // جدول را در یک پنجره باز می‌کند. ستون‌های کم‌اهمیت روی موبایل پنهانند.
             ->columns([
                 static::statusColumn(),
+
+                ImageColumn::make('image')
+                    ->label(__('items.image'))
+                    ->disk('items')
+                    ->circular()
+                    ->extraHeaderAttributes(['class' => 'hidden md:table-cell'])
+                    ->extraCellAttributes(['class' => 'hidden md:table-cell']),
 
                 TextColumn::make('name')
                     ->label(__('items.name'))
@@ -96,6 +104,31 @@ class ItemsTable
                     ->relationship('category', 'name')
                     ->searchable()
                     ->preload(),
+
+                // وضعیت موجودی — از داشبورد هم با کلیک روی «کالای تمام‌شده» فعال می‌شود.
+                SelectFilter::make('stock_state')
+                    ->label(__('items.stock_state'))
+                    ->options([
+                        'out' => __('items.statuses.out'),
+                        'low' => __('items.statuses.low'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        $value = $data['value'] ?? null;
+
+                        if (! in_array($value, ['out', 'low'], true)) {
+                            return $query;
+                        }
+
+                        $total = '(SELECT COALESCE(SUM(sb.quantity), 0) FROM stock_balances sb
+                                    JOIN item_versions iv ON iv.id = sb.item_version_id
+                                   WHERE iv.item_id = items.id AND iv.deleted_at IS NULL)';
+                        $min = '(SELECT COALESCE(MAX(iv2.min_stock), 0) FROM item_versions iv2
+                                  WHERE iv2.item_id = items.id AND iv2.deleted_at IS NULL)';
+
+                        return $value === 'out'
+                            ? $query->whereRaw("$total <= 0")
+                            : $query->whereRaw("$total > 0 AND $min > 0 AND $total <= $min");
+                    }),
 
                 // جستجو بر اساس انباری که کالا در آن موجودی دارد
                 SelectFilter::make('warehouse')

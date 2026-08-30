@@ -113,6 +113,39 @@ class WarehouseReportController extends Controller
         ], __('reports.stock_flow_title')));
     }
 
+    /**
+     * گزارشِ کالاهای نیازمندِ سفارش — ورژن‌هایی که موجودی‌شان زیرِ حد هشدار است،
+     * همراه با «مقدارِ پیشنهادی سفارش» (حد هشدار منهای موجودی) برای تصمیمِ خرید.
+     */
+    public function reorder(): Response
+    {
+        $this->authorizeView();
+
+        $rows = \App\Models\ItemVersion::query()
+            ->with(['item.category', 'balances'])
+            ->where('min_stock', '>', 0)
+            ->whereHas('item')
+            ->get()
+            ->map(fn (\App\Models\ItemVersion $v) => [
+                'category'  => $v->item->category?->name ?? '—',
+                'code'      => $v->item->code,
+                'name'      => $v->item->name,
+                'version'   => $v->version_code,
+                'unit'      => $v->item->unit,
+                'current'   => $v->totalQuantity(),
+                'min'       => (float) $v->min_stock,
+                'suggested' => max(0.0, (float) $v->min_stock - $v->totalQuantity()),
+            ])
+            ->filter(fn (array $r) => $r['current'] < $r['min'])
+            ->sortBy(fn (array $r) => [$r['category'], $r['name']])
+            ->groupBy('category');
+
+        return $this->stream($this->pdf->html('reorder', [
+            'groups'     => $rows,
+            'totalItems' => $rows->flatten(1)->count(),
+        ], __('reports.reorder_title')));
+    }
+
     /** فهرست شمارش انبارگردانی — بدون ستون موجودی. */
     public function stocktakeSheet(Stocktake $stocktake, StocktakeService $service): Response
     {

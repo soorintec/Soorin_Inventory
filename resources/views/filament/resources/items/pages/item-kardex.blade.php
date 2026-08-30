@@ -1,5 +1,8 @@
 <x-filament-panels::page>
     <div class="flex flex-wrap items-center gap-3">
+        @if ($record->imageUrl())
+            <img src="{{ $record->imageUrl() }}" alt="" class="h-11 w-11 rounded-lg object-cover ring-1 ring-gray-200 dark:ring-gray-700">
+        @endif
         <span class="text-sm text-gray-500 dark:text-gray-400">{{ __('items.total_stock') }}:</span>
         <x-filament::badge :color="$balance > 0 ? 'success' : ($balance < 0 ? 'danger' : 'gray')" size="lg">
             {{ \App\Support\Jalali::quantity($balance) }} {{ $record->unit }}

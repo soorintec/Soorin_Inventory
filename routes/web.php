@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
     // گزارش‌های چاپی انبار — PDF درون مرورگر باز می‌شود تا مستقیم پرینت شود
     Route::get('/warehouse/print/stock', [WarehouseReportController::class, 'stockList'])->name('warehouse.print.stock');
     Route::get('/warehouse/print/flow', [WarehouseReportController::class, 'stockFlow'])->name('warehouse.print.flow');
+    Route::get('/warehouse/print/reorder', [WarehouseReportController::class, 'reorder'])->name('warehouse.print.reorder');
     Route::get('/warehouse/stocktake/{stocktake}/sheet', [WarehouseReportController::class, 'stocktakeSheet'])->name('stocktake.sheet');
     Route::get('/warehouse/stocktake/{stocktake}/report', [WarehouseReportController::class, 'stocktakeReport'])->name('stocktake.report');
 

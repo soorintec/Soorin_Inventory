@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'reorder_empty' => 'All items are above their reorder level.',
+    'col_suggested' => 'Suggested order',
+    'col_min_stock' => 'Reorder level',
+    'col_current_stock' => 'Current stock',
+    'reorder_title' => 'Items to reorder',
     'label'     => 'Reports',
     'nav_group' => 'Management & Reports',
 

@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'default_version' => 'Principal',
+    'stock_state' => 'État du stock',
+    'image' => 'Photo',
     'category_label' => 'Catégorie d\'article', 'category_plural' => 'Catégories', 'category_parent' => 'Catégorie parente',
     'spec_template' => 'Modèle de spécifications techniques',
     'spec_template_hint' => 'Champs à enregistrer pour cette catégorie (ex. : CPU, RAM, disque). Un formulaire dynamique est créé à partir de ce modèle pour chaque version.',

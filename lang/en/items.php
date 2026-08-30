@@ -6,6 +6,9 @@
 */
 
 return [
+    'default_version' => 'Main',
+    'stock_state' => 'Stock status',
+    'image' => 'Photo',
     'category_label'  => 'Item category',
     'category_plural' => 'Categories',
     'category_parent' => 'Parent category',

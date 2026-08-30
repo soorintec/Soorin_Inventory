@@ -61,6 +61,19 @@ return [
             'report' => false,
         ],
 
+        /*
+        | عکسِ کالاها مستقیم داخل public/item-images می‌نشیند و با آدرس /item-images
+        | سرو می‌شود — مثل دیسکِ branding، بدونِ وابستگی به php artisan storage:link.
+        */
+        'items' => [
+            'driver' => 'local',
+            'root' => public_path('item-images'),
+            'url' => '/item-images',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

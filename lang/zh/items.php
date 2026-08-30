@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'default_version' => '主',
+    'stock_state' => '库存状态',
+    'image' => '照片',
     'category_label' => '商品分类', 'category_plural' => '分类', 'category_parent' => '父级分类',
     'spec_template' => '技术规格模板',
     'spec_template_hint' => '此分类需记录的字段（例如：CPU、内存、硬盘）。系统会依此模板为每个版本生成动态表单。',

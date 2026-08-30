@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'reorder_empty' => 'Tutti gli articoli sono sopra la soglia.',
+    'col_suggested' => 'Quantità suggerita',
+    'col_min_stock' => 'Soglia minima',
+    'col_current_stock' => 'Giacenza attuale',
+    'reorder_title' => 'Articoli da riordinare',
     'label' => 'Report', 'nav_group' => 'Gestione e report',
     'from_date' => 'Dalla data', 'to_date' => 'Alla data',
     'by_user' => 'Movimenti per utente', 'col_user' => 'Utente', 'col_in_count' => 'Documenti di carico', 'col_out_count' => 'Documenti di scarico', 'col_in_qty' => 'Totale carichi', 'col_out_qty' => 'Totale scarichi',

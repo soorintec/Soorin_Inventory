@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'reorder_empty' => 'Tous les articles sont au-dessus du seuil.',
+    'col_suggested' => 'Quantité suggérée',
+    'col_min_stock' => 'Seuil dalerte',
+    'col_current_stock' => 'Stock actuel',
+    'reorder_title' => 'Articles à réapprovisionner',
     'label' => 'Rapports', 'nav_group' => 'Gestion et rapports',
     'from_date' => 'Date de début', 'to_date' => 'Date de fin',
     'by_user' => 'Mouvements par utilisateur', 'col_user' => 'Utilisateur', 'col_in_count' => 'Documents d\'entrée', 'col_out_count' => 'Documents de sortie', 'col_in_qty' => 'Total entrées', 'col_out_qty' => 'Total sorties',

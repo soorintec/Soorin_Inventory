@@ -6,6 +6,9 @@
 */
 
 return [
+    'default_version' => 'الأساسي',
+    'stock_state' => 'حالة المخزون',
+    'image' => 'صورة الصنف',
     'category_label'  => 'فئة الصنف',
     'category_plural' => 'الفئات',
     'category_parent' => 'الفئة الأصل',

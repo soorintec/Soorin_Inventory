@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'reorder_empty' => '所有商品均高于警戒线。',
+    'col_suggested' => '建议订购量',
+    'col_min_stock' => '警戒线',
+    'col_current_stock' => '当前库存',
+    'reorder_title' => '需补货商品',
     'label' => '报表', 'nav_group' => '管理与报表',
     'from_date' => '起始日期', 'to_date' => '结束日期',
     'by_user' => '按用户的仓库流水', 'col_user' => '用户', 'col_in_count' => '入库单据数', 'col_out_count' => '出库单据数', 'col_in_qty' => '入库合计', 'col_out_qty' => '出库合计',

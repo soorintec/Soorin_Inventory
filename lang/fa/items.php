@@ -6,6 +6,9 @@
 */
 
 return [
+    'default_version' => 'اصلی',
+    'stock_state' => 'وضعیت موجودی',
+    'image' => 'عکس کالا',
     'category_label'  => 'دسته کالا',
     'category_plural' => 'دسته‌بندی‌ها',
     'category_parent' => 'دسته والد',
