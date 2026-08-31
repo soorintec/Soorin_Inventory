@@ -432,6 +432,13 @@ class ListStockBalances extends ListRecords
             // «ویرایش کالاها» عمداً حذف شد — کالاها از منوی «کالاها» ویرایش
             // می‌شوند و این میان‌بر فقط شلوغی بود.
 
+            // مدیریت دسته‌بندی‌ها (ویرایش نام و حذف) — صفحه‌اش از قبل هست ولی در منو
+            // نبود، پس کاربر راهی برای حذف دسته نداشت.
+            Action::make('manageCategories')
+                ->label(\App\Filament\Resources\ItemCategories\ItemCategoryResource::getPluralModelLabel())
+                ->icon(Heroicon::OutlinedTag)
+                ->url(fn () => \App\Filament\Resources\ItemCategories\ItemCategoryResource::getUrl('index')),
+
             Action::make('manageWarehouses')
                 ->label(__('warehouses.plural'))
                 ->icon(Heroicon::OutlinedBuildingStorefront)

@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'kardex_print' => 'Stampa scheda',
     'price_hint' => 'Se compilato, aggiorna il prezzo di questo articolo; lascia vuoto per mantenere il prezzo attuale.',
     'price' => 'Prezzo',
     'kardex' => 'Scheda articolo',

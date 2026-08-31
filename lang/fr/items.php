@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'category_in_use' => 'Cette catégorie contient des articles ou sous-catégories et ne peut pas être supprimée ; déplacez-les ou supprimez-les dabord.',
     'default_version' => 'Principal',
     'stock_state' => 'État du stock',
     'image' => 'Photo',

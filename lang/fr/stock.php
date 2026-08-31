@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'kardex_print' => 'Imprimer la fiche',
     'price_hint' => 'Si renseigné, met à jour le prix de cet article ; laisser vide pour conserver le prix actuel.',
     'price' => 'Prix',
     'kardex' => 'Fiche de stock',

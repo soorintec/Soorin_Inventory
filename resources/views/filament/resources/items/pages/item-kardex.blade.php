@@ -33,7 +33,9 @@
                     <tbody>
                         @foreach ($rows as $i => $row)
                             @php $m = $row['movement']; $isIn = $m->direction === \App\Models\StockMovement::DIRECTION_IN; @endphp
-                            <tr class="border-b border-gray-100 last:border-0 dark:border-gray-800">
+                            {{-- ردیفِ ورود سبز، ردیفِ خروج قرمز (رنگ درون‌خطی تا مستقل از کلاس‌های تیلویند قطعی باشد) --}}
+                            <tr class="border-b border-gray-100 last:border-0 dark:border-gray-800"
+                                style="background: {{ $isIn ? 'rgba(16,185,129,0.09)' : 'rgba(239,68,68,0.09)' }}">
                                 <td class="px-4 py-3 text-gray-400">{{ \App\Support\Jalali::digits((string) ($i + 1)) }}</td>
                                 <td class="px-4 py-3 whitespace-nowrap">{{ \App\Support\Jalali::formatDateTime($m->created_at) }}</td>
                                 <td class="px-4 py-3">{{ $m->warehouse?->name ?? '—' }}</td>

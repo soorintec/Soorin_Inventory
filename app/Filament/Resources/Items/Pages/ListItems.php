@@ -16,6 +16,19 @@ class ListItems extends ListRecords
 {
     protected static string $resource = ItemResource::class;
 
+    /**
+     * کلیک روی «کالای تمام‌شده» در داشبورد (?stock=out) فیلترِ وضعیت موجودی را
+     * همین‌جا فعال می‌کند — چون هیدریتِ فیلتر از URLِ tableFilters همیشه قابل‌اتکا نبود.
+     */
+    public function mount(): void
+    {
+        parent::mount();
+
+        if (in_array(request('stock'), ['out', 'low'], true)) {
+            $this->tableFilters['stock_state']['value'] = request('stock');
+        }
+    }
+
     public function getTitle(): string
     {
         return __('items.nav_label');

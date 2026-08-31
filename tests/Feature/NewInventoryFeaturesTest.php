@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Filament\Resources\ItemCategories\Pages\ListItemCategories;
 use App\Filament\Resources\Items\Pages\ListItems;
 use App\Models\Item;
 use App\Models\ItemCategory;
 use App\Models\StockBalance;
+use App\Models\StockMovement;
 use App\Models\User;
 use App\Models\Warehouse;
 use Database\Seeders\RolePermissionSeeder;
@@ -85,5 +87,36 @@ class NewInventoryFeaturesTest extends TestCase
             ->filterTable('stock_state', 'out')
             ->assertCanSeeTableRecords([$out])
             ->assertCanNotSeeTableRecords([$full]);
+    }
+
+    /** چاپِ کاردکس: مسیر باز می‌شود و حرکت‌های کالا را نشان می‌دهد. */
+    public function test_kardex_print_route_renders(): void
+    {
+        $item = $this->item('K-1', 'کالای کاردکس');
+        $v = $item->versions()->create(['version_code' => 'اصلی']);
+        StockMovement::create([
+            'item_version_id' => $v->id, 'warehouse_id' => $this->warehouse->id,
+            'direction' => StockMovement::DIRECTION_IN, 'reason' => StockMovement::REASON_PURCHASE,
+            'quantity' => 7, 'unit_cost' => 0, 'user_id' => $this->admin->id,
+        ]);
+
+        $response = $this->actingAs($this->admin)->get(route('warehouse.print.kardex', $item));
+
+        $response->assertOk();
+        $response->assertSee('کالای کاردکس');
+        $response->assertSee(__('stock.reasons.purchase'));
+    }
+
+    /** دسته‌ای که کالا دارد نباید حذف شود (وگرنه خطای کلید خارجی). */
+    public function test_a_category_with_items_cannot_be_deleted(): void
+    {
+        $cat = ItemCategory::create(['name' => 'دستهٔ پرکالا']);
+        Item::create(['item_category_id' => $cat->id, 'code' => 'C-1', 'name' => 'کالا']);
+
+        Livewire::actingAs($this->admin)
+            ->test(ListItemCategories::class)
+            ->callTableAction('delete', $cat);
+
+        $this->assertDatabaseHas('item_categories', ['id' => $cat->id]);
     }
 }

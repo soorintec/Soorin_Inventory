@@ -146,6 +146,36 @@ class WarehouseReportController extends Controller
         ], __('reports.reorder_title')));
     }
 
+    /** چاپِ کاردکسِ یک کالا — دفترِ ورود/خروج با ماندهٔ در حرکت. */
+    public function kardex(\App\Models\Item $item): Response
+    {
+        $this->authorizeView();
+
+        $versionIds = \App\Models\ItemVersion::withTrashed()->where('item_id', $item->id)->pluck('id');
+
+        $movements = StockMovement::with(['warehouse', 'user', 'itemVersion'])
+            ->whereIn('item_version_id', $versionIds)
+            ->orderBy('created_at')
+            ->orderBy('id')
+            ->get();
+
+        $balance = 0.0;
+        $rows = [];
+
+        foreach ($movements as $movement) {
+            $balance += $movement->direction === StockMovement::DIRECTION_IN
+                ? (float) $movement->quantity
+                : -(float) $movement->quantity;
+            $rows[] = ['movement' => $movement, 'balance' => $balance];
+        }
+
+        return $this->stream($this->pdf->html('kardex', [
+            'item'    => $item,
+            'rows'    => $rows,
+            'balance' => $balance,
+        ], __('stock.kardex') . ' — ' . $item->name));
+    }
+
     /** فهرست شمارش انبارگردانی — بدون ستون موجودی. */
     public function stocktakeSheet(Stocktake $stocktake, StocktakeService $service): Response
     {

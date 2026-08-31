@@ -7,6 +7,7 @@ use App\Filament\Resources\Items\ItemResource;
 use App\Models\Item;
 use App\Models\ItemVersion;
 use App\Models\StockMovement;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
 use Filament\Resources\Pages\Page;
 use Filament\Support\Icons\Heroicon;
@@ -42,6 +43,18 @@ class ItemKardex extends Page
     public function getTitle(): string
     {
         return __('stock.kardex') . ' — ' . $this->record->name;
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('print')
+                ->label(__('stock.kardex_print'))
+                ->icon(Heroicon::OutlinedPrinter)
+                ->color('gray')
+                ->url(fn () => route('warehouse.print.kardex', $this->record))
+                ->openUrlInNewTab(),
+        ];
     }
 
     /**

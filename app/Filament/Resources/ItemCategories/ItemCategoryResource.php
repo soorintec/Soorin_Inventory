@@ -8,6 +8,7 @@ use App\Models\ItemCategory;
 use BackedEnum;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Notifications\Notification;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -115,7 +116,23 @@ class ItemCategoryResource extends Resource
                     ->counts('items')
                     ->badge(),
             ])
-            ->recordActions([EditAction::make(), DeleteAction::make()])
+            ->recordActions([
+                EditAction::make(),
+                // حذفِ دسته‌ای که کالا یا زیردسته دارد جلوگیری می‌شود (وگرنه خطای
+                // کلید خارجی می‌داد) و پیامِ روشن نشان داده می‌شود.
+                DeleteAction::make()
+                    ->before(function (ItemCategory $record, DeleteAction $action) {
+                        if ($record->items()->exists() || $record->children()->exists()) {
+                            Notification::make()
+                                ->danger()
+                                ->title(__('items.category_in_use'))
+                                ->persistent()
+                                ->send();
+
+                            $action->halt();
+                        }
+                    }),
+            ])
             ->emptyStateHeading(__('items.empty_categories'));
     }
 

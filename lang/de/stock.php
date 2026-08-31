@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'kardex_print' => 'Lagerkarte drucken',
     'price_hint' => 'Wenn ausgefüllt, wird der Preis dieses Artikels aktualisiert; leer lassen, um den aktuellen Preis zu behalten.',
     'price' => 'Preis',
     'kardex' => 'Lagerkarte',

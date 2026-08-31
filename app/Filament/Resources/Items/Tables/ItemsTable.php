@@ -174,6 +174,9 @@ class ItemsTable
                     ))
                     ->toggle(),
             ])
+            // بدون این، فیلترِ آمده از URL (کلیک روی «کالای تمام‌شده» در داشبورد)
+            // تا زدنِ دکمهٔ «اعمال» اثر نمی‌کرد و همهٔ کالاها نشان داده می‌شد.
+            ->deferFilters(false)
             ->defaultSort('name')
             ->emptyStateHeading(__('items.empty_items'));
     }

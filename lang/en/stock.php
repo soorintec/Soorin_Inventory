@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'kardex_print' => 'Print kardex',
     'price_hint' => 'If set, updates this item’s price; leave empty to keep the current price.',
     'price' => 'Price',
     'kardex' => 'Kardex',

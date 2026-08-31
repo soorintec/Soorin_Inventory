@@ -6,6 +6,7 @@
 */
 
 return [
+    'category_in_use' => 'This category has items or sub-categories and cannot be deleted; move or remove them first.',
     'default_version' => 'Main',
     'stock_state' => 'Stock status',
     'image' => 'Photo',

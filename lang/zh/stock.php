@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'kardex_print' => '打印库存卡',
     'price_hint' => '若填写，将更新该商品价格；留空则保持当前价格。',
     'price' => '价格',
     'kardex' => '库存卡',

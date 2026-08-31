@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'category_in_use' => 'Questa categoria contiene articoli o sotto-categorie e non può essere eliminata; spostali o rimuovili prima.',
     'default_version' => 'Principale',
     'stock_state' => 'Stato scorte',
     'image' => 'Foto',

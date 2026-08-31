@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'category_in_use' => 'Diese Kategorie enthält Artikel oder Unterkategorien und kann nicht gelöscht werden; verschieben oder entfernen Sie diese zuerst.',
     'default_version' => 'Standard',
     'stock_state' => 'Bestandsstatus',
     'image' => 'Foto',

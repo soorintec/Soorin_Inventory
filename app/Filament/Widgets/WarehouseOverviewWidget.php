@@ -52,9 +52,7 @@ class WarehouseOverviewWidget extends StatsOverviewWidget
                 ->descriptionIcon('heroicon-o-exclamation-triangle')
                 ->color($outOfStock > 0 ? 'danger' : 'success')
                 // کلیک روی این عدد → فهرستِ همان کالاهای تمام‌شده در «موجودی انبار».
-                ->url(\App\Filament\Resources\Items\ItemResource::getUrl('index', [
-                    'tableFilters' => ['stock_state' => ['value' => 'out']],
-                ])),
+                ->url(\App\Filament\Resources\Items\ItemResource::getUrl('index', ['stock' => 'out'])),
 
             Stat::make(__('dashboard.movements_today'), Jalali::quantity($today))
                 ->description(__('dashboard.movements_today_hint'))

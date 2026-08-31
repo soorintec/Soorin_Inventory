@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'category_in_use' => '该分类包含商品或子分类，无法删除；请先移动或删除它们。',
     'default_version' => '主',
     'stock_state' => '库存状态',
     'image' => '照片',
