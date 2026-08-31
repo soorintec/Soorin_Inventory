@@ -27,6 +27,11 @@ class ListItems extends ListRecords
         if (in_array(request('stock'), ['out', 'low'], true)) {
             $this->tableFilters['stock_state']['value'] = request('stock');
         }
+
+        // کلیک روی تعدادِ کالاهای یک دسته (?category=id) → فیلترِ همان دسته.
+        if (filled(request('category'))) {
+            $this->tableFilters['item_category_id']['value'] = request('category');
+        }
     }
 
     public function getTitle(): string

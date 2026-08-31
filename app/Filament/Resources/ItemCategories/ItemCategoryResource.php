@@ -44,6 +44,12 @@ class ItemCategoryResource extends Resource
         return __('items.category_label');
     }
 
+    // بدون این، فیلامنت خودش «s» انگلیسی به «دسته کالا» می‌چسباند («دسته کالاs»).
+    public static function getPluralModelLabel(): string
+    {
+        return __('items.category_plural');
+    }
+
     public static function getNavigationLabel(): string
     {
         return __('items.category_plural');
@@ -114,7 +120,11 @@ class ItemCategoryResource extends Resource
                 TextColumn::make('items_count')
                     ->label(__('items.plural'))
                     ->counts('items')
-                    ->badge(),
+                    ->badge()
+                    // کلیک روی عدد → فهرستِ کالاهای همین دسته در «موجودی انبار».
+                    ->url(fn ($record) => $record->items_count > 0
+                        ? \App\Filament\Resources\Items\ItemResource::getUrl('index', ['category' => $record->id])
+                        : null),
             ])
             ->recordActions([
                 EditAction::make(),
