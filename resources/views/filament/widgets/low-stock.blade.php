@@ -10,8 +10,8 @@
                 {{ __('dashboard.stock_all_good') }}
             </p>
         @else
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
+            <div class="calc-parts-scroll overflow-x-auto">
+                <table class="dash-table w-full text-sm">
                     <thead>
                         <tr class="border-b border-gray-200 dark:border-gray-700">
                             <th class="p-2 text-start font-medium">{{ __('items.name') }}</th>

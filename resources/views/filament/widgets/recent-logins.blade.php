@@ -11,8 +11,8 @@
         @if ($users->isEmpty())
             <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.no_logins') }}</p>
         @else
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
+            <div class="calc-parts-scroll overflow-x-auto">
+                <table class="dash-table w-full text-sm">
                     <thead>
                         <tr class="border-b border-gray-200 dark:border-gray-700">
                             <th class="p-2 text-start font-medium">{{ __('users.name') }}</th>

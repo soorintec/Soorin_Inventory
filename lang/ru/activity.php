@@ -7,6 +7,8 @@ return [
 
     'actions' => [
         'stock_in' => 'Приход', 'stock_out' => 'Расход',
+        'stocktake_cancelled' => 'Инвентаризация отменена',
+        'stocktake_applied' => 'Инвентаризация применена',
         'item_created' => 'Товар создан', 'item_updated' => 'Товар изменён', 'item_deleted' => 'Товар удалён',
         'version_created' => 'Версия создана', 'version_updated' => 'Версия изменена', 'version_deleted' => 'Версия удалена',
         'category_created' => 'Категория создана', 'category_updated' => 'Категория изменена', 'category_deleted' => 'Категория удалена',

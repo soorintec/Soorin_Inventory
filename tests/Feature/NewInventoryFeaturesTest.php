@@ -107,6 +107,39 @@ class NewInventoryFeaturesTest extends TestCase
         $response->assertSee(__('stock.reasons.purchase'));
     }
 
+    /** حذفِ کالا از «مدیریت انبار» (سطر) — کالا حذفِ نرم می‌شود. */
+    public function test_delete_item_action_soft_deletes_the_item(): void
+    {
+        $item = $this->item('DEL-1', 'کالای حذفی');
+        $v = $item->versions()->create(['version_code' => 'اصلی']);
+        $bal = StockBalance::create(['item_version_id' => $v->id, 'warehouse_id' => $this->warehouse->id, 'quantity' => 5]);
+
+        Livewire::actingAs($this->admin)
+            ->test(\App\Filament\Resources\StockBalances\Pages\ListStockBalances::class)
+            ->callTableAction('deleteItem', $bal);
+
+        $this->assertSoftDeleted('items', ['id' => $item->id]);
+    }
+
+    /** حذفِ گروهیِ کالاها با تیک‌زدن. */
+    public function test_bulk_delete_removes_selected_items(): void
+    {
+        $a = $this->item('B-1', 'الف');
+        $va = $a->versions()->create(['version_code' => 'اصلی']);
+        $ba = StockBalance::create(['item_version_id' => $va->id, 'warehouse_id' => $this->warehouse->id, 'quantity' => 2]);
+
+        $b = $this->item('B-2', 'ب');
+        $vb = $b->versions()->create(['version_code' => 'اصلی']);
+        $bb = StockBalance::create(['item_version_id' => $vb->id, 'warehouse_id' => $this->warehouse->id, 'quantity' => 3]);
+
+        Livewire::actingAs($this->admin)
+            ->test(\App\Filament\Resources\StockBalances\Pages\ListStockBalances::class)
+            ->callTableBulkAction('deleteItems', [$ba, $bb]);
+
+        $this->assertSoftDeleted('items', ['id' => $a->id]);
+        $this->assertSoftDeleted('items', ['id' => $b->id]);
+    }
+
     /** دسته‌ای که کالا دارد نباید حذف شود (وگرنه خطای کلید خارجی). */
     public function test_a_category_with_items_cannot_be_deleted(): void
     {

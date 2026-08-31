@@ -5,6 +5,8 @@ return [
     'user' => '用户', 'action' => '操作', 'subject' => '对象', 'when' => '时间', 'system' => '系统', 'view_all' => '全部活动',
     'actions' => [
         'stock_in' => '入库', 'stock_out' => '出库',
+        'stocktake_cancelled' => '已取消盘点',
+        'stocktake_applied' => '已应用盘点',
         'item_created' => '创建商品', 'item_updated' => '编辑商品', 'item_deleted' => '删除商品',
         'version_created' => '创建版本', 'version_updated' => '编辑版本', 'version_deleted' => '删除版本',
         'category_created' => '创建分类', 'category_updated' => '编辑分类', 'category_deleted' => '删除分类',

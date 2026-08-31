@@ -76,6 +76,24 @@ class ActivityLog extends Model
         };
     }
 
+    /**
+     * گروهِ رنگیِ ردیف در داشبورد: ورود سبز، خروج قرمز، ویرایش زرد،
+     * پشتیبان آبی، انبارگردانی بنفش — سایر موارد بی‌رنگ.
+     */
+    public function colorGroup(): ?string
+    {
+        return match (true) {
+            str_starts_with($this->action, 'backup_')   => 'backup',
+            str_starts_with($this->action, 'stocktake_') => 'stocktake',
+            $this->action === 'stock_in' || $this->action === 'purchase_received' => 'in',
+            $this->action === 'stock_out' => 'out',
+            str_contains($this->action, 'created')
+                || str_contains($this->action, 'updated')
+                || str_contains($this->action, 'deleted') => 'edit',
+            default => null,
+        };
+    }
+
     /** تاریخ و ساعت شمسی به وقت تهران. */
     public function happenedAt(): string
     {

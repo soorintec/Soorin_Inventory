@@ -235,6 +235,16 @@ body { background: var(--bg); color: var(--text); }
     .calc-parts tbody tr { line-height: 1.5; }
 }
 
+/* ---------- جدول‌های ویجت‌های داشبورد (آخرین تغییرات، کالاهای تمام‌شده، آخرین ورودها) ----------
+   کلاس‌های px/py تیلویند در CSSِ کامپایل‌شده نبودند و ستون‌های عمودی به هم می‌چسبیدند؛
+   فاصله را اینجا قطعی می‌دهیم. */
+.dash-table th,
+.dash-table td {
+    padding-block: 0.6rem !important;
+    padding-inline: 1.05rem !important;
+    vertical-align: middle;
+}
+
 /* ---------- فوتر ---------- */
 .app-footer {
     border-top: 1px solid var(--border);

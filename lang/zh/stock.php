@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'deleted_count' => '已删除 :count 件商品。',
+    'delete_selected_items' => '删除所选',
+    'delete_item_warning' => '将删除该商品及其所有版本（可恢复）。继续？',
+    'delete_item' => '删除商品',
     'kardex_print' => '打印库存卡',
     'price_hint' => '若填写，将更新该商品价格；留空则保持当前价格。',
     'price' => '价格',

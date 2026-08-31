@@ -15,6 +15,8 @@ return [
     'actions' => [
         'stock_in'          => 'ورود کالا',
         'stock_out'         => 'خروج کالا',
+        'stocktake_cancelled' => 'لغو انبارگردانی',
+        'stocktake_applied' => 'اعمال انبارگردانی',
         'item_created'      => 'ساخت کالا',
         'item_updated'      => 'ویرایش کالا',
         'item_deleted'      => 'حذف کالا',

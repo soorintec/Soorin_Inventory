@@ -4,10 +4,14 @@ namespace App\Filament\Resources\StockBalances\Tables;
 
 use App\Enums\Permission;
 use App\Filament\Resources\Items\ItemResource;
+use App\Models\Item;
 use App\Models\StockBalance;
 use App\Support\Jalali;
 use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
+use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Collection;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -117,6 +121,42 @@ class StockBalancesTable
                     ->url(fn (StockBalance $record) => $record->itemVersion?->item
                         ? ItemResource::getUrl('edit', ['record' => $record->itemVersion->item_id])
                         : null),
+
+                // حذفِ کالا (نرم، قابل بازیابی) از همین‌جا.
+                Action::make('deleteItem')
+                    ->label(__('stock.delete_item'))
+                    ->icon(Heroicon::OutlinedTrash)
+                    ->color('danger')
+                    ->visible(fn () => auth()->user()?->can(Permission::ManageItems->value) ?? false)
+                    ->requiresConfirmation()
+                    ->modalHeading(__('stock.delete_item'))
+                    ->modalDescription(__('stock.delete_item_warning'))
+                    ->action(function (StockBalance $record) {
+                        $record->itemVersion?->item?->delete();
+                        Notification::make()->success()->title(__('common.deleted'))->send();
+                    }),
+            ])
+            // تیک‌زدنِ چند کالا و حذفِ یک‌جا.
+            ->toolbarActions([
+                BulkAction::make('deleteItems')
+                    ->label(__('stock.delete_selected_items'))
+                    ->icon(Heroicon::OutlinedTrash)
+                    ->color('danger')
+                    ->visible(fn () => auth()->user()?->can(Permission::ManageItems->value) ?? false)
+                    ->requiresConfirmation()
+                    ->modalHeading(__('stock.delete_selected_items'))
+                    ->modalDescription(__('stock.delete_item_warning'))
+                    ->action(function (Collection $records) {
+                        // هر سطر یک «موجودیِ ورژن» است؛ کالاهای یکتای پشتشان حذف می‌شوند.
+                        $itemIds = $records->pluck('itemVersion.item_id')->filter()->unique();
+                        $items = Item::whereIn('id', $itemIds)->get();
+                        $items->each->delete();
+
+                        Notification::make()->success()
+                            ->title(__('stock.deleted_count', ['count' => Jalali::quantity($items->count())]))
+                            ->send();
+                    })
+                    ->deselectRecordsAfterCompletion(),
             ])
             // کالای حذف‌شده (حذف نرم) نباید سطر بی‌نام در فهرست بسازد
             ->modifyQueryUsing(fn (Builder $query) => $query

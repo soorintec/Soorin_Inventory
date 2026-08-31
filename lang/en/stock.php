@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'deleted_count' => ':count items deleted.',
+    'delete_selected_items' => 'Delete selected items',
+    'delete_item_warning' => 'This item and all its versions will be deleted (soft, recoverable). Continue?',
+    'delete_item' => 'Delete item',
     'kardex_print' => 'Print kardex',
     'price_hint' => 'If set, updates this item’s price; leave empty to keep the current price.',
     'price' => 'Price',

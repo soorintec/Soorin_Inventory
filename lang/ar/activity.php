@@ -15,6 +15,8 @@ return [
     'actions' => [
         'stock_in'          => 'إدخال مخزون',
         'stock_out'         => 'إخراج مخزون',
+        'stocktake_cancelled' => 'إلغاء الجرد',
+        'stocktake_applied' => 'تطبيق الجرد',
         'item_created'      => 'إنشاء صنف',
         'item_updated'      => 'تعديل صنف',
         'item_deleted'      => 'حذف صنف',

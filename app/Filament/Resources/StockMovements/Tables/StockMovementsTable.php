@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\StockMovements\Tables;
 
+use App\Filament\Resources\Items\Pages\ItemKardex;
+use App\Models\StockMovement;
 use App\Support\Jalali;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -52,6 +54,10 @@ class StockMovementsTable
                 SelectFilter::make('warehouse_id')->label(__('stock.warehouse'))->relationship('warehouse', 'name'),
                 SelectFilter::make('user_id')->label(__('stock.user'))->relationship('user', 'name'),
             ])
+            // کلیک روی هر تراکنش → کاردکسِ همان کالا.
+            ->recordUrl(fn (StockMovement $record) => $record->itemVersion?->item_id
+                ? ItemKardex::getUrl(['record' => $record->itemVersion->item_id])
+                : null)
             ->defaultSort('created_at', 'desc')
             ->emptyStateHeading(__('stock.empty'));
     }

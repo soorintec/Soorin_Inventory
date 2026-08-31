@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'deleted_count' => ':count Artikel gelöscht.',
+    'delete_selected_items' => 'Ausgewählte löschen',
+    'delete_item_warning' => 'Dieser Artikel und alle Versionen werden gelöscht (wiederherstellbar). Fortfahren?',
+    'delete_item' => 'Artikel löschen',
     'kardex_print' => 'Lagerkarte drucken',
     'price_hint' => 'Wenn ausgefüllt, wird der Preis dieses Artikels aktualisiert; leer lassen, um den aktuellen Preis zu behalten.',
     'price' => 'Preis',

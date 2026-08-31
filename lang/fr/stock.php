@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'deleted_count' => ':count articles supprimés.',
+    'delete_selected_items' => 'Supprimer la sélection',
+    'delete_item_warning' => 'Cet article et toutes ses versions seront supprimés (récupérable). Continuer ?',
+    'delete_item' => 'Supprimer larticle',
     'kardex_print' => 'Imprimer la fiche',
     'price_hint' => 'Si renseigné, met à jour le prix de cet article ; laisser vide pour conserver le prix actuel.',
     'price' => 'Prix',

@@ -15,6 +15,8 @@ return [
     'actions' => [
         'stock_in'          => 'Stock in',
         'stock_out'         => 'Stock out',
+        'stocktake_cancelled' => 'Stocktake cancelled',
+        'stocktake_applied' => 'Stocktake applied',
         'item_created'      => 'Item created',
         'item_updated'      => 'Item updated',
         'item_deleted'      => 'Item deleted',

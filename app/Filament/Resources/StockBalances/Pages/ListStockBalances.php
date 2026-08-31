@@ -13,6 +13,7 @@ use App\Models\Warehouse;
 use App\Services\StockMovementService;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -209,6 +210,7 @@ class ListStockBalances extends ListRecords
                 ->searchable()
                 ->required()
                 ->native(false)
+                ->live()
                 ->placeholder(fn ($get) => $get('item_id') && ItemVersion::where('item_id', $get('item_id'))->doesntExist()
                     ? __('stock.no_version')
                     : null),
@@ -218,7 +220,27 @@ class ListStockBalances extends ListRecords
                 ->options(fn () => Warehouse::where('is_active', true)->pluck('name', 'id'))
                 ->default(fn () => Warehouse::where('code', 'MAIN')->value('id'))
                 ->required()
-                ->native(false),
+                ->native(false)
+                ->live(),
+
+            // موجودی فعلیِ کالای انتخاب‌شده (در انبارِ انتخاب‌شده) — تا کاربر بداند چقدر دارد.
+            Placeholder::make('current_stock')
+                ->label(__('items.current_stock'))
+                ->content(function ($get) {
+                    $vid = $get('item_version_id');
+                    $version = $vid ? ItemVersion::find($vid) : null;
+
+                    if (! $version) {
+                        return '—';
+                    }
+
+                    $wid = $get('warehouse_id');
+                    $qty = $wid
+                        ? (float) $version->balances()->where('warehouse_id', $wid)->sum('quantity')
+                        : $version->totalQuantity();
+
+                    return \App\Support\Jalali::quantity($qty) . ' ' . ($version->item->unit ?? '');
+                }),
 
             TextInput::make('quantity')
                 ->label(__('stock.quantity'))
@@ -427,7 +449,8 @@ class ListStockBalances extends ListRecords
     {
         return ActionGroup::make([
             $this->newItemAction(),
-            $this->newCategoryAction(),
+            // «دسته‌بندی جدید» از اینجا برداشته شد؛ ساخت/ویرایش/حذفِ دسته از خودِ
+            // صفحهٔ «دسته‌بندی‌ها» انجام می‌شود (خواسته: تکراری نباشد).
 
             // «ویرایش کالاها» عمداً حذف شد — کالاها از منوی «کالاها» ویرایش
             // می‌شوند و این میان‌بر فقط شلوغی بود.

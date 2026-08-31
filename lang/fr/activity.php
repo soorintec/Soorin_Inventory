@@ -5,6 +5,8 @@ return [
     'user' => 'Utilisateur', 'action' => 'Action', 'subject' => 'Objet', 'when' => 'Quand', 'system' => 'Système', 'view_all' => 'Toutes les activités',
     'actions' => [
         'stock_in' => 'Entrée', 'stock_out' => 'Sortie',
+        'stocktake_cancelled' => 'Inventaire annulé',
+        'stocktake_applied' => 'Inventaire appliqué',
         'item_created' => 'Article créé', 'item_updated' => 'Article modifié', 'item_deleted' => 'Article supprimé',
         'version_created' => 'Version créée', 'version_updated' => 'Version modifiée', 'version_deleted' => 'Version supprimée',
         'category_created' => 'Catégorie créée', 'category_updated' => 'Catégorie modifiée', 'category_deleted' => 'Catégorie supprimée',

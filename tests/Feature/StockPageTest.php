@@ -247,11 +247,12 @@ class StockPageTest extends TestCase
         $this->assertSame(1, $created->versions()->count());
     }
 
-    public function test_a_new_category_can_be_created_here(): void
+    public function test_a_category_can_be_created_on_the_categories_page(): void
     {
+        // ساختِ دسته از خودِ صفحهٔ «دسته‌بندی‌ها» (میان‌بر «دسته‌بندی جدید» در عملیات حذف شد).
         Livewire::actingAs($this->admin)
-            ->test(\App\Filament\Resources\StockBalances\Pages\ListStockBalances::class)
-            ->callAction('newCategory', ['name' => 'برد الکترونیکی', 'code' => 'PCB'])
+            ->test(\App\Filament\Resources\ItemCategories\Pages\ListItemCategories::class)
+            ->callAction('create', ['name' => 'برد الکترونیکی', 'code' => 'PCB', 'spec_template' => []])
             ->assertHasNoActionErrors();
 
         $this->assertTrue(ItemCategory::where('name', 'برد الکترونیکی')->exists());
