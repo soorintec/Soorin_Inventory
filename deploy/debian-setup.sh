@@ -23,7 +23,13 @@ APP_DIR="$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)"
 PHP_VER="8.4"
 DB_NAME="soorin_inventory"
 DB_USER="soorin"
-DB_PASS="$(openssl rand -hex 16 2>/dev/null || head -c 16 /dev/urandom | xxd -p)"
+# رمزِ دیتابیس: اگر .env از قبل هست و رمز دارد، همان را نگه می‌داریم تا اجرای
+# دوبارهٔ اسکریپت رمز را عوض (و اتصال را خراب) نکند؛ وگرنه یک رمزِ تازه می‌سازیم.
+if [ -f "$APP_DIR/.env" ] && grep -qE '^DB_PASSWORD=.+' "$APP_DIR/.env"; then
+    DB_PASS="$(grep -E '^DB_PASSWORD=' "$APP_DIR/.env" | head -1 | cut -d= -f2- | tr -d '\042\047')"
+else
+    DB_PASS="$(openssl rand -hex 16 2>/dev/null || head -c 16 /dev/urandom | xxd -p)"
+fi
 SERVER_NAME="${1:-_}"
 
 echo "- Installing system packages ..."
@@ -53,6 +59,9 @@ systemctl enable --now mariadb
 mysql <<SQL
 CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASS}';
+-- ALTER هم می‌آید تا اگر کاربر از قبل بود، رمزش با .env هماهنگ شود (وگرنه
+-- «Access denied … using password: YES» می‌گرفتیم).
+ALTER USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASS}';
 GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'localhost';
 FLUSH PRIVILEGES;
 SQL
