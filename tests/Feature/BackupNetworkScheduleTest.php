@@ -85,10 +85,45 @@ class BackupNetworkScheduleTest extends TestCase
 
     public function test_empty_password_keeps_the_previous_one(): void
     {
-        BackupSettings::save(['network_password' => 'first']);
-        BackupSettings::save(['network_password' => '']); // خالی → دست‌نخورده
+        BackupSettings::save(['network_enabled' => true, 'network_password' => 'first']);
+        BackupSettings::save(['network_enabled' => true, 'network_password' => '']); // خالی → دست‌نخورده
 
         $this->assertSame('first', BackupSettings::networkPassword());
+    }
+
+    /** غیرفعال‌کردن با «نگه‌دار» باید مسیر/یوزر/رمز را حفظ کند تا دفعهٔ بعد آماده باشند. */
+    public function test_disabling_with_keep_preserves_the_saved_network_settings(): void
+    {
+        BackupSettings::save([
+            'network_enabled' => true, 'network_path' => '//srv/backups',
+            'network_username' => 'u', 'network_password' => 'p',
+        ]);
+
+        // خاموش‌کردن با انتخابِ پیش‌فرض «نگه‌دار»
+        BackupSettings::save(['network_enabled' => false, 'network_on_disable' => 'keep']);
+
+        $this->assertFalse(BackupSettings::networkEnabled());
+        $this->assertSame('//srv/backups', BackupSettings::networkPath());
+        $this->assertSame('u', BackupSettings::networkUsername());
+        $this->assertSame('p', BackupSettings::networkPassword());
+
+        // فعال‌کردنِ دوباره → همان تنظیماتِ قبلی در formState هست.
+        $this->assertSame('//srv/backups', BackupSettings::formState()['network_path']);
+    }
+
+    /** غیرفعال‌کردن با «پاک کن» باید مسیر/یوزر/رمز را صفر کند. */
+    public function test_disabling_with_clear_wipes_the_saved_network_settings(): void
+    {
+        BackupSettings::save([
+            'network_enabled' => true, 'network_path' => '//srv/backups',
+            'network_username' => 'u', 'network_password' => 'p',
+        ]);
+
+        BackupSettings::save(['network_enabled' => false, 'network_on_disable' => 'clear']);
+
+        $this->assertSame('', BackupSettings::networkPath());
+        $this->assertSame('', BackupSettings::networkUsername());
+        $this->assertSame('', BackupSettings::networkPassword());
     }
 
     // ----------------------------------------------------- NetworkBackupService
@@ -194,6 +229,31 @@ class BackupNetworkScheduleTest extends TestCase
 
         $command = app(\App\Console\Commands\ScheduledBackupCommand::class);
         $this->assertTrue($command->isDue(now()), 'باید به وقتِ تهران «رسیده» باشد.');
+
+        Carbon::setTestNow();
+    }
+
+    /**
+     * ماهانه با روزِ ۳۱ در ماهی که آن روز را ندارد، باید روی آخرین روزِ ماه بیفتد —
+     * نه زودتر و نه اینکه اصلاً جا بیفتد.
+     */
+    public function test_monthly_day_beyond_month_length_runs_on_the_last_day(): void
+    {
+        $command = app(\App\Console\Commands\ScheduledBackupCommand::class);
+
+        // فوریهٔ ۲۰۲۶ = ۲۸ روز؛ روزِ انتخابی ۳۱.
+        BackupSettings::save([
+            'schedule_enabled'  => true,
+            'schedule_frequency' => 'monthly',
+            'schedule_time'     => '02:00',
+            'schedule_monthday' => 31,
+        ]);
+
+        Carbon::setTestNow(Carbon::parse('2026-02-27 10:00:00', 'Asia/Tehran'));
+        $this->assertFalse($command->isDue(now()), 'روزِ ۲۷ نباید بگیرد.');
+
+        Carbon::setTestNow(Carbon::parse('2026-02-28 10:00:00', 'Asia/Tehran'));
+        $this->assertTrue($command->isDue(now()), 'آخرین روزِ ماهِ کوتاه باید بگیرد.');
 
         Carbon::setTestNow();
     }

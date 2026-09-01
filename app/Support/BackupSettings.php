@@ -88,12 +88,12 @@ class BackupSettings
         return (int) Setting::get(self::key('schedule_weekday'), 6); // پیش‌فرض: شنبه
     }
 
-    /** روزِ ماه برای حالتِ ماهانه (۱ تا ۲۸). */
+    /** روزِ ماه برای حالتِ ماهانه (۱ تا ۳۱؛ اگر ماه کوتاه‌تر باشد، آخرین روزِ ماه اجرا می‌شود). */
     public static function monthday(): int
     {
         $day = (int) Setting::get(self::key('schedule_monthday'), 1);
 
-        return max(1, min(28, $day));
+        return max(1, min(31, $day));
     }
 
     public static function lastRun(): ?Carbon
@@ -144,6 +144,7 @@ class BackupSettings
             'network_path'      => self::networkPath(),
             'network_username'  => self::networkUsername(),
             'network_password'  => '',
+            'network_on_disable' => 'keep',
             'schedule_enabled'  => self::scheduleEnabled(),
             'schedule_frequency' => self::frequency(),
             'schedule_time'     => self::time(),
@@ -159,20 +160,38 @@ class BackupSettings
      */
     public static function save(array $data): void
     {
-        Setting::set(self::key('network_enabled'), (bool) ($data['network_enabled'] ?? false), self::GROUP, 'bool');
-        Setting::set(self::key('network_path'), (string) ($data['network_path'] ?? ''), self::GROUP, 'string');
-        Setting::set(self::key('network_username'), (string) ($data['network_username'] ?? ''), self::GROUP, 'string');
+        $networkEnabled = (bool) ($data['network_enabled'] ?? false);
+        Setting::set(self::key('network_enabled'), $networkEnabled, self::GROUP, 'bool');
 
-        // رمز فقط وقتی نوشته می‌شود که کاربر مقدارِ تازه‌ای وارد کرده باشد.
-        if (filled($data['network_password'] ?? null)) {
-            Setting::set(self::key('network_password'), Crypt::encryptString((string) $data['network_password']), self::GROUP, 'string');
+        if ($networkEnabled) {
+            // روشن: مقادیرِ فرم نوشته می‌شوند.
+            Setting::set(self::key('network_path'), (string) ($data['network_path'] ?? ''), self::GROUP, 'string');
+            Setting::set(self::key('network_username'), (string) ($data['network_username'] ?? ''), self::GROUP, 'string');
+
+            // رمز فقط وقتی نوشته می‌شود که کاربر مقدارِ تازه‌ای وارد کرده باشد.
+            if (filled($data['network_password'] ?? null)) {
+                Setting::set(self::key('network_password'), Crypt::encryptString((string) $data['network_password']), self::GROUP, 'string');
+            }
+        } elseif (($data['network_on_disable'] ?? 'keep') === 'clear') {
+            // خاموش + انتخابِ «پاک کن»: مسیر/یوزر/رمز صفر می‌شوند.
+            self::clearNetwork();
         }
+        // خاموش + «نگه‌دار» (پیش‌فرض): مسیر/یوزر/رمز دست‌نخورده می‌مانند تا دفعهٔ
+        // بعد که روشن شد، لازم نباشد دوباره وارد شوند.
 
         Setting::set(self::key('schedule_enabled'), (bool) ($data['schedule_enabled'] ?? false), self::GROUP, 'bool');
         Setting::set(self::key('schedule_frequency'), (string) ($data['schedule_frequency'] ?? 'daily'), self::GROUP, 'string');
         Setting::set(self::key('schedule_time'), (string) ($data['schedule_time'] ?? '02:00'), self::GROUP, 'string');
         Setting::set(self::key('schedule_weekday'), (int) ($data['schedule_weekday'] ?? 6), self::GROUP, 'int');
         Setting::set(self::key('schedule_monthday'), (int) ($data['schedule_monthday'] ?? 1), self::GROUP, 'int');
+    }
+
+    /** پاک‌کردنِ مسیر/نام‌کاربری/رمزِ پوشهٔ شبکه. */
+    public static function clearNetwork(): void
+    {
+        Setting::set(self::key('network_path'), '', self::GROUP, 'string');
+        Setting::set(self::key('network_username'), '', self::GROUP, 'string');
+        Setting::set(self::key('network_password'), '', self::GROUP, 'string');
     }
 
     private static function key(string $suffix): string

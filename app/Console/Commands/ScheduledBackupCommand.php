@@ -83,8 +83,14 @@ class ScheduledBackupCommand extends Command
             return false;
         }
 
-        if ($frequency === 'monthly' && $now->day !== BackupSettings::monthday()) {
-            return false;
+        if ($frequency === 'monthly') {
+            // اگر روزِ انتخابی از تعدادِ روزهای این ماه بیشتر باشد (مثلاً ۳۱ در ماهی
+            // که ۳۰ روز دارد یا اسفند/فوریه)، روی آخرین روزِ ماه می‌افتد تا هیچ‌وقت جا نیفتد.
+            $targetDay = min(BackupSettings::monthday(), $now->daysInMonth);
+
+            if ($now->day !== $targetDay) {
+                return false;
+            }
         }
 
         // جلوگیری از اجرای دوباره در همین دوره: اگر آخرین اجرا بعد از ساعتِ

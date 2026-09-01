@@ -12,6 +12,7 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -218,6 +219,19 @@ class Backups extends Page
                             ->revealable()
                             ->extraInputAttributes(['dir' => 'ltr'])
                             ->visible(fn ($get) => (bool) $get('network_enabled')),
+
+                        // وقتی کاربر بکاپِ شبکه را خاموش می‌کند و از قبل تنظیماتی
+                        // ذخیره شده، می‌پرسیم نگه‌داری یا پاک. پیش‌فرض «نگه‌دار» تا
+                        // دفعهٔ بعد که روشن شد لازم نباشد دوباره وارد شود.
+                        Radio::make('network_on_disable')
+                            ->label(__('backups.on_disable_label'))
+                            ->options([
+                                'keep'  => __('backups.on_disable_keep'),
+                                'clear' => __('backups.on_disable_clear'),
+                            ])
+                            ->default('keep')
+                            ->visible(fn ($get) => ! (bool) $get('network_enabled')
+                                && filled(BackupSettings::networkPath())),
                     ]),
 
                 Section::make(__('backups.sched_section'))
@@ -251,7 +265,7 @@ class Backups extends Page
                             ->helperText(__('backups.sched_monthday_hint'))
                             ->numeric()
                             ->minValue(1)
-                            ->maxValue(28)
+                            ->maxValue(31)
                             ->default(1)
                             ->visible(fn ($get) => (bool) $get('schedule_enabled') && $get('schedule_frequency') === 'monthly'),
 
