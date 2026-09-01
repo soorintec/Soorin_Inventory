@@ -10,6 +10,28 @@
         </ul>
     </x-filament::section>
 
+    @if ($this->canManageBackupSettings() && ($this->scheduleSummary() || $this->networkSummary()))
+        <x-filament::section>
+            <x-slot name="heading">{{ __('backups.auto_status') }}</x-slot>
+
+            <dl class="grid gap-3 text-sm sm:grid-cols-2">
+                <div class="flex flex-col gap-1 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
+                    <dt class="text-xs text-gray-500 dark:text-gray-400">{{ __('backups.sched_section') }}</dt>
+                    <dd class="font-medium">
+                        {{ $this->scheduleSummary() ?? __('backups.sched_off') }}
+                    </dd>
+                </div>
+
+                <div class="flex flex-col gap-1 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
+                    <dt class="text-xs text-gray-500 dark:text-gray-400">{{ __('backups.net_section') }}</dt>
+                    <dd class="break-all font-mono text-xs" dir="ltr">
+                        {{ $this->networkSummary() ?? __('backups.net_off') }}
+                    </dd>
+                </div>
+            </dl>
+        </x-filament::section>
+    @endif
+
     <x-filament::section>
         <x-slot name="heading">{{ __('backups.list') }}</x-slot>
 

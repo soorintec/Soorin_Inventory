@@ -2,6 +2,7 @@
 
 return [
     'labels' => [
+        'backups.settings' => '自动与网络备份设置',
         'items.view' => '查看商品', 'items.manage' => '创建和编辑商品与分类',
         'stock.view' => '查看仓库库存', 'stock.manage' => '登记入库和出库',
         'warehouses.manage' => '创建和管理仓库', 'stocktakes.manage' => '盘点',
@@ -15,6 +16,7 @@ return [
         'backups.create' => '创建备份', 'backups.delete' => '删除备份文件', 'backups.restore' => '从备份恢复数据库',
     ],
     'hints' => [
+        'backups.settings' => '配置网络文件夹和自动备份计划。',
         'backups.restore' => '危险：用文件数据替换当前数据。',
         'stock.manage' => '没有此项，用户只能查看库存而不能修改。',
         'stock.view' => '最基本的仓库权限；没有它用户看不到任何仓库页面。',

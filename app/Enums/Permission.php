@@ -55,6 +55,7 @@ enum Permission: string
     case CreateBackups  = 'backups.create';
     case DeleteBackups  = 'backups.delete';
     case RestoreBackups = 'backups.restore';
+    case ManageBackupSettings = 'backups.settings'; // بکاپ روی شبکه و زمان‌بندیِ خودکار
 
     public function label(): string
     {
@@ -92,7 +93,8 @@ enum Permission: string
             self::ViewReports, self::ViewActivity => 'reports',
 
             self::ViewBackups, self::CreateBackups,
-            self::DeleteBackups, self::RestoreBackups => 'backups',
+            self::DeleteBackups, self::RestoreBackups,
+            self::ManageBackupSettings => 'backups',
 
             self::ViewUsers, self::ManageUsers, self::ManageSettings => 'system',
         };

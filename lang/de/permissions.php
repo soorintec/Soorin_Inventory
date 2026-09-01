@@ -2,6 +2,7 @@
 
 return [
     'labels' => [
+        'backups.settings' => 'Einstellungen für automatische & Netzwerk-Sicherung',
         'items.view' => 'Artikel ansehen', 'items.manage' => 'Artikel und Kategorien erstellen und bearbeiten',
         'stock.view' => 'Lagerbestand ansehen', 'stock.manage' => 'Zu- und Abgänge erfassen',
         'warehouses.manage' => 'Lager erstellen und verwalten', 'stocktakes.manage' => 'Inventur',
@@ -15,6 +16,7 @@ return [
         'backups.create' => 'Sicherungen erstellen', 'backups.delete' => 'Sicherungsdateien löschen', 'backups.restore' => 'Datenbank aus Sicherung wiederherstellen',
     ],
     'hints' => [
+        'backups.settings' => 'Netzwerkordner und Zeitplan für automatische Sicherungen konfigurieren.',
         'backups.restore' => 'Gefährlich: ersetzt die aktuellen Daten durch die Dateidaten.',
         'stock.manage' => 'Ohne dies kann der Benutzer den Bestand nur ansehen, aber nicht ändern.',
         'stock.view' => 'Grundlegendster Lagerzugriff; ohne ihn sieht der Benutzer keine Lagerseite.',

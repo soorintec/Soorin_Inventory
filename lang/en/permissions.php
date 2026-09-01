@@ -6,6 +6,7 @@
 
 return [
     'labels' => [
+        'backups.settings' => 'Automatic & network backup settings',
         'items.view'          => 'View items',
         'items.manage'        => 'Create and edit items and categories',
         'stock.view'          => 'View warehouse stock',
@@ -31,6 +32,7 @@ return [
     ],
 
     'hints' => [
+        'backups.settings' => 'Configure the network folder and automatic backup schedule.',
         'backups.restore' => 'Dangerous: replaces the current data with the file\'s data.',
         'stock.manage'    => 'Without this, the user can only view stock and cannot change it.',
         'stock.view'      => 'The most basic warehouse access; without it the user sees no warehouse page.',

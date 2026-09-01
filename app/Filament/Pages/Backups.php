@@ -4,14 +4,20 @@ namespace App\Filament\Pages;
 
 use App\Enums\Permission;
 use App\Services\DatabaseBackupService;
+use App\Services\NetworkBackupService;
+use App\Support\BackupSettings;
 use App\Support\Jalali;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Section;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\HtmlString;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -68,7 +74,13 @@ class Backups extends Page
             Permission::CreateBackups->value,
             Permission::DeleteBackups->value,
             Permission::RestoreBackups->value,
+            Permission::ManageBackupSettings->value,
         ]);
+    }
+
+    public function canManageBackupSettings(): bool
+    {
+        return auth()->user()?->can(Permission::ManageBackupSettings->value) ?? false;
     }
 
     public function canCreateBackups(): bool
@@ -101,6 +113,8 @@ class Backups extends Page
         return [
             $this->createAction(),
             $this->restoreAction(),
+            $this->settingsAction(),
+            $this->testNetworkAction(),
         ];
     }
 
@@ -120,7 +134,167 @@ class Backups extends Page
                     ->title(__('backups.created', ['file' => $name]))
                     ->success()
                     ->send();
+
+                // اگر «بکاپ روی شبکه» روشن است، همین فایلِ تازه را آنجا هم بریز.
+                if (BackupSettings::networkEnabled()) {
+                    $result = app(NetworkBackupService::class)->push($service->absolutePath($name), $name);
+
+                    Notification::make()
+                        ->title($result['message'])
+                        ->{$result['ok'] ? 'success' : 'warning'}()
+                        ->send();
+                }
             });
+    }
+
+    /**
+     * تنظیماتِ «بکاپ روی شبکه» و «زمان‌بندیِ خودکار».
+     *
+     * دو بخش دارد: مقصدِ شبکه (پوشه + نام‌کاربری + رمز) و زمان‌بندی
+     * (روزانه/هفتگی/ماهانه + ساعت). فیلدها با تیکِ فعال‌سازیِ هر بخش زنده
+     * ظاهر/پنهان می‌شوند تا فرم شلوغ نباشد.
+     */
+    private function settingsAction(): Action
+    {
+        return Action::make('backupSettings')
+            ->label(__('backups.settings'))
+            ->icon(Heroicon::OutlinedCog6Tooth)
+            ->color('gray')
+            ->visible(fn () => $this->canManageBackupSettings())
+            ->modalHeading(__('backups.settings'))
+            ->modalWidth('2xl')
+            ->fillForm(fn () => BackupSettings::formState())
+            ->schema([
+                Section::make(__('backups.net_section'))
+                    ->description(__('backups.net_section_hint'))
+                    ->schema([
+                        Toggle::make('network_enabled')
+                            ->label(__('backups.net_enable'))
+                            ->live(),
+
+                        TextInput::make('network_path')
+                            ->label(__('backups.net_path'))
+                            ->helperText(__('backups.net_path_hint'))
+                            ->placeholder('//192.168.1.10/backups/soorin')
+                            ->extraInputAttributes(['dir' => 'ltr'])
+                            ->visible(fn ($get) => (bool) $get('network_enabled'))
+                            ->required(fn ($get) => (bool) $get('network_enabled')),
+
+                        TextInput::make('network_username')
+                            ->label(__('backups.net_username'))
+                            ->extraInputAttributes(['dir' => 'ltr'])
+                            ->visible(fn ($get) => (bool) $get('network_enabled')),
+
+                        TextInput::make('network_password')
+                            ->label(__('backups.net_password'))
+                            ->helperText(__('backups.net_password_hint'))
+                            ->password()
+                            ->revealable()
+                            ->extraInputAttributes(['dir' => 'ltr'])
+                            ->visible(fn ($get) => (bool) $get('network_enabled')),
+                    ]),
+
+                Section::make(__('backups.sched_section'))
+                    ->description(__('backups.sched_section_hint'))
+                    ->schema([
+                        Toggle::make('schedule_enabled')
+                            ->label(__('backups.sched_enable'))
+                            ->live(),
+
+                        Select::make('schedule_frequency')
+                            ->label(__('backups.sched_frequency'))
+                            ->options([
+                                'daily'   => __('backups.freq_daily'),
+                                'weekly'  => __('backups.freq_weekly'),
+                                'monthly' => __('backups.freq_monthly'),
+                            ])
+                            ->default('daily')
+                            ->native(false)
+                            ->live()
+                            ->visible(fn ($get) => (bool) $get('schedule_enabled')),
+
+                        Select::make('schedule_weekday')
+                            ->label(__('backups.sched_weekday'))
+                            ->options(self::weekdayOptions())
+                            ->default(6)
+                            ->native(false)
+                            ->visible(fn ($get) => (bool) $get('schedule_enabled') && $get('schedule_frequency') === 'weekly'),
+
+                        TextInput::make('schedule_monthday')
+                            ->label(__('backups.sched_monthday'))
+                            ->helperText(__('backups.sched_monthday_hint'))
+                            ->numeric()
+                            ->minValue(1)
+                            ->maxValue(28)
+                            ->default(1)
+                            ->visible(fn ($get) => (bool) $get('schedule_enabled') && $get('schedule_frequency') === 'monthly'),
+
+                        TextInput::make('schedule_time')
+                            ->label(__('backups.sched_time'))
+                            ->helperText(__('backups.sched_time_hint'))
+                            ->placeholder('02:00')
+                            ->extraInputAttributes(['dir' => 'ltr'])
+                            ->rule('regex:/^\d{1,2}:\d{2}$/')
+                            ->visible(fn ($get) => (bool) $get('schedule_enabled')),
+                    ]),
+            ])
+            ->action(function (array $data): void {
+                BackupSettings::save($data);
+
+                Notification::make()->success()->title(__('backups.settings_saved'))->send();
+            });
+    }
+
+    /** آزمایشِ دسترسی به پوشهٔ شبکهٔ ذخیره‌شده. */
+    private function testNetworkAction(): Action
+    {
+        return Action::make('testNetwork')
+            ->label(__('backups.test_network'))
+            ->icon(Heroicon::OutlinedSignal)
+            ->color('gray')
+            ->visible(fn () => $this->canManageBackupSettings() && BackupSettings::networkEnabled())
+            ->action(function (NetworkBackupService $service): void {
+                $result = $service->testSaved();
+
+                Notification::make()
+                    ->title($result['message'])
+                    ->{$result['ok'] ? 'success' : 'danger'}()
+                    ->persistent()
+                    ->send();
+            });
+    }
+
+    /** گزینه‌های روزِ هفته برای زمان‌بندیِ هفتگی (کلید = dayOfWeek کاربن). */
+    private static function weekdayOptions(): array
+    {
+        $days = __('backups.weekdays');
+
+        return is_array($days) ? $days : [
+            0 => 'Sunday', 1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday',
+            4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday',
+        ];
+    }
+
+    /** خلاصهٔ وضعیتِ زمان‌بندی برای نمایش در صفحه. */
+    public function scheduleSummary(): ?string
+    {
+        if (! BackupSettings::scheduleEnabled()) {
+            return null;
+        }
+
+        $when = match (BackupSettings::frequency()) {
+            'weekly'  => __('backups.freq_weekly') . ' — ' . (self::weekdayOptions()[BackupSettings::weekday()] ?? ''),
+            'monthly' => __('backups.freq_monthly') . ' — ' . __('backups.day_n', ['n' => Jalali::digits((string) BackupSettings::monthday())]),
+            default   => __('backups.freq_daily'),
+        };
+
+        return $when . ' — ' . __('backups.at_time', ['time' => Jalali::digits(BackupSettings::time())]);
+    }
+
+    /** خلاصهٔ مقصدِ شبکه برای نمایش در صفحه. */
+    public function networkSummary(): ?string
+    {
+        return BackupSettings::networkEnabled() ? BackupSettings::networkPath() : null;
     }
 
     /**

@@ -2,6 +2,7 @@
 
 return [
     'labels' => [
+        'backups.settings' => 'Paramètres de sauvegarde automatique et réseau',
         'items.view' => 'Voir les articles', 'items.manage' => 'Créer et modifier articles et catégories',
         'stock.view' => 'Voir le stock', 'stock.manage' => 'Enregistrer entrées et sorties',
         'warehouses.manage' => 'Créer et gérer les entrepôts', 'stocktakes.manage' => 'Inventaire',
@@ -15,6 +16,7 @@ return [
         'backups.create' => 'Créer des sauvegardes', 'backups.delete' => 'Supprimer des sauvegardes', 'backups.restore' => 'Restaurer la base depuis une sauvegarde',
     ],
     'hints' => [
+        'backups.settings' => 'Configurer le dossier réseau et la planification des sauvegardes automatiques.',
         'backups.restore' => 'Dangereux : remplace les données actuelles par celles du fichier.',
         'stock.manage' => 'Sans cela, l\'utilisateur ne fait que voir le stock sans pouvoir le modifier.',
         'stock.view' => 'Accès entrepôt le plus basique ; sans lui, l\'utilisateur ne voit aucune page d\'entrepôt.',
