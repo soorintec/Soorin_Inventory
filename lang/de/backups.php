@@ -73,4 +73,9 @@ return [
     'status_active' => 'Aktiv',
     'status_inactive' => 'Inaktiv',
     'last_run' => 'Letzte Ausführung',
+    'scheduler_alive' => 'Server-Scheduler läuft',
+    'scheduler_dead_title' => 'Der Server-Scheduler läuft nicht',
+    'scheduler_dead_body' => 'Ohne den Betriebssystem-Scheduler funktionieren automatische Sicherungen und Update-Prüfungen nicht. Führen Sie diesen Befehl auf dem Server aus (oder bitten Sie Ihren Server-Administrator):',
+    'scheduler_dead_hint' => 'Falls die Scheduler-Unit nicht existiert, führen Sie deploy/debian-setup.sh erneut aus.',
+    'scheduler_heartbeat' => 'Letzter Herzschlag',
 ];

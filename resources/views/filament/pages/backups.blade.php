@@ -40,6 +40,22 @@
                       style="letter-spacing:.06em;color:#1d4ed8;"></span>
             </div>
 
+            {{-- هشدارِ کلیدی: اگر زمان‌بندی روشن است ولی زمان‌بندِ سرور نمی‌دود،
+                 بکاپِ خودکار هرگز گرفته نمی‌شود — رایج‌ترین علتِ «بکاپ نگرفت». --}}
+            @if ($schedOn && ! $this->schedulerAlive())
+                <div class="mb-4 rounded-lg p-4"
+                     style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.35);">
+                    <div class="font-semibold" style="color:#b91c1c;">
+                        <x-filament::icon icon="heroicon-o-exclamation-triangle" class="inline h-5 w-5 align-text-bottom" />
+                        {{ __('backups.scheduler_dead_title') }}
+                    </div>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">{{ __('backups.scheduler_dead_body') }}</p>
+                    <pre class="mt-2 overflow-x-auto rounded-md p-3 text-xs" dir="ltr"
+                         style="background:rgba(0,0,0,.06);"><code>{{ $this->schedulerRepairCommand() }}</code></pre>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ __('backups.scheduler_dead_hint') }}</p>
+                </div>
+            @endif
+
             <div class="bk-grid text-sm">
                 {{-- کارتِ زمان‌بندی --}}
                 <div class="bk-card">
@@ -60,6 +76,17 @@
                     @if ($schedOn && $this->lastScheduledRun())
                         <div class="text-xs text-gray-500 dark:text-gray-400">
                             {{ __('backups.last_run') }}: {{ $this->lastScheduledRun() }}
+                        </div>
+                    @endif
+
+                    {{-- وضعیتِ زمان‌بندِ سرور — چراغِ سلامتِ کرون --}}
+                    @if ($schedOn)
+                        <div class="flex items-center gap-1.5 text-xs" style="color: {{ $this->schedulerAlive() ? '#15803d' : '#b91c1c' }};">
+                            <span style="{{ $lamp($this->schedulerAlive()) }}"></span>
+                            {{ $this->schedulerAlive() ? __('backups.scheduler_alive') : __('backups.scheduler_dead_title') }}
+                            @if ($this->schedulerHeartbeat())
+                                <span class="text-gray-400">· {{ __('backups.scheduler_heartbeat') }}: {{ $this->schedulerHeartbeat() }}</span>
+                            @endif
                         </div>
                     @endif
                 </div>

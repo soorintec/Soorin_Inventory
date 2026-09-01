@@ -108,6 +108,27 @@ class BackupSettings
         Setting::set(self::key('schedule_last_run'), ($at ?? now())->toIso8601String(), self::GROUP, 'string');
     }
 
+    /**
+     * آخرین «ضربانِ» زمان‌بندِ سیستم‌عامل.
+     *
+     * عمداً بی‌واسطه از دیتابیس خوانده می‌شود (نه از کشِ Setting::get) چون هر
+     * دقیقه عوض می‌شود و کشِ همیشگی آن را کهنه نشان می‌دهد.
+     */
+    public static function schedulerHeartbeat(): ?Carbon
+    {
+        $value = Setting::where('key', self::key('scheduler_heartbeat'))->value('value');
+
+        return filled($value) ? Carbon::parse($value) : null;
+    }
+
+    /** آیا زمان‌بندِ سرور در چند دقیقهٔ اخیر اجرا شده؟ (هر دقیقه ضربان می‌زند) */
+    public static function isSchedulerAlive(): bool
+    {
+        $beat = self::schedulerHeartbeat();
+
+        return $beat !== null && $beat->gt(now()->subMinutes(3));
+    }
+
     // ------------------------------------------------------- خواندن/نوشتنِ فرم
 
     /**

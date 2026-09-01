@@ -94,4 +94,9 @@ return [
     'status_active' => 'Active',
     'status_inactive' => 'Inactive',
     'last_run' => 'Last run',
+    'scheduler_alive' => 'Server scheduler is running',
+    'scheduler_dead_title' => 'The server scheduler is not running',
+    'scheduler_dead_body' => 'Without the OS scheduler, automatic backups and update checks will not run. Run this command on the server (or ask your server admin):',
+    'scheduler_dead_hint' => 'If the scheduler unit does not exist, re-run deploy/debian-setup.sh.',
+    'scheduler_heartbeat' => 'Last heartbeat',
 ];

@@ -94,4 +94,9 @@ return [
     'status_active' => 'مُفعّل',
     'status_inactive' => 'مُعطّل',
     'last_run' => 'آخر تشغيل',
+    'scheduler_alive' => 'مُجدوِل الخادم يعمل',
+    'scheduler_dead_title' => 'مُجدوِل الخادم لا يعمل',
+    'scheduler_dead_body' => 'بدون مُجدوِل نظام التشغيل، لن تعمل النسخ الاحتياطية التلقائية ولا فحص التحديثات. نفِّذ هذا الأمر على الخادم (أو اطلب من مسؤول الخادم):',
+    'scheduler_dead_hint' => 'إذا لم تكن وحدة المُجدوِل موجودة، أعد تشغيل deploy/debian-setup.sh.',
+    'scheduler_heartbeat' => 'آخر نبضة',
 ];

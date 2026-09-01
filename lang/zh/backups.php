@@ -73,4 +73,9 @@ return [
     'status_active' => '已启用',
     'status_inactive' => '已停用',
     'last_run' => '上次运行',
+    'scheduler_alive' => '服务器计划任务正在运行',
+    'scheduler_dead_title' => '服务器计划任务未运行',
+    'scheduler_dead_body' => '没有操作系统的计划任务，自动备份和更新检查都不会运行。请在服务器上执行此命令（或联系服务器管理员）：',
+    'scheduler_dead_hint' => '如果计划任务单元不存在，请重新运行 deploy/debian-setup.sh。',
+    'scheduler_heartbeat' => '最近心跳',
 ];

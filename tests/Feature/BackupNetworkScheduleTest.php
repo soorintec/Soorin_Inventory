@@ -204,6 +204,18 @@ class BackupNetworkScheduleTest extends TestCase
         $this->assertCount(1, app(DatabaseBackupService::class)->list());
     }
 
+    /** تشخیصِ سلامتِ زمان‌بند: ضربانِ تازه = زنده، ضربانِ کهنه یا نبود = خاموش. */
+    public function test_scheduler_alive_reflects_heartbeat_freshness(): void
+    {
+        $this->assertFalse(BackupSettings::isSchedulerAlive()); // هنوز ضربانی نیست
+
+        Setting::set('backup.scheduler_heartbeat', now()->toIso8601String(), 'backup', 'string');
+        $this->assertTrue(BackupSettings::isSchedulerAlive());
+
+        Setting::set('backup.scheduler_heartbeat', now()->subMinutes(10)->toIso8601String(), 'backup', 'string');
+        $this->assertFalse(BackupSettings::isSchedulerAlive());
+    }
+
     // ----------------------------------------------------------------- مجوز/UI
 
     public function test_only_a_user_with_the_settings_permission_sees_the_settings_action(): void

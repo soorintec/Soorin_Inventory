@@ -347,6 +347,26 @@ class Backups extends Page
         return $last ? Jalali::formatDateTime($last) : null;
     }
 
+    /** آیا زمان‌بندِ سیستم‌عاملِ سرور در حال اجراست؟ (از ضربانِ هر دقیقه) */
+    public function schedulerAlive(): bool
+    {
+        return BackupSettings::isSchedulerAlive();
+    }
+
+    /** زمانِ آخرین ضربانِ زمان‌بند برای نمایش (یا null اگر هرگز اجرا نشده). */
+    public function schedulerHeartbeat(): ?string
+    {
+        $beat = BackupSettings::schedulerHeartbeat();
+
+        return $beat ? Jalali::formatDateTime($beat) : null;
+    }
+
+    /** دستوری که مدیرِ سرور برای روشن‌کردنِ زمان‌بند اجرا می‌کند. */
+    public function schedulerRepairCommand(): string
+    {
+        return 'sudo systemctl enable --now soorin-scheduler.timer';
+    }
+
     /**
      * بازیابی از فایل آپلودی.
      *

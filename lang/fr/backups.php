@@ -73,4 +73,9 @@ return [
     'status_active' => 'Activé',
     'status_inactive' => 'Désactivé',
     'last_run' => 'Dernière exécution',
+    'scheduler_alive' => 'Le planificateur du serveur fonctionne',
+    'scheduler_dead_title' => 'Le planificateur du serveur ne fonctionne pas',
+    'scheduler_dead_body' => 'Sans le planificateur du système d\'exploitation, les sauvegardes automatiques et la vérification des mises à jour ne fonctionnent pas. Exécutez cette commande sur le serveur (ou demandez à votre administrateur) :',
+    'scheduler_dead_hint' => 'Si l\'unité du planificateur n\'existe pas, relancez deploy/debian-setup.sh.',
+    'scheduler_heartbeat' => 'Dernier battement',
 ];

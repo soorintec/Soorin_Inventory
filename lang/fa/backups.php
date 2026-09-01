@@ -94,4 +94,9 @@ return [
     'status_active' => 'فعال',
     'status_inactive' => 'غیرفعال',
     'last_run' => 'آخرین اجرا',
+    'scheduler_alive' => 'زمان‌بندِ سرور فعال است',
+    'scheduler_dead_title' => 'زمان‌بندِ سرور اجرا نمی‌شود',
+    'scheduler_dead_body' => 'بدونِ زمان‌بندِ سیستم‌عامل، بکاپِ خودکار و بررسیِ به‌روزرسانی کار نمی‌کند. روی سرور این دستور را اجرا کنید (یا از مدیرِ سرور بخواهید):',
+    'scheduler_dead_hint' => 'اگر واحدِ زمان‌بند وجود نداشت، اسکریپتِ deploy/debian-setup.sh را دوباره اجرا کنید.',
+    'scheduler_heartbeat' => 'آخرین ضربان',
 ];

@@ -73,4 +73,9 @@ return [
     'status_active' => 'Attivo',
     'status_inactive' => 'Disattivato',
     'last_run' => 'Ultima esecuzione',
+    'scheduler_alive' => 'Lo scheduler del server è in esecuzione',
+    'scheduler_dead_title' => 'Lo scheduler del server non è in esecuzione',
+    'scheduler_dead_body' => 'Senza lo scheduler del sistema operativo, i backup automatici e il controllo aggiornamenti non funzionano. Esegui questo comando sul server (o chiedi al tuo amministratore):',
+    'scheduler_dead_hint' => 'Se l\'unità dello scheduler non esiste, riesegui deploy/debian-setup.sh.',
+    'scheduler_heartbeat' => 'Ultimo battito',
 ];
