@@ -53,7 +53,7 @@ return [
     'sched_weekday' => 'Jour de la semaine',
     'sched_monthday' => 'Jour du mois',
     'sched_monthday_hint' => 'Entre 1 et 28.',
-    'sched_time' => 'Heure (heure du serveur)',
+    'sched_time' => 'Heure (heure de Téhéran)',
     'sched_time_hint' => 'Format 24 h, par ex. 02:00.',
     'sched_off' => 'Désactivé',
     'net_off' => 'Désactivé',
@@ -69,4 +69,8 @@ return [
         5 => 'Vendredi',
         6 => 'Samedi',
     ],
+    'clock_label' => 'Heure de Téhéran (base de la planification)',
+    'status_active' => 'Activé',
+    'status_inactive' => 'Désactivé',
+    'last_run' => 'Dernière exécution',
 ];

@@ -175,6 +175,29 @@ class BackupNetworkScheduleTest extends TestCase
         Carbon::setTestNow();
     }
 
+    /**
+     * زمان‌بندی باید به وقتِ تهران سنجیده شود، نه UTC.
+     *
+     * ۰۲:۰۰ به وقتِ UTC یعنی ۰۵:۳۰ به وقتِ تهران. با ساعتِ مقررِ ۰۵:۰۰،
+     * به وقتِ تهران رسیده‌ایم (باید بگیرد) ولی به وقتِ UTC هنوز نه. اگر
+     * دستور اشتباهاً UTC را مبنا بگیرد، این تست می‌افتد.
+     */
+    public function test_schedule_is_measured_in_tehran_time_not_utc(): void
+    {
+        Carbon::setTestNow(Carbon::parse('2026-09-01 02:00:00', 'UTC'));
+
+        BackupSettings::save([
+            'schedule_enabled'  => true,
+            'schedule_frequency' => 'daily',
+            'schedule_time'     => '05:00',
+        ]);
+
+        $command = app(\App\Console\Commands\ScheduledBackupCommand::class);
+        $this->assertTrue($command->isDue(now()), 'باید به وقتِ تهران «رسیده» باشد.');
+
+        Carbon::setTestNow();
+    }
+
     public function test_force_option_backs_up_regardless_of_schedule(): void
     {
         $this->artisan('soorin:scheduled-backup', ['--force' => true])->assertSuccessful();

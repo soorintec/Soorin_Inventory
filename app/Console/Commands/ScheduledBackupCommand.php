@@ -58,9 +58,16 @@ class ScheduledBackupCommand extends Command
      *
      * منطق: ساعتِ مقررِ «امروز» را می‌سازیم؛ اگر از آن گذشته‌ایم و در این دوره
      * (روز/هفته/ماه) هنوز بکاپی گرفته نشده، بله. روزِ هفته/ماه هم بررسی می‌شود.
+     *
+     * زمان‌بندی به **وقتِ تهران** سنجیده می‌شود، نه UTC: کاربر ساعت را به وقتِ
+     * محلی می‌دهد و کلِ برنامه هم تاریخ/زمان را با همین منطقه نشان می‌دهد
+     * (config('app.timezone') روی UTC است). بدونِ این تبدیل، بکاپ ۳:۳۰ دیرتر
+     * از ساعتِ تنظیم‌شده گرفته می‌شد و «سرِ ساعت» هیچ اتفاقی نمی‌افتاد.
      */
     public function isDue(Carbon $now): bool
     {
+        $now = $now->copy()->setTimezone(\App\Support\Jalali::TIMEZONE);
+
         [$hour, $minute] = array_map('intval', explode(':', BackupSettings::time()));
         $target = $now->copy()->setTime($hour, $minute, 0);
 

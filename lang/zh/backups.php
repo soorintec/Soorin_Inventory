@@ -53,7 +53,7 @@ return [
     'sched_weekday' => '星期',
     'sched_monthday' => '每月日期',
     'sched_monthday_hint' => '介于 1 到 28 之间。',
-    'sched_time' => '时间（服务器时间）',
+    'sched_time' => '时间（德黑兰时间）',
     'sched_time_hint' => '24 小时制，例如 02:00。',
     'sched_off' => '关闭',
     'net_off' => '关闭',
@@ -69,4 +69,8 @@ return [
         5 => '星期五',
         6 => '星期六',
     ],
+    'clock_label' => '德黑兰时间（计划基准）',
+    'status_active' => '已启用',
+    'status_inactive' => '已停用',
+    'last_run' => '上次运行',
 ];

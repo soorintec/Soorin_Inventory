@@ -53,7 +53,7 @@ return [
     'sched_weekday' => 'Giorno della settimana',
     'sched_monthday' => 'Giorno del mese',
     'sched_monthday_hint' => 'Tra 1 e 28.',
-    'sched_time' => 'Orario (ora del server)',
+    'sched_time' => 'Orario (ora di Teheran)',
     'sched_time_hint' => 'Formato 24 ore, es. 02:00.',
     'sched_off' => 'Disattivato',
     'net_off' => 'Disattivato',
@@ -69,4 +69,8 @@ return [
         5 => 'Venerdì',
         6 => 'Sabato',
     ],
+    'clock_label' => 'Ora di Teheran (base della pianificazione)',
+    'status_active' => 'Attivo',
+    'status_inactive' => 'Disattivato',
+    'last_run' => 'Ultima esecuzione',
 ];

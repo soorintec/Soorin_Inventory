@@ -74,7 +74,7 @@ return [
     'sched_weekday' => 'Day of week',
     'sched_monthday' => 'Day of month',
     'sched_monthday_hint' => 'Between 1 and 28.',
-    'sched_time' => 'Time (server time)',
+    'sched_time' => 'Time (Tehran time)',
     'sched_time_hint' => '24-hour format, e.g. 02:00.',
     'sched_off' => 'Off',
     'net_off' => 'Off',
@@ -90,4 +90,8 @@ return [
         5 => 'Friday',
         6 => 'Saturday',
     ],
+    'clock_label' => 'Tehran time (schedule basis)',
+    'status_active' => 'Active',
+    'status_inactive' => 'Inactive',
+    'last_run' => 'Last run',
 ];

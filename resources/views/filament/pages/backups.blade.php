@@ -10,25 +10,79 @@
         </ul>
     </x-filament::section>
 
-    @if ($this->canManageBackupSettings() && ($this->scheduleSummary() || $this->networkSummary()))
+    @if ($this->canManageBackupSettings())
+        @php
+            $schedOn = $this->scheduleIsOn();
+            $netOn   = $this->networkIsOn();
+            // چراغِ وضعیت: سبز=فعال، خاکستری=خاموش.
+            $lamp = fn (bool $on) => $on
+                ? 'display:inline-block;width:.7rem;height:.7rem;border-radius:9999px;background:#16a34a;box-shadow:0 0 0 .18rem rgba(22,163,74,.22);'
+                : 'display:inline-block;width:.7rem;height:.7rem;border-radius:9999px;background:#9ca3af;box-shadow:0 0 0 .18rem rgba(156,163,175,.20);';
+            $badge = fn (bool $on) => $on
+                ? 'display:inline-flex;align-items:center;gap:.3rem;padding:.15rem .6rem;border-radius:9999px;font-size:.72rem;font-weight:600;background:rgba(22,163,74,.12);color:#15803d;'
+                : 'display:inline-flex;align-items:center;gap:.3rem;padding:.15rem .6rem;border-radius:9999px;font-size:.72rem;font-weight:600;background:rgba(156,163,175,.16);color:#6b7280;';
+        @endphp
+
         <x-filament::section>
             <x-slot name="heading">{{ __('backups.auto_status') }}</x-slot>
 
-            <dl class="grid gap-3 text-sm sm:grid-cols-2">
-                <div class="flex flex-col gap-1 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-                    <dt class="text-xs text-gray-500 dark:text-gray-400">{{ __('backups.sched_section') }}</dt>
-                    <dd class="font-medium">
+            {{-- ساعتِ زندهٔ تهران — همان مبنایی که زمان‌بندی سرِ آن بکاپ می‌گیرد. --}}
+            <div class="bk-clock">
+                <span class="text-sm font-medium" style="color:#2563eb;">
+                    <x-filament::icon icon="heroicon-o-clock" class="inline h-4 w-4 align-text-bottom" />
+                    {{ __('backups.clock_label') }}
+                </span>
+                <span dir="ltr"
+                      x-data="{ t: @js($this->serverClock()) }"
+                      x-init="setInterval(() => { t = new Intl.DateTimeFormat('fa-IR', { timeZone: 'Asia/Tehran', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(new Date()) }, 1000)"
+                      x-text="t"
+                      class="font-mono text-lg font-bold tabular-nums"
+                      style="letter-spacing:.06em;color:#1d4ed8;"></span>
+            </div>
+
+            <div class="bk-grid text-sm">
+                {{-- کارتِ زمان‌بندی --}}
+                <div class="bk-card">
+                    <div class="bk-row">
+                        <span class="bk-title">
+                            <span style="{{ $lamp($schedOn) }}"></span>
+                            {{ __('backups.sched_section') }}
+                        </span>
+                        <span style="{{ $badge($schedOn) }}">
+                            {{ $schedOn ? __('backups.status_active') : __('backups.status_inactive') }}
+                        </span>
+                    </div>
+
+                    <div class="{{ $schedOn ? 'font-medium' : 'text-gray-400 dark:text-gray-500' }}">
                         {{ $this->scheduleSummary() ?? __('backups.sched_off') }}
-                    </dd>
+                    </div>
+
+                    @if ($schedOn && $this->lastScheduledRun())
+                        <div class="text-xs text-gray-500 dark:text-gray-400">
+                            {{ __('backups.last_run') }}: {{ $this->lastScheduledRun() }}
+                        </div>
+                    @endif
                 </div>
 
-                <div class="flex flex-col gap-1 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-                    <dt class="text-xs text-gray-500 dark:text-gray-400">{{ __('backups.net_section') }}</dt>
-                    <dd class="break-all font-mono text-xs" dir="ltr">
-                        {{ $this->networkSummary() ?? __('backups.net_off') }}
-                    </dd>
+                {{-- کارتِ بکاپ روی شبکه --}}
+                <div class="bk-card">
+                    <div class="bk-row">
+                        <span class="bk-title">
+                            <span style="{{ $lamp($netOn) }}"></span>
+                            {{ __('backups.net_section') }}
+                        </span>
+                        <span style="{{ $badge($netOn) }}">
+                            {{ $netOn ? __('backups.status_active') : __('backups.status_inactive') }}
+                        </span>
+                    </div>
+
+                    @if ($netOn)
+                        <div class="break-all font-mono text-xs" dir="ltr">{{ $this->networkSummary() }}</div>
+                    @else
+                        <div class="text-gray-400 dark:text-gray-500">{{ __('backups.net_off') }}</div>
+                    @endif
                 </div>
-            </dl>
+            </div>
         </x-filament::section>
     @endif
 

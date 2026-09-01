@@ -53,7 +53,7 @@ return [
     'sched_weekday' => 'Wochentag',
     'sched_monthday' => 'Tag des Monats',
     'sched_monthday_hint' => 'Zwischen 1 und 28.',
-    'sched_time' => 'Uhrzeit (Serverzeit)',
+    'sched_time' => 'Uhrzeit (Teheran-Zeit)',
     'sched_time_hint' => '24-Stunden-Format, z. B. 02:00.',
     'sched_off' => 'Aus',
     'net_off' => 'Aus',
@@ -69,4 +69,8 @@ return [
         5 => 'Freitag',
         6 => 'Samstag',
     ],
+    'clock_label' => 'Teheran-Zeit (Basis des Zeitplans)',
+    'status_active' => 'Aktiv',
+    'status_inactive' => 'Inaktiv',
+    'last_run' => 'Letzte Ausführung',
 ];

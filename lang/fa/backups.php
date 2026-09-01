@@ -74,7 +74,7 @@ return [
     'sched_weekday' => 'روزِ هفته',
     'sched_monthday' => 'روزِ ماه',
     'sched_monthday_hint' => 'بینِ ۱ تا ۲۸.',
-    'sched_time' => 'ساعت (به وقتِ سرور)',
+    'sched_time' => 'ساعت (به وقتِ تهران)',
     'sched_time_hint' => 'قالبِ ۲۴ساعته، مثلاً 02:00.',
     'sched_off' => 'خاموش',
     'net_off' => 'خاموش',
@@ -90,4 +90,8 @@ return [
         5 => 'جمعه',
         6 => 'شنبه',
     ],
+    'clock_label' => 'ساعتِ تهران (مبنای زمان‌بندی)',
+    'status_active' => 'فعال',
+    'status_inactive' => 'غیرفعال',
+    'last_run' => 'آخرین اجرا',
 ];

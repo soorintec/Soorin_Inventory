@@ -178,7 +178,33 @@ class Backups extends Page
                             ->placeholder('//192.168.1.10/backups/soorin')
                             ->extraInputAttributes(['dir' => 'ltr'])
                             ->visible(fn ($get) => (bool) $get('network_enabled'))
-                            ->required(fn ($get) => (bool) $get('network_enabled')),
+                            ->required(fn ($get) => (bool) $get('network_enabled'))
+                            // تستِ درجا: همین حالا با مقادیرِ واردشده دسترسیِ نوشتن را
+                            // می‌آزماید — بدونِ نیاز به ذخیره. اگر یوزر/رمز غلط باشد،
+                            // پیغامِ خطا را همان‌جا نشان می‌دهد.
+                            ->hintAction(
+                                Action::make('verifyNetwork')
+                                    ->label(__('backups.test_network'))
+                                    ->icon(Heroicon::OutlinedSignal)
+                                    ->action(function ($get): void {
+                                        // رمزِ خالی یعنی «رمزِ قبلی حفظ شود» → از تنظیماتِ ذخیره‌شده بخوان.
+                                        $password = filled($get('network_password'))
+                                            ? (string) $get('network_password')
+                                            : BackupSettings::networkPassword();
+
+                                        $result = app(NetworkBackupService::class)->test(
+                                            (string) $get('network_path'),
+                                            (string) $get('network_username'),
+                                            $password,
+                                        );
+
+                                        Notification::make()
+                                            ->title($result['message'])
+                                            ->{$result['ok'] ? 'success' : 'danger'}()
+                                            ->persistent()
+                                            ->send();
+                                    }),
+                            ),
 
                         TextInput::make('network_username')
                             ->label(__('backups.net_username'))
@@ -295,6 +321,30 @@ class Backups extends Page
     public function networkSummary(): ?string
     {
         return BackupSettings::networkEnabled() ? BackupSettings::networkPath() : null;
+    }
+
+    public function networkIsOn(): bool
+    {
+        return BackupSettings::isNetworkConfigured();
+    }
+
+    public function scheduleIsOn(): bool
+    {
+        return BackupSettings::scheduleEnabled();
+    }
+
+    /** ساعتِ فعلیِ سرور به وقتِ تهران — همان مبنایی که زمان‌بندی با آن سنجیده می‌شود. */
+    public function serverClock(): string
+    {
+        return Jalali::digits(\Illuminate\Support\Carbon::now(Jalali::TIMEZONE)->format('H:i:s'));
+    }
+
+    /** آخرین باری که بکاپِ خودکار اجرا شد (یا null). */
+    public function lastScheduledRun(): ?string
+    {
+        $last = BackupSettings::lastRun();
+
+        return $last ? Jalali::formatDateTime($last) : null;
     }
 
     /**

@@ -74,7 +74,7 @@ return [
     'sched_weekday' => 'يوم الأسبوع',
     'sched_monthday' => 'يوم الشهر',
     'sched_monthday_hint' => 'بين 1 و 28.',
-    'sched_time' => 'الوقت (بتوقيت الخادم)',
+    'sched_time' => 'الوقت (بتوقيت طهران)',
     'sched_time_hint' => 'صيغة 24 ساعة، مثل 02:00.',
     'sched_off' => 'متوقف',
     'net_off' => 'متوقف',
@@ -90,4 +90,8 @@ return [
         5 => 'الجمعة',
         6 => 'السبت',
     ],
+    'clock_label' => 'توقيت طهران (أساس الجدولة)',
+    'status_active' => 'مُفعّل',
+    'status_inactive' => 'مُعطّل',
+    'last_run' => 'آخر تشغيل',
 ];
