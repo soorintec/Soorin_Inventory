@@ -204,6 +204,17 @@ class BackupNetworkScheduleTest extends TestCase
         $this->assertCount(1, app(DatabaseBackupService::class)->list());
     }
 
+    /** اجرای زمان‌بند (schedule:run) باید ضربان را بنویسد — همان چیزی که تشخیصِ صفحه به آن تکیه دارد. */
+    public function test_running_the_scheduler_writes_a_heartbeat(): void
+    {
+        $this->assertNull(BackupSettings::schedulerHeartbeat());
+
+        $this->artisan('schedule:run');
+
+        $this->assertNotNull(BackupSettings::schedulerHeartbeat());
+        $this->assertTrue(BackupSettings::isSchedulerAlive());
+    }
+
     /** تشخیصِ سلامتِ زمان‌بند: ضربانِ تازه = زنده، ضربانِ کهنه یا نبود = خاموش. */
     public function test_scheduler_alive_reflects_heartbeat_freshness(): void
     {
