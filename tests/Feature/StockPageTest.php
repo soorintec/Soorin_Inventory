@@ -247,6 +247,38 @@ class StockPageTest extends TestCase
         $this->assertSame(1, $created->versions()->count());
     }
 
+    /**
+     * تیک‌زدنِ چند موجودی و «انتقال به انبارِ دیگر» — کلِ موجودیِ آزادِ هر سطر
+     * باید از مبدأ خارج و به مقصد وارد شود؛ سندِ خروج/ورود در کاردکس می‌ماند.
+     */
+    public function test_selected_balances_can_be_transferred_to_another_warehouse(): void
+    {
+        $target = Warehouse::create(['name' => 'انبار دوم', 'code' => 'W2']);
+
+        $balance = \App\Models\StockBalance::where('item_version_id', $this->version->id)
+            ->where('warehouse_id', $this->warehouse->id)
+            ->firstOrFail();
+
+        Livewire::actingAs($this->admin)
+            ->test(\App\Filament\Resources\StockBalances\Pages\ListStockBalances::class)
+            ->assertTableBulkActionExists('transferItems')
+            ->callTableBulkAction('transferItems', [$balance->getKey()], [
+                'to_warehouse_id' => $target->id,
+            ])
+            ->assertHasNoTableBulkActionErrors();
+
+        $this->assertEqualsWithDelta(
+            0,
+            (float) $this->version->balances()->where('warehouse_id', $this->warehouse->id)->sum('quantity'),
+            0.001,
+        );
+        $this->assertEqualsWithDelta(
+            21,
+            (float) $this->version->balances()->where('warehouse_id', $target->id)->sum('quantity'),
+            0.001,
+        );
+    }
+
     public function test_a_category_can_be_created_on_the_categories_page(): void
     {
         // ساختِ دسته از خودِ صفحهٔ «دسته‌بندی‌ها» (میان‌بر «دسته‌بندی جدید» در عملیات حذف شد).

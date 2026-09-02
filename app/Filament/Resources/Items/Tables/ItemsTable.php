@@ -32,7 +32,9 @@ class ItemsTable
             // موجودی و حد هشدار در همان کوئری فهرست جمع زده می‌شوند تا هم
             // ستون وضعیت بدون کوئری اضافه ساخته شود و هم بشود روی آن مرتب کرد.
             ->modifyQueryUsing(fn (Builder $query) => $query
-                ->with(['category', 'versions'])
+                // balances.warehouse برای ستونِ «انبارِ نگهداری» بارگذاری می‌شود تا
+                // نامِ انبارها بدونِ کوئریِ جداگانه به‌ازای هر سطر در دست باشد.
+                ->with(['category', 'versions.balances.warehouse'])
                 ->withSum('balances as stock_total', 'quantity')
                 ->withMax('versions as min_threshold', 'min_stock'))
             // ستون‌های ساده (نه Split) تا سطر عنوان (هدر) نمایش داده شود — خواسته
@@ -61,6 +63,26 @@ class ItemsTable
                     ->badge()
                     ->color('gray')
                     ->sortable()
+                    ->extraHeaderAttributes(['class' => 'hidden md:table-cell'])
+                    ->extraCellAttributes(['class' => 'hidden md:table-cell']),
+
+                // انبارِ نگهداریِ کالا — هر انباری که این کالا در آن موجودی دارد،
+                // به‌صورتِ نشانِ رنگی (هر انبار رنگِ متمایزِ خودش). فقط وقتی فیلترِ
+                // انبار روی «همه» است دیده می‌شود؛ با فیلترِ یک انبار، همه یکی‌اند.
+                TextColumn::make('stored_warehouses')
+                    ->label(__('items.stored_in'))
+                    ->badge()
+                    ->state(fn (Item $record) => $record->versions
+                        ->flatMap(fn ($version) => $version->balances)
+                        ->filter(fn ($balance) => (float) $balance->quantity > 0)
+                        ->map(fn ($balance) => $balance->warehouse?->name)
+                        ->filter()
+                        ->unique()
+                        ->values()
+                        ->all())
+                    ->color(fn ($state) => Warehouse::colorForName($state))
+                    ->placeholder('—')
+                    ->visible(fn ($livewire) => blank($livewire->getTableFilterState('warehouse')['value'] ?? null))
                     ->extraHeaderAttributes(['class' => 'hidden md:table-cell'])
                     ->extraCellAttributes(['class' => 'hidden md:table-cell']),
 
@@ -178,6 +200,9 @@ class ItemsTable
             // تا زدنِ دکمهٔ «اعمال» اثر نمی‌کرد و همهٔ کالاها نشان داده می‌شد.
             ->deferFilters(false)
             ->defaultSort('name')
+            // ردیف‌ها یک‌درمیان سفید/خاکستری تا هنگامِ خواندن، سطرِ هر کالا با
+            // سطرِ بالا و پایینش اشتباه گرفته نشود.
+            ->striped()
             ->emptyStateHeading(__('items.empty_items'));
     }
 

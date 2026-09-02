@@ -3,6 +3,11 @@
 return [
     'deleted_count' => ':count کالا حذف شد.',
     'delete_selected_items' => 'حذفِ کالاهای انتخاب‌شده',
+    'transfer_item' => 'انتقال به انبارِ دیگر',
+    'transfer_selected_items' => 'انتقالِ انتخاب‌شده‌ها به انبارِ دیگر',
+    'transfer_target' => 'انبارِ مقصد',
+    'transfer_done' => ':count مورد به انبارِ «:warehouse» منتقل شد.',
+    'transfer_none' => 'موردی برای انتقال نبود (شاید موجودیِ آزادی نداشتند یا همان انبارِ مقصد بودند).',
     'delete_item_warning' => 'این کالا و همهٔ ورژن‌هایش حذف می‌شوند (نرم و قابل بازیابی). ادامه؟',
     'delete_item' => 'حذف کالا',
     'kardex_print' => 'چاپِ کاردکس',

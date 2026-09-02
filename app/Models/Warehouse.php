@@ -16,6 +16,12 @@ class Warehouse extends Model
     public const TYPE_DEFECTIVE   = 'defective';
     public const TYPE_TRANSIT     = 'transit';
 
+    /**
+     * پالتِ نشانِ انبار — فقط نام‌های معناییِ تمِ فیلامنت (نه رنگِ هاردکد)، تا
+     * با قاعدهٔ «رنگ‌ها از تم/برندینگ، نه هاردکد» نشکند و در تمِ شب هم درست بنشیند.
+     */
+    public const BADGE_PALETTE = ['info', 'success', 'warning', 'primary', 'danger', 'gray'];
+
     protected $fillable = ['name', 'code', 'type', 'customer_id', 'is_active'];
 
     protected $attributes = [
@@ -46,5 +52,28 @@ class Warehouse extends Model
     public function lots(): HasMany
     {
         return $this->hasMany(StockLot::class);
+    }
+
+    /**
+     * رنگِ نشانِ این انبار در فهرست‌ها — تا وقتی فیلترِ انبار روی «همه» است،
+     * هر انبار با رنگی متمایز از بقیه دیده شود.
+     */
+    public function badgeColor(): string
+    {
+        return self::colorForName($this->name);
+    }
+
+    /**
+     * رنگ بر پایهٔ نامِ انبار (نه شناسه) انتخاب می‌شود تا یک انبار در هر دو فهرستِ
+     * «موجودی انبار» و «مدیریت انبار» — حتی آنجا که فقط نام در دست است — همان رنگ
+     * را بگیرد و کاربر رنگ‌ها را با هم یکی ببیند.
+     */
+    public static function colorForName(?string $name): string
+    {
+        if (blank($name)) {
+            return 'gray';
+        }
+
+        return self::BADGE_PALETTE[crc32($name) % count(self::BADGE_PALETTE)];
     }
 }
