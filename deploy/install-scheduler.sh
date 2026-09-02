@@ -60,6 +60,22 @@ systemctl daemon-reload
 systemctl enable --now soorin-scheduler.timer
 
 echo
-echo "✓ زمان‌بند نصب و فعال شد. برای اطمینان:"
-echo "    systemctl status soorin-scheduler.timer"
-echo "  و پس از یکی‌دو دقیقه، در صفحهٔ «پشتیبان‌گیری» باید چراغِ «زمان‌بندِ سرور» سبز شود."
+echo "✓ زمان‌بند نصب و فعال شد."
+
+# مهم: نصبِ تایمر به‌تنهایی کافی نیست — چراغِ «زمان‌بندِ سرور» فقط وقتی سبز می‌شود
+# که schedule:run بتواند «ضربان» را در دیتابیس بنویسد. اگر اتصالِ دیتابیس خراب باشد
+# (رایج‌ترین علتِ قرمزماندن)، تایمر می‌دود ولی ضربانی نوشته نمی‌شود. پس همین‌جا
+# اتصال را می‌سنجیم و یک ضربان می‌زنیم تا اگر مشکلی هست، همین حالا معلوم شود.
+echo "- بررسیِ اتصالِ برنامه به دیتابیس ..."
+if sudo -u "$RUN_USER" "$PHP_BIN" "$APP_DIR/artisan" migrate:status >/dev/null 2>&1; then
+    sudo -u "$RUN_USER" "$PHP_BIN" "$APP_DIR/artisan" schedule:run >/dev/null 2>&1 || true
+    echo "  ✓ اتصالِ دیتابیس سالم است و ضربان نوشته شد."
+    echo "  پس از یکی‌دو دقیقه، در صفحهٔ «پشتیبان‌گیری» چراغِ «زمان‌بندِ سرور» باید سبز شود."
+else
+    echo "  ✗ برنامه به دیتابیس وصل نمی‌شود — تا این درست نشود، چراغِ زمان‌بند قرمز می‌ماند." >&2
+    echo "    علتِ رایج: ناهماهنگیِ رمز بین .env و کاربرِ MySQL، یا کشِ کهنهٔ پیکربندی." >&2
+    echo "    این‌ها را امتحان کنید:" >&2
+    echo "      sudo -u $RUN_USER $PHP_BIN $APP_DIR/artisan optimize:clear" >&2
+    echo "      sudo -u $RUN_USER $PHP_BIN $APP_DIR/artisan migrate:status   # باید بدونِ خطا اجرا شود" >&2
+    echo "    و مقدارهای DB_* در .env را با کاربر/رمزِ MySQL هماهنگ کنید." >&2
+fi

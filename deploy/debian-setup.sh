@@ -56,13 +56,19 @@ composer install --no-dev --optimize-autoloader --no-interaction
 
 echo "- Setting up the database ..."
 systemctl enable --now mariadb
+# کاربر برای هر دو میزبان ساخته می‌شود: 'localhost' (سوکتِ یونیکس) و '127.0.0.1'
+# (TCP). .env روی DB_HOST=127.0.0.1 است؛ روی سرورهایی که name-resolutionِ مای‌اس‌کیو‌ال
+# خاموش است (skip-name-resolve)، اتصالِ 127.0.0.1 با کاربرِ @localhost جور نمی‌شود و
+# «Access denied» می‌دهد. داشتنِ هر دو میزبان این را قطعی می‌کند.
+# ALTER هم می‌آید تا اگر کاربر از قبل بود، رمزِ هر دو با .env هماهنگ شود.
 mysql <<SQL
 CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASS}';
--- ALTER هم می‌آید تا اگر کاربر از قبل بود، رمزش با .env هماهنگ شود (وگرنه
--- «Access denied … using password: YES» می‌گرفتیم).
+CREATE USER IF NOT EXISTS '${DB_USER}'@'127.0.0.1' IDENTIFIED BY '${DB_PASS}';
 ALTER USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASS}';
+ALTER USER '${DB_USER}'@'127.0.0.1' IDENTIFIED BY '${DB_PASS}';
 GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'localhost';
+GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'127.0.0.1';
 FLUSH PRIVILEGES;
 SQL
 
@@ -91,6 +97,11 @@ php artisan key:generate --force
 echo "- Setting file permissions ..."
 chown -R www-data:www-data "$APP_DIR"
 find "$APP_DIR/storage" "$APP_DIR/bootstrap/cache" -type d -exec chmod 775 {} \;
+
+# پاک‌سازیِ کشِ پیکربندی تا رمزِ تازهٔ .env قطعاً خوانده شود — نه نسخهٔ کش‌شدهٔ قدیمی.
+# اگر جایی config:cache اجرا شده باشد، رمزِ قدیمی در کش می‌ماند و در اجرای دوباره
+# «Access denied» می‌دهد (و در نتیجه ضربانِ زمان‌بند نوشته نمی‌شود و چراغ قرمز می‌ماند).
+sudo -u www-data php artisan optimize:clear >/dev/null 2>&1 || true
 
 echo "- Creating tables and the admin user ..."
 read -rp "  Admin email: " ADMIN_EMAIL
@@ -182,9 +193,41 @@ if command -v ufw >/dev/null 2>&1 && ufw status 2>/dev/null | grep -q "Status: a
     ufw allow 443/tcp || true
 fi
 
+# ---------------------------------------------------------------------------
+# Post-install self-check — همان چیزهایی که اگر خراب باشند، چراغِ «زمان‌بندِ
+# سرور» در صفحهٔ پشتیبان‌گیری قرمز می‌شود. بهتر است همین‌جا معلوم شود تا کاربر
+# بعداً سردرگم نشود.
+# ---------------------------------------------------------------------------
+echo "- Verifying installation ..."
+
+# ۱) آیا برنامه (همان کاربری که زمان‌بند با آن می‌دود) به دیتابیس وصل می‌شود؟
+if sudo -u www-data php "$APP_DIR/artisan" migrate:status >/dev/null 2>&1; then
+    DB_OK="yes"
+else
+    DB_OK="no"
+fi
+
+# ۲) آیا تایمرِ زمان‌بند فعال است؟
+if systemctl is-active --quiet soorin-scheduler.timer; then
+    TIMER_OK="yes"
+else
+    TIMER_OK="no"
+fi
+
+# ۳) یک اجرای دستیِ زمان‌بند تا همین حالا ضربان نوشته شود (چراغ زودتر سبز شود).
+sudo -u www-data php "$APP_DIR/artisan" schedule:run >/dev/null 2>&1 || true
+
 echo
 echo "======================================================================"
-echo "  Installation complete."
+if [ "$DB_OK" = "yes" ] && [ "$TIMER_OK" = "yes" ]; then
+    echo "  Installation complete.  (database: OK, scheduler: OK)"
+else
+    echo "  Installation finished WITH WARNINGS:"
+    [ "$DB_OK" = "yes" ]    || echo "   ✗ The app cannot connect to the database — check .env DB_* and the MySQL user."
+    [ "$TIMER_OK" = "yes" ] || echo "   ✗ The scheduler timer is not active — run:  sudo bash deploy/install-scheduler.sh"
+    echo "   NOTE: while either is broken, automatic backups won't run and the"
+    echo "         'server scheduler' light on the Backups page stays red."
+fi
 echo "  Open in your browser:   ${APP_URL}/admin"
 echo "  Sign in with the email and password you just entered."
 echo ""
