@@ -38,7 +38,14 @@
                                 style="background: {{ $isIn ? 'rgba(16,185,129,0.09)' : 'rgba(239,68,68,0.09)' }}">
                                 <td class="px-4 py-3 text-gray-400">{{ \App\Support\Jalali::digits((string) ($i + 1)) }}</td>
                                 <td class="px-4 py-3 whitespace-nowrap">{{ \App\Support\Jalali::formatDateTime($m->created_at) }}</td>
-                                <td class="px-4 py-3">{{ $m->warehouse?->name ?? '—' }}</td>
+                                <td class="px-4 py-3">
+                                    @if ($m->warehouse)
+                                        {{-- نامِ انبار با همان رنگِ متمایزِ فهرست‌ها، برای یکدستی --}}
+                                        <x-filament::badge :color="$m->warehouse->badgeColor()">{{ $m->warehouse->name }}</x-filament::badge>
+                                    @else
+                                        —
+                                    @endif
+                                </td>
                                 <td class="px-4 py-3">{{ $m->itemVersion?->version_code ?? '—' }}</td>
                                 <td class="px-4 py-3">{{ __('stock.reasons.' . $m->reason) }}</td>
                                 <td class="px-4 py-3 font-semibold text-green-600 dark:text-green-400">
