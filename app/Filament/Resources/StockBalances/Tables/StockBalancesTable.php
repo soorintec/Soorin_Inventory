@@ -13,6 +13,7 @@ use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Collection;
@@ -145,12 +146,15 @@ class StockBalancesTable
                             collect([$record]),
                             (int) $data['to_warehouse_id'],
                             $data['notes'] ?? null,
+                            (bool) ($data['remove_from_source'] ?? false),
                         );
 
                         static::notifyTransfer($moved, (int) $data['to_warehouse_id']);
                     }),
 
-                // حذفِ کالا (نرم، قابل بازیابی) از همین‌جا.
+                // حذفِ کالا — انبار-محور: فقط از همین انبار برداشته می‌شود؛ اگر کالا
+                // در انبارِ دیگری هم موجودی داشته باشد، آن‌جا دست‌نخورده می‌ماند و فقط
+                // وقتی در هیچ انباری نماند، خودِ کالا حذفِ نرم می‌شود.
                 Action::make('deleteItem')
                     ->label(__('stock.delete_item'))
                     ->icon(Heroicon::OutlinedTrash)
@@ -158,9 +162,14 @@ class StockBalancesTable
                     ->visible(fn () => auth()->user()?->can(Permission::ManageItems->value) ?? false)
                     ->requiresConfirmation()
                     ->modalHeading(__('stock.delete_item'))
-                    ->modalDescription(__('stock.delete_item_warning'))
+                    ->modalDescription(fn (StockBalance $record) => static::deleteWarning($record))
                     ->action(function (StockBalance $record) {
-                        $record->itemVersion?->item?->delete();
+                        $item = $record->itemVersion?->item;
+
+                        if ($item !== null) {
+                            static::removeItemFromWarehouse($item, $record->warehouse_id);
+                        }
+
                         Notification::make()->success()->title(__('common.deleted'))->send();
                     }),
             ])
@@ -181,6 +190,7 @@ class StockBalancesTable
                             $records,
                             (int) $data['to_warehouse_id'],
                             $data['notes'] ?? null,
+                            (bool) ($data['remove_from_source'] ?? false),
                         );
 
                         static::notifyTransfer($moved, (int) $data['to_warehouse_id']);
@@ -194,15 +204,25 @@ class StockBalancesTable
                     ->visible(fn () => auth()->user()?->can(Permission::ManageItems->value) ?? false)
                     ->requiresConfirmation()
                     ->modalHeading(__('stock.delete_selected_items'))
-                    ->modalDescription(__('stock.delete_item_warning'))
+                    ->modalDescription(__('stock.delete_selected_warning'))
                     ->action(function (Collection $records) {
-                        // هر سطر یک «موجودیِ ورژن» است؛ کالاهای یکتای پشتشان حذف می‌شوند.
-                        $itemIds = $records->pluck('itemVersion.item_id')->filter()->unique();
-                        $items = Item::whereIn('id', $itemIds)->get();
-                        $items->each->delete();
+                        // هر سطر انبار-محور حذف می‌شود: کالا فقط از انبارِ همان ردیف
+                        // برداشته می‌شود و اگر در هیچ انباری نماند، کاملاً حذفِ نرم می‌شود.
+                        $count = 0;
+
+                        foreach ($records as $record) {
+                            $item = $record->itemVersion?->item;
+
+                            if ($item === null) {
+                                continue;
+                            }
+
+                            static::removeItemFromWarehouse($item, $record->warehouse_id);
+                            $count++;
+                        }
 
                         Notification::make()->success()
-                            ->title(__('stock.deleted_count', ['count' => Jalali::quantity($items->count())]))
+                            ->title(__('stock.remove_done', ['count' => Jalali::quantity($count)]))
                             ->send();
                     })
                     ->deselectRecordsAfterCompletion(),
@@ -235,8 +255,72 @@ class StockBalancesTable
                 ->required()
                 ->native(false),
 
+            // پس از انتقال، یا فقط موجودی رفته و ردیفِ خالیِ مبدأ می‌ماند، یا نامِ
+            // کالا هم از مبدأ برداشته می‌شود — انتخابِ کاربر.
+            Toggle::make('remove_from_source')
+                ->label(__('stock.transfer_remove_source'))
+                ->helperText(__('stock.transfer_remove_source_hint'))
+                ->default(false),
+
             Textarea::make('notes')->label(__('stock.notes'))->rows(2),
         ];
+    }
+
+    /**
+     * حذفِ انبار-محور — قلبِ رفعِ باگ: حذف از یک انبار نباید انبارهای دیگر را ببرد.
+     *
+     * - اگر کالا در انبارِ دیگری هم موجودی دارد: فقط از همین انبار برداشته می‌شود
+     *   (ردیفِ مانده پاک، و موجودیِ آزادِ باقی‌مانده به‌صورت «اصلاح» خارج می‌شود).
+     * - اگر این تنها انبارِ کالاست: مثلِ قبل کلِ کالا حذفِ نرم می‌شود و موجودی/لات‌ها
+     *   دست‌نخورده به‌عنوان سابقه می‌مانند (تا بازیابیِ کالا موجودی را هم برگرداند).
+     */
+    private static function removeItemFromWarehouse(Item $item, int $warehouseId): void
+    {
+        $versionIds = $item->versions()->pluck('id');
+
+        $inOtherWarehouses = StockBalance::whereIn('item_version_id', $versionIds)
+            ->where('warehouse_id', '!=', $warehouseId)
+            ->exists();
+
+        if (! $inOtherWarehouses) {
+            // تنها انبارِ کالا → رفتارِ قبلی حفظ می‌شود.
+            $item->delete();
+
+            return;
+        }
+
+        $warehouse = Warehouse::find($warehouseId);
+
+        if ($warehouse === null) {
+            return;
+        }
+
+        $service = app(StockMovementService::class);
+
+        foreach ($item->versions()->get() as $version) {
+            $service->removeFromWarehouse($version, $warehouse);
+        }
+    }
+
+    /**
+     * متنِ هشدارِ حذف بسته به اینکه کالا در انبارِ دیگری هم هست یا نه — تا کاربر
+     * بداند حذف فقط از همین انبار است یا کلِ کالا را می‌برد.
+     */
+    private static function deleteWarning(StockBalance $record): string
+    {
+        $item = $record->itemVersion?->item;
+
+        if ($item === null) {
+            return __('stock.delete_item_warning');
+        }
+
+        $inOtherWarehouses = StockBalance::whereIn('item_version_id', $item->versions()->pluck('id'))
+            ->where('warehouse_id', '!=', $record->warehouse_id)
+            ->exists();
+
+        return $inOtherWarehouses
+            ? __('stock.delete_item_from_warehouse_warning', ['warehouse' => $record->warehouse?->name])
+            : __('stock.delete_item_warning');
     }
 
     /**
@@ -246,10 +330,13 @@ class StockBalancesTable
      * حفظ شود و سندِ خروج/ورود در کاردکس بماند — مطابقِ قاعدهٔ «هیچ حرکتی حذف
      * نمی‌شود». سطرهایی که در همان انبارِ مقصدند یا موجودیِ آزادشان صفر است رد می‌شوند.
      *
+     * اگر $removeFromSource روشن باشد، پس از انتقال، ردیفِ (اکنون خالیِ) مبدأ هم
+     * برداشته می‌شود تا نامِ کالا زیرِ انبارِ مبدأ نماند؛ وگرنه فقط موجودی می‌رود.
+     *
      * @param  Collection<int, StockBalance>  $balances
      * @return int  تعدادِ سطرهای واقعاً منتقل‌شده
      */
-    private static function transferBalances(Collection $balances, int $toWarehouseId, ?string $notes): int
+    private static function transferBalances(Collection $balances, int $toWarehouseId, ?string $notes, bool $removeFromSource = false): int
     {
         $to = Warehouse::find($toWarehouseId);
 
@@ -273,6 +360,11 @@ class StockBalancesTable
             try {
                 $service->transfer($version, $from, $to, $quantity, $notes);
                 $moved++;
+
+                if ($removeFromSource) {
+                    // موجودیِ مبدأ حالا صفر است؛ این فقط ردیفِ خالی را برمی‌دارد.
+                    $service->removeFromWarehouse($version, $from, $notes);
+                }
             } catch (\RuntimeException|\InvalidArgumentException) {
                 // سطرِ خطادار (مثلاً ناسازگاریِ موجودی) از انتقالِ بقیه جلو نگیرد.
                 continue;

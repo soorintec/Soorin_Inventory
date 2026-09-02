@@ -279,6 +279,116 @@ class StockPageTest extends TestCase
         );
     }
 
+    /**
+     * باگِ مهم: حذفِ کالا از یک انبار نباید همان کالا را از انبارِ دیگر هم ببرد.
+     * پرگار در «مرکزی» و «بلااستفاده» است؛ حذف از مرکزی باید بلااستفاده را نگه دارد.
+     */
+    public function test_deleting_from_one_warehouse_keeps_the_item_in_other_warehouses(): void
+    {
+        $unused = Warehouse::create(['name' => 'بلااستفاده', 'code' => 'UNUSED']);
+        app(StockMovementService::class)->recordIn(
+            $this->version, $unused, 6, 0, StockMovement::REASON_INITIAL,
+        );
+
+        $mainBalance = \App\Models\StockBalance::where('item_version_id', $this->version->id)
+            ->where('warehouse_id', $this->warehouse->id)
+            ->firstOrFail();
+
+        Livewire::actingAs($this->admin)
+            ->test(\App\Filament\Resources\StockBalances\Pages\ListStockBalances::class)
+            ->callTableAction('deleteItem', $mainBalance->getKey())
+            ->assertHasNoTableActionErrors();
+
+        // کالا نباید حذف شود، چون هنوز در «بلااستفاده» موجودی دارد.
+        $this->assertNull($this->item->fresh()->deleted_at);
+        // موجودیِ «بلااستفاده» دست‌نخورده.
+        $this->assertEqualsWithDelta(
+            6,
+            (float) $this->version->balances()->where('warehouse_id', $unused->id)->sum('quantity'),
+            0.001,
+        );
+        // ردیفِ «مرکزی» برداشته شده.
+        $this->assertFalse(
+            \App\Models\StockBalance::where('item_version_id', $this->version->id)
+                ->where('warehouse_id', $this->warehouse->id)
+                ->exists(),
+        );
+    }
+
+    /** حذف از آخرین انبارِ باقی‌مانده، کلِ کالا را (نرم) حذف می‌کند. */
+    public function test_deleting_the_last_warehouse_line_soft_deletes_the_whole_item(): void
+    {
+        $mainBalance = \App\Models\StockBalance::where('item_version_id', $this->version->id)
+            ->where('warehouse_id', $this->warehouse->id)
+            ->firstOrFail();
+
+        Livewire::actingAs($this->admin)
+            ->test(\App\Filament\Resources\StockBalances\Pages\ListStockBalances::class)
+            ->callTableAction('deleteItem', $mainBalance->getKey())
+            ->assertHasNoTableActionErrors();
+
+        $this->assertNotNull($this->item->fresh()->deleted_at);
+    }
+
+    /**
+     * گزینهٔ «نام کالا از انبارِ مبدأ هم حذف شود» هنگام انتقال: پس از انتقال،
+     * ردیفِ کالا در انبارِ مبدأ نباید بماند.
+     */
+    public function test_transfer_can_remove_the_item_line_from_the_source_warehouse(): void
+    {
+        $target = Warehouse::create(['name' => 'انبار دوم', 'code' => 'W2']);
+
+        $balance = \App\Models\StockBalance::where('item_version_id', $this->version->id)
+            ->where('warehouse_id', $this->warehouse->id)
+            ->firstOrFail();
+
+        Livewire::actingAs($this->admin)
+            ->test(\App\Filament\Resources\StockBalances\Pages\ListStockBalances::class)
+            ->callTableBulkAction('transferItems', [$balance->getKey()], [
+                'to_warehouse_id'    => $target->id,
+                'remove_from_source' => true,
+            ])
+            ->assertHasNoTableBulkActionErrors();
+
+        // مقصد ۲۱ گرفته.
+        $this->assertEqualsWithDelta(
+            21,
+            (float) $this->version->balances()->where('warehouse_id', $target->id)->sum('quantity'),
+            0.001,
+        );
+        // ردیفِ مبدأ برداشته شده (نه اینکه صفر بماند).
+        $this->assertFalse(
+            \App\Models\StockBalance::where('item_version_id', $this->version->id)
+                ->where('warehouse_id', $this->warehouse->id)
+                ->exists(),
+        );
+    }
+
+    /** بدونِ آن گزینه، ردیفِ مبدأ با موجودیِ صفر می‌ماند (فقط موجودی منتقل می‌شود). */
+    public function test_transfer_without_the_option_keeps_a_zero_line_in_the_source(): void
+    {
+        $target = Warehouse::create(['name' => 'انبار دوم', 'code' => 'W2']);
+
+        $balance = \App\Models\StockBalance::where('item_version_id', $this->version->id)
+            ->where('warehouse_id', $this->warehouse->id)
+            ->firstOrFail();
+
+        Livewire::actingAs($this->admin)
+            ->test(\App\Filament\Resources\StockBalances\Pages\ListStockBalances::class)
+            ->callTableBulkAction('transferItems', [$balance->getKey()], [
+                'to_warehouse_id'    => $target->id,
+                'remove_from_source' => false,
+            ])
+            ->assertHasNoTableBulkActionErrors();
+
+        $sourceBalance = \App\Models\StockBalance::where('item_version_id', $this->version->id)
+            ->where('warehouse_id', $this->warehouse->id)
+            ->first();
+
+        $this->assertNotNull($sourceBalance);
+        $this->assertEqualsWithDelta(0, (float) $sourceBalance->quantity, 0.001);
+    }
+
     public function test_a_category_can_be_created_on_the_categories_page(): void
     {
         // ساختِ دسته از خودِ صفحهٔ «دسته‌بندی‌ها» (میان‌بر «دسته‌بندی جدید» در عملیات حذف شد).

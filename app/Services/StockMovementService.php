@@ -196,6 +196,44 @@ class StockMovementService
         });
     }
 
+    /**
+     * برداشتنِ حضورِ یک ورژن از یک انبار — ردیفِ ماندهٔ همان (ورژن، انبار) پاک
+     * می‌شود، بی‌آنکه انبارهای دیگر یا خودِ کالا دست بخورند.
+     *
+     * اگر موجودیِ آزادی مانده باشد، اول به‌صورت «اصلاح» خارج می‌شود تا کاردکس با
+     * مانده هم‌خوان بماند (قاعده: مانده = جمعِ حرکت‌ها). ردیفِ دارای رزرو دست‌نخورده
+     * می‌ماند چون رزرو تعهد به پروژه است و نباید بی‌سروصدا برود.
+     *
+     * ردیفِ stock_balances یک کَش است (منبعِ حقیقت، حرکت‌هاست)؛ پاک‌شدنش سابقه را
+     * از بین نمی‌برد و در صورت نیاز دوباره ساخته می‌شود.
+     */
+    public function removeFromWarehouse(ItemVersion $itemVersion, Warehouse $warehouse, ?string $notes = null): void
+    {
+        DB::transaction(function () use ($itemVersion, $warehouse, $notes) {
+            $balance = StockBalance::where('item_version_id', $itemVersion->id)
+                ->where('warehouse_id', $warehouse->id)
+                ->lockForUpdate()
+                ->first();
+
+            if ($balance === null) {
+                return;
+            }
+
+            $available = $balance->available();
+
+            if ($available > 0) {
+                $this->recordOut($itemVersion, $warehouse, $available, StockMovement::REASON_ADJUSTMENT, notes: $notes);
+                $balance->refresh();
+            }
+
+            if ((float) $balance->reserved > 0) {
+                return;
+            }
+
+            $balance->delete();
+        });
+    }
+
     private function adjustBalance(ItemVersion $itemVersion, Warehouse $warehouse, float $delta): void
     {
         $balance = StockBalance::firstOrCreate(
