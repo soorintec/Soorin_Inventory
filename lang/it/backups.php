@@ -10,6 +10,7 @@ return [
     'create' => 'Crea backup', 'created' => 'Backup creato: :file',
     'list' => 'File di backup', 'empty' => 'Nessun backup.', 'file' => 'Nome file', 'created_at' => 'Data', 'size' => 'Dimensione',
     'download' => 'Scarica', 'delete' => 'Elimina', 'deleted' => 'File di backup eliminato.', 'delete_confirm' => 'Eliminare questo file di backup?',
+    'select_all' => 'Seleziona tutto', 'delete_selected' => 'Elimina selezionati', 'delete_selected_confirm' => 'Eliminare i file di backup selezionati? L\'operazione è irreversibile.', 'deleted_bulk' => ':count file di backup eliminati.', 'selected_count' => ':count selezionati',
     'megabyte' => 'MB', 'kilobyte' => 'KB',
     'restore' => 'Ripristina da file', 'restore_heading' => 'Ripristina il database da un file di backup',
     'restore_warning' => 'Attenzione: il ripristino cancella tutti i dati attuali e li sostituisce con quelli del file. Irreversibile. Prima dell\'esecuzione il sistema salva lo stato attuale.',

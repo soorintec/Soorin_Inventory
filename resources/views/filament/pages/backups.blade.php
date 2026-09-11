@@ -119,13 +119,52 @@
         @if (empty($backups))
             <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('backups.empty') }}</p>
         @else
+            {{-- نوارِ انتخابِ گروهی: تیکِ «انتخاب همه» و دکمهٔ حذفِ انتخاب‌شده‌ها.
+                 فقط برای کسی که مجوزِ حذف دارد نمایش داده می‌شود. --}}
+            @if ($this->canDeleteBackups())
+                <div class="mb-3 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-3 dark:border-gray-800">
+                    <label class="flex cursor-pointer items-center gap-2 text-sm">
+                        <input
+                            type="checkbox"
+                            wire:model.live="selectAll"
+                            class="fi-checkbox-input rounded border-gray-300 text-primary-600 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-900"
+                        />
+                        <span class="font-medium">{{ __('backups.select_all') }}</span>
+                        @if (count($selected) > 0)
+                            <span class="text-xs text-gray-500 dark:text-gray-400">
+                                ({{ __('backups.selected_count', ['count' => \App\Support\Jalali::digits((string) count($selected))]) }})
+                            </span>
+                        @endif
+                    </label>
+
+                    <x-filament::button
+                        size="xs"
+                        color="danger"
+                        icon="heroicon-o-trash"
+                        wire:click="deleteSelected"
+                        wire:confirm="{{ __('backups.delete_selected_confirm') }}"
+                        x-bind:disabled="! $wire.selected.length"
+                    >
+                        {{ __('backups.delete_selected') }}
+                    </x-filament::button>
+                </div>
+            @endif
+
             {{-- چیدمان کارتی و واکنش‌گرا به‌جای جدول عریض: روی گوشی نام فایل در
                  چند خط می‌شکند و دکمه‌های دانلود/حذف زیرش می‌آیند و در دسترس‌اند؛
                  روی دسکتاپ همه در یک ردیف. --}}
             <div class="space-y-3">
                 @foreach ($backups as $backup)
                     <div class="flex flex-col gap-3 rounded-lg border border-gray-200 p-3 dark:border-gray-700 sm:flex-row sm:items-center sm:justify-between">
-                        <div class="min-w-0">
+                        @if ($this->canDeleteBackups())
+                            <input
+                                type="checkbox"
+                                wire:model.live="selected"
+                                value="{{ $backup['name'] }}"
+                                class="fi-checkbox-input mt-0.5 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-900 sm:mt-0"
+                            />
+                        @endif
+                        <div class="min-w-0 sm:flex-1">
                             <div class="break-all font-mono text-xs" dir="ltr">{{ $backup['name'] }}</div>
                             <div class="mt-1 text-xs text-gray-500 dark:text-gray-400">
                                 {{ \App\Support\Jalali::formatDateTime($backup['created_at']) }}

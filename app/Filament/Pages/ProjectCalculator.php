@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Enums\Permission;
+use App\Models\SystemModel;
 use App\Models\SystemVersion;
 use App\Services\ProjectCalculatorService;
 use BackedEnum;
@@ -69,14 +70,30 @@ class ProjectCalculator extends Page
                 Repeater::make('rows')
                     ->label(__('calculator.selections'))
                     ->addActionLabel(__('calculator.add_system'))
-                    ->columns(2)
+                    ->columns(3)
                     ->minItems(1)
                     ->schema([
-                        Select::make('system_version_id')
+                        // مرحلهٔ اول: انتخاب مدل سامانه. با تغییرِ مدل، نسخهٔ
+                        // انتخاب‌شدهٔ قبلی پاک می‌شود تا نسخهٔ مدلِ دیگری باقی نماند.
+                        Select::make('system_model_id')
                             ->label(__('calculator.system'))
-                            ->options(fn () => SystemVersion::with('systemModel')
-                                ->get()
-                                ->mapWithKeys(fn (SystemVersion $v) => [$v->id => $v->displayName()]))
+                            ->options(fn () => SystemModel::orderBy('name')->pluck('name', 'id'))
+                            ->searchable()
+                            ->live()
+                            ->afterStateUpdated(fn (callable $set) => $set('system_version_id', null))
+                            ->required(),
+
+                        // مرحلهٔ دوم: نسخه‌های همان مدل. تا وقتی مدلی انتخاب نشده،
+                        // فهرست خالی است و راهنما نمایش داده می‌شود.
+                        Select::make('system_version_id')
+                            ->label(__('calculator.version'))
+                            ->options(fn (callable $get) => filled($get('system_model_id'))
+                                ? SystemVersion::where('system_model_id', $get('system_model_id'))
+                                    ->orderByDesc('version_code')
+                                    ->get()
+                                    ->mapWithKeys(fn (SystemVersion $v) => [$v->id => $v->version_code])
+                                : [])
+                            ->placeholder(__('calculator.version_placeholder'))
                             ->searchable()
                             ->required(),
 

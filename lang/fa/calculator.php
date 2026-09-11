@@ -6,6 +6,8 @@ return [
 
     'selections'    => 'سامانه‌های پروژه',
     'system'        => 'مدل سامانه',
+    'version'       => 'نسخه',
+    'version_placeholder' => 'ابتدا مدل را انتخاب کنید',
     'count'         => 'تعداد',
     'add_system'    => 'افزودن مدل سامانه',
     'calculate'     => 'محاسبه',

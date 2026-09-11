@@ -10,6 +10,7 @@ return [
     'create' => 'Sicherung erstellen', 'created' => 'Sicherung erstellt: :file',
     'list' => 'Sicherungsdateien', 'empty' => 'Noch keine Sicherung.', 'file' => 'Dateiname', 'created_at' => 'Datum', 'size' => 'Größe',
     'download' => 'Herunterladen', 'delete' => 'Löschen', 'deleted' => 'Sicherungsdatei gelöscht.', 'delete_confirm' => 'Diese Sicherungsdatei löschen?',
+    'select_all' => 'Alle auswählen', 'delete_selected' => 'Ausgewählte löschen', 'delete_selected_confirm' => 'Die ausgewählten Sicherungsdateien löschen? Dies ist unwiderruflich.', 'deleted_bulk' => ':count Sicherungsdateien gelöscht.', 'selected_count' => ':count ausgewählt',
     'megabyte' => 'MB', 'kilobyte' => 'KB',
     'restore' => 'Aus Datei wiederherstellen', 'restore_heading' => 'Datenbank aus Sicherungsdatei wiederherstellen',
     'restore_warning' => 'Achtung: Die Wiederherstellung löscht alle aktuellen Daten und ersetzt sie durch die Dateidaten. Unumkehrbar. Vor dem Start sichert das System den aktuellen Stand.',

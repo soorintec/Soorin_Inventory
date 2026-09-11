@@ -10,6 +10,7 @@ return [
     'create' => '创建备份', 'created' => '备份已创建：:file',
     'list' => '备份文件', 'empty' => '尚无备份。', 'file' => '文件名', 'created_at' => '日期', 'size' => '大小',
     'download' => '下载', 'delete' => '删除', 'deleted' => '备份文件已删除。', 'delete_confirm' => '删除此备份文件？',
+    'select_all' => '全选', 'delete_selected' => '删除所选', 'delete_selected_confirm' => '删除所选的备份文件？此操作不可撤销。', 'deleted_bulk' => '已删除 :count 个备份文件。', 'selected_count' => '已选 :count 项',
     'megabyte' => 'MB', 'kilobyte' => 'KB',
     'restore' => '从文件恢复', 'restore_heading' => '从备份文件恢复数据库',
     'restore_warning' => '警告：恢复会清除所有当前数据并以文件数据替换。不可逆。运行前系统会对当前状态做备份。',

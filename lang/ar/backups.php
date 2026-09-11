@@ -22,6 +22,11 @@ return [
     'delete'     => 'حذف',
     'deleted'    => 'تم حذف ملف النسخة الاحتياطية.',
     'delete_confirm' => 'حذف ملف النسخة الاحتياطية هذا؟',
+    'select_all'      => 'تحديد الكل',
+    'delete_selected' => 'حذف المحدد',
+    'delete_selected_confirm' => 'حذف ملفات النسخ الاحتياطية المحددة؟ هذا الإجراء لا يمكن التراجع عنه.',
+    'deleted_bulk'    => 'تم حذف :count ملف نسخ احتياطي.',
+    'selected_count'  => 'تم تحديد :count',
     'megabyte'   => 'ميغابايت',
     'kilobyte'   => 'كيلوبايت',
 

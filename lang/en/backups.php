@@ -22,6 +22,11 @@ return [
     'delete'     => 'Delete',
     'deleted'    => 'Backup file deleted.',
     'delete_confirm' => 'Delete this backup file?',
+    'select_all'      => 'Select all',
+    'delete_selected' => 'Delete selected',
+    'delete_selected_confirm' => 'Delete the selected backup files? This is irreversible.',
+    'deleted_bulk'    => ':count backup files deleted.',
+    'selected_count'  => ':count selected',
     'megabyte'   => 'MB',
     'kilobyte'   => 'KB',
 

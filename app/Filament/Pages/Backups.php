@@ -41,6 +41,12 @@ class Backups extends Page
     /** @var array<int, array{name: string, size: int, created_at: \Illuminate\Support\Carbon}> */
     public array $backups = [];
 
+    /** نام فایل‌هایی که کاربر برای حذفِ گروهی تیک زده. */
+    public array $selected = [];
+
+    /** تیکِ «انتخاب همه» — با تیک/برداشتنِ تکی هم‌گام می‌ماند. */
+    public bool $selectAll = false;
+
     public static function getNavigationLabel(): string
     {
         return __('backups.label');
@@ -502,8 +508,54 @@ class Backups extends Page
 
         app(DatabaseBackupService::class)->delete($name);
         $this->refreshList();
+        $this->selected = array_values(array_diff($this->selected, [$name]));
+        $this->syncSelectAll();
 
         Notification::make()->title(__('backups.deleted'))->success()->send();
+    }
+
+    /** حذفِ گروهیِ فایل‌های تیک‌خورده. */
+    public function deleteSelected(): void
+    {
+        abort_unless(auth()->user()?->can(Permission::DeleteBackups->value), 403);
+
+        $service = app(DatabaseBackupService::class);
+        $count = 0;
+
+        foreach ($this->selected as $name) {
+            if ($service->exists($name)) {
+                $service->delete($name);
+                $count++;
+            }
+        }
+
+        $this->selected = [];
+        $this->selectAll = false;
+        $this->refreshList();
+
+        if ($count > 0) {
+            Notification::make()
+                ->title(__('backups.deleted_bulk', ['count' => Jalali::digits((string) $count)]))
+                ->success()
+                ->send();
+        }
+    }
+
+    /** تیکِ «انتخاب همه»: همهٔ فایل‌ها را انتخاب یا همه را برمی‌دارد. */
+    public function updatedSelectAll(bool $value): void
+    {
+        $this->selected = $value ? array_column($this->backups, 'name') : [];
+    }
+
+    /** با هر تغییرِ تیکِ تکی، وضعیتِ «انتخاب همه» را هم‌گام کن. */
+    public function updatedSelected(): void
+    {
+        $this->syncSelectAll();
+    }
+
+    private function syncSelectAll(): void
+    {
+        $this->selectAll = $this->backups !== [] && count($this->selected) === count($this->backups);
     }
 
     /** حجم خوانا: «۱٫۲ مگابایت» */

@@ -10,6 +10,7 @@ return [
     'create' => 'Créer une sauvegarde', 'created' => 'Sauvegarde créée : :file',
     'list' => 'Fichiers de sauvegarde', 'empty' => 'Aucune sauvegarde.', 'file' => 'Nom du fichier', 'created_at' => 'Date', 'size' => 'Taille',
     'download' => 'Télécharger', 'delete' => 'Supprimer', 'deleted' => 'Fichier de sauvegarde supprimé.', 'delete_confirm' => 'Supprimer ce fichier de sauvegarde ?',
+    'select_all' => 'Tout sélectionner', 'delete_selected' => 'Supprimer la sélection', 'delete_selected_confirm' => 'Supprimer les fichiers de sauvegarde sélectionnés ? Cette action est irréversible.', 'deleted_bulk' => ':count fichiers de sauvegarde supprimés.', 'selected_count' => ':count sélectionné(s)',
     'megabyte' => 'Mo', 'kilobyte' => 'Ko',
     'restore' => 'Restaurer depuis un fichier', 'restore_heading' => 'Restaurer la base depuis un fichier de sauvegarde',
     'restore_warning' => 'Attention : la restauration efface toutes les données actuelles et les remplace par celles du fichier. Irréversible. Avant l\'exécution, le système sauvegarde l\'état actuel.',

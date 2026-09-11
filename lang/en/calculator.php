@@ -6,6 +6,8 @@ return [
 
     'selections'    => 'Project systems',
     'system'        => 'System model',
+    'version'       => 'Version',
+    'version_placeholder' => 'Select a model first',
     'count'         => 'Quantity',
     'add_system'    => 'Add system model',
     'calculate'     => 'Calculate',
