@@ -28,7 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(\App\Filament\Auth\Login::class)
             // نام و لوگو از App\Support\Branding خوانده می‌شوند تا شخصی‌سازیِ مدیر
             // (صفحهٔ «شخصی‌سازی») همین‌جا هم اعمال شود، نه فقط پیش‌فرضِ config.
             ->brandName(fn () => \App\Support\Branding::appTitle())

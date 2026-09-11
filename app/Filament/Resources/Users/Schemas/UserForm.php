@@ -31,7 +31,12 @@ class UserForm
                 ->columns(2)
                 ->schema([
                     TextInput::make('name')->label(__('users.name'))->required()->maxLength(255),
-                    TextInput::make('email')->label(__('users.email'))->email()->required()->maxLength(255)->unique(ignoreRecord: true),
+                    TextInput::make('email')
+                        ->label(__('users.email_or_username'))
+                        ->helperText(__('users.email_or_username_hint'))
+                        ->required()
+                        ->maxLength(255)
+                        ->unique(ignoreRecord: true),
                     TextInput::make('mobile')->label(__('users.mobile'))->maxLength(20)->unique(ignoreRecord: true),
 
                     TextInput::make('password')

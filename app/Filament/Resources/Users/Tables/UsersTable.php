@@ -16,7 +16,7 @@ class UsersTable
         return $table
             ->columns([
                 TextColumn::make('name')->label(__('users.name'))->searchable()->weight('medium'),
-                TextColumn::make('email')->label(__('users.email'))->searchable(),
+                TextColumn::make('email')->label(__('users.email_or_username'))->searchable(),
                 TextColumn::make('mobile')->label(__('users.mobile'))->placeholder('—'),
                 TextColumn::make('user_type')
                     ->label(__('users.user_type'))
