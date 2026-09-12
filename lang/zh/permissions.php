@@ -5,7 +5,7 @@ return [
         'backups.settings' => '自动与网络备份设置',
         'items.view' => '查看商品', 'items.manage' => '创建和编辑商品与分类',
         'stock.view' => '查看仓库库存', 'stock.manage' => '登记入库和出库',
-        'warehouses.manage' => '创建和管理仓库', 'stocktakes.manage' => '盘点',
+        'warehouses.manage' => '创建和管理仓库', 'stocktakes.manage' => '盘点', 'stock_movements.purge' => '清空库存交易日志',
         'purchases.view' => '查看采购', 'purchases.manage' => '创建和管理采购',
         'projects.view' => '查看项目和系统', 'projects.manage' => '管理项目',
         'system_models.manage' => '定义系统型号及其部件',
@@ -17,6 +17,7 @@ return [
     ],
     'hints' => [
         'backups.settings' => '配置网络文件夹和自动备份计划。',
+        'stock_movements.purge' => '危险：永久删除全部库存移动历史（卡片账）；当前库存保持不变。',
         'backups.restore' => '危险：用文件数据替换当前数据。',
         'stock.manage' => '没有此项，用户只能查看库存而不能修改。',
         'stock.view' => '最基本的仓库权限；没有它用户看不到任何仓库页面。',

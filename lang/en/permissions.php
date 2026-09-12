@@ -13,6 +13,7 @@ return [
         'stock.manage'        => 'Record stock in and out',
         'warehouses.manage'   => 'Create and manage warehouses',
         'stocktakes.manage'   => 'Stocktake',
+        'stock_movements.purge' => 'Purge stock transaction log',
         'purchases.view'      => 'View purchases',
         'purchases.manage'    => 'Create and manage purchases',
         'projects.view'       => 'View projects and systems',
@@ -36,6 +37,7 @@ return [
         'backups.restore' => 'Dangerous: replaces the current data with the file\'s data.',
         'stock.manage'    => 'Without this, the user can only view stock and cannot change it.',
         'stock.view'      => 'The most basic warehouse access; without it the user sees no warehouse page.',
+        'stock_movements.purge' => 'Dangerous: permanently deletes the entire stock movement history (kardex); current stock remains untouched.',
     ],
 
     'groups' => [

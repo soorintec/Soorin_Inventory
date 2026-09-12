@@ -5,7 +5,7 @@ return [
         'backups.settings' => 'Paramètres de sauvegarde automatique et réseau',
         'items.view' => 'Voir les articles', 'items.manage' => 'Créer et modifier articles et catégories',
         'stock.view' => 'Voir le stock', 'stock.manage' => 'Enregistrer entrées et sorties',
-        'warehouses.manage' => 'Créer et gérer les entrepôts', 'stocktakes.manage' => 'Inventaire',
+        'warehouses.manage' => 'Créer et gérer les entrepôts', 'stocktakes.manage' => 'Inventaire', 'stock_movements.purge' => 'Vider le journal des mouvements',
         'purchases.view' => 'Voir les achats', 'purchases.manage' => 'Créer et gérer les achats',
         'projects.view' => 'Voir projets et systèmes', 'projects.manage' => 'Gérer les projets',
         'system_models.manage' => 'Définir les modèles de système et leurs pièces',
@@ -17,6 +17,7 @@ return [
     ],
     'hints' => [
         'backups.settings' => 'Configurer le dossier réseau et la planification des sauvegardes automatiques.',
+        'stock_movements.purge' => 'Dangereux : supprime définitivement tout l\'historique des mouvements de stock (kardex) ; le stock actuel reste intact.',
         'backups.restore' => 'Dangereux : remplace les données actuelles par celles du fichier.',
         'stock.manage' => 'Sans cela, l\'utilisateur ne fait que voir le stock sans pouvoir le modifier.',
         'stock.view' => 'Accès entrepôt le plus basique ; sans lui, l\'utilisateur ne voit aucune page d\'entrepôt.',

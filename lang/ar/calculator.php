@@ -6,6 +6,8 @@ return [
 
     'selections'    => 'أنظمة المشروع',
     'system'        => 'نموذج النظام',
+    'version'       => 'الإصدار',
+    'version_placeholder' => 'اختر النموذج أولاً',
     'count'         => 'الكمية',
     'add_system'    => 'إضافة نموذج نظام',
     'calculate'     => 'احسب',

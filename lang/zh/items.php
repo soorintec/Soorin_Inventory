@@ -13,7 +13,7 @@ return [
     'stock_intro' => '仓库商品及库存列表。点击商品可查看其版本、存放位置和备注。入库/出库和编辑在“仓库管理”中进行。',
     'code' => '商品代码', 'name' => '商品名称', 'brand' => '品牌', 'unit' => '单位', 'unit_default' => '个',
     'track_serial' => '序列号追踪', 'track_serial_hint' => '用于贵重商品。开启并保存后，页面底部会显示“序列号”表。',
-    'description' => '描述', 'total_stock' => '库存总量',
+    'description' => '描述', 'total_stock' => '库存总量', 'stored_in' => '存放仓库',
     'version_label' => '版本', 'version_plural' => '版本', 'version_code' => '版本代码', 'version_name' => '显示名称',
     'location' => '存放位置', 'location_hint' => '货架实际地址——例如“D3/#04”。',
     'fx_price' => '价格', 'fx_price_hint' => '该版本的单价。请在旁边字段选择币种。留空表示未设价格。',

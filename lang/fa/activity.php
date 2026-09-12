@@ -34,6 +34,7 @@ return [
         'backup_created'    => 'تهیه پشتیبان',
         'backup_restored'   => 'بازیابی پشتیبان',
         'backup_deleted'    => 'حذف فایل پشتیبان',
+        'stock_movements_purged' => 'پاک‌سازیِ لاگِ تراکنش‌ها',
     ],
 
     'subjects' => [

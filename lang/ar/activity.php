@@ -34,6 +34,7 @@ return [
         'backup_created'    => 'إنشاء نسخة احتياطية',
         'backup_restored'   => 'استعادة نسخة احتياطية',
         'backup_deleted'    => 'حذف نسخة احتياطية',
+        'stock_movements_purged' => 'مسح سجل الحركات',
     ],
 
     'subjects' => [

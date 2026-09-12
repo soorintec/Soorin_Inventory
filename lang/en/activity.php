@@ -34,6 +34,7 @@ return [
         'backup_created'    => 'Backup created',
         'backup_restored'   => 'Backup restored',
         'backup_deleted'    => 'Backup deleted',
+        'stock_movements_purged' => 'Stock log purged',
     ],
 
     'subjects' => [

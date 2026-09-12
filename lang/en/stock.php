@@ -62,6 +62,25 @@ return [
     'empty' => 'No transactions recorded yet.',
     'movements_intro' => 'Warehouse change log: every stock-in, stock-out and transfer recorded so far, with the recorder\'s name and date. This log is read-only and no row is ever deleted or edited — corrections are made only by recording a reversing document so the history stays intact. Recording stock in/out is done from the "Warehouse management" page.',
 
+    // Purge the whole log — dedicated permission only (admin by default)
+    'purge_label'          => 'Purge entire log',
+    'purge_heading'        => 'Purge the entire stock transaction log',
+    'purge_warning'        => 'All rows in this ledger will be permanently deleted and the kardex history and past movement reports will be lost. Current stock and item costs remain untouched. This is irreversible.',
+    'purge_confirm_button' => 'Yes, purge the whole log',
+    'purge_done'           => ':count transactions deleted.',
+
+    // انتقال و حذفِ انبار-محور (هم‌تراز با fa)
+    'remove_done' => ':count item(s) removed from the warehouse.',
+    'delete_selected_warning' => 'Each row is removed only from its own warehouse; an item that also has stock in another warehouse stays untouched there and is fully deleted only when it remains in no warehouse. Any remaining free stock is written off as an "adjustment". Continue?',
+    'delete_item_from_warehouse_warning' => 'This item will be removed only from the ":warehouse" warehouse; it stays untouched in other warehouses. If free stock remains in this warehouse, it is written off as an "adjustment". Continue?',
+    'transfer_item' => 'Transfer to another warehouse',
+    'transfer_selected_items' => 'Transfer selected to another warehouse',
+    'transfer_target' => 'Destination warehouse',
+    'transfer_remove_source' => 'Also remove the item name from the source warehouse',
+    'transfer_remove_source_hint' => 'On: after the transfer, the item\'s empty row is also removed from the source warehouse. Off: only the stock is moved and the item stays with zero stock in the source warehouse.',
+    'transfer_done' => ':count item(s) transferred to the ":warehouse" warehouse.',
+    'transfer_none' => 'Nothing to transfer (they may have had no free stock, or were already in the destination warehouse).',
+
     'balance_label'   => 'Stock balance',
     'balance_plural'  => 'Warehouse balances',
     // Menu label — this is the home of warehouse operations: in, out, transfer,

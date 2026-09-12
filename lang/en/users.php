@@ -7,6 +7,8 @@ return [
 
     'name'      => 'Name',
     'email'     => 'Email',
+    'email_or_username' => 'Email or username',
+    'email_or_username_hint' => 'You can enter a real email or just a username (e.g. ali); the user signs in with this value.',
     'mobile'    => 'Mobile',
     'password'  => 'Password',
     'password_hint' => 'Leave empty to keep the current password.',

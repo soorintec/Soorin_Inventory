@@ -34,6 +34,7 @@ return [
     'track_serial_hint' => 'For expensive items. Turning this on and saving the item shows the "Serial numbers" table at the bottom of this page.',
     'description' => 'Description',
     'total_stock' => 'Total stock',
+    'stored_in'   => 'Stored in',
 
     'version_label'  => 'Version',
     'version_plural' => 'Versions',

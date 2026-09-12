@@ -13,7 +13,7 @@ return [
     'stock_intro' => 'Liste der Lagerartikel mit Bestand. Klicken Sie auf einen Artikel, um Versionen, Lagerort und Notizen zu öffnen. Zu-/Abgänge und Bearbeitung erfolgen im Bereich „Lagerverwaltung“.',
     'code' => 'Artikelnummer', 'name' => 'Artikelname', 'brand' => 'Marke', 'unit' => 'Einheit', 'unit_default' => 'Stk',
     'track_serial' => 'Seriennummern verfolgen', 'track_serial_hint' => 'Für teure Artikel. Aktivieren und Speichern zeigt die Tabelle „Seriennummern“ unten.',
-    'description' => 'Beschreibung', 'total_stock' => 'Gesamtbestand',
+    'description' => 'Beschreibung', 'total_stock' => 'Gesamtbestand', 'stored_in' => 'Lagerort',
     'version_label' => 'Version', 'version_plural' => 'Versionen', 'version_code' => 'Versionscode', 'version_name' => 'Anzeigename',
     'location' => 'Lagerort', 'location_hint' => 'Physische Regaladresse – z. B. „D3/#04“.',
     'fx_price' => 'Preis', 'fx_price_hint' => 'Stückpreis dieser Version. Währung im Nachbarfeld wählen. Leer = kein Preis.',

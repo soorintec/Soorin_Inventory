@@ -5,7 +5,7 @@ return [
         'backups.settings' => 'Impostazioni di backup automatico e di rete',
         'items.view' => 'Visualizza articoli', 'items.manage' => 'Crea e modifica articoli e categorie',
         'stock.view' => 'Visualizza giacenza', 'stock.manage' => 'Registra carichi e scarichi',
-        'warehouses.manage' => 'Crea e gestisci magazzini', 'stocktakes.manage' => 'Inventario',
+        'warehouses.manage' => 'Crea e gestisci magazzini', 'stocktakes.manage' => 'Inventario', 'stock_movements.purge' => 'Svuota il registro movimenti',
         'purchases.view' => 'Visualizza acquisti', 'purchases.manage' => 'Crea e gestisci acquisti',
         'projects.view' => 'Visualizza progetti e sistemi', 'projects.manage' => 'Gestisci progetti',
         'system_models.manage' => 'Definisci modelli di sistema e relative parti',
@@ -17,6 +17,7 @@ return [
     ],
     'hints' => [
         'backups.settings' => 'Configura la cartella di rete e la pianificazione dei backup automatici.',
+        'stock_movements.purge' => 'Pericoloso: elimina definitivamente tutta la cronologia dei movimenti di magazzino (kardex); la giacenza attuale resta intatta.',
         'backups.restore' => 'Pericoloso: sostituisce i dati attuali con quelli del file.',
         'stock.manage' => 'Senza questo, l\'utente può solo vedere la giacenza ma non modificarla.',
         'stock.view' => 'Accesso di magazzino più basilare; senza di esso l\'utente non vede alcuna pagina di magazzino.',

@@ -234,6 +234,28 @@ class StockMovementService
         });
     }
 
+    /**
+     * پاک‌سازیِ کاملِ لاگِ تراکنش‌های انبار (stock_movements).
+     *
+     * این یک استثنای عمدی و مجوزدار بر قاعدهٔ «سند انبار حذف نمی‌شود» است: با
+     * انباشتِ سال‌ها، این جدول بزرگ و سنگین می‌شود و مدیر می‌خواهد سابقهٔ حرکت‌ها
+     * را صفر کند. امن است چون موجودیِ فعلی در stock_balances و قیمتِ FIFO در
+     * stock_lots به‌صورتِ مستقل ذخیره شده‌اند و از روی این جدول بازسازی نمی‌شوند؛
+     * پس فقط کاردکس و گزارش‌های تاریخی خالی می‌شوند، نه موجودی یا قیمتِ جاری.
+     *
+     * @return int تعداد سطرهای پاک‌شده
+     */
+    public function purgeLog(): int
+    {
+        $count = StockMovement::query()->count();
+
+        StockMovement::query()->delete();
+
+        ActivityLog::record('stock_movements_purged', null, ['deleted' => $count]);
+
+        return $count;
+    }
+
     private function adjustBalance(ItemVersion $itemVersion, Warehouse $warehouse, float $delta): void
     {
         $balance = StockBalance::firstOrCreate(

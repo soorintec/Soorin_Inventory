@@ -5,7 +5,7 @@ return [
         'backups.settings' => 'Einstellungen für automatische & Netzwerk-Sicherung',
         'items.view' => 'Artikel ansehen', 'items.manage' => 'Artikel und Kategorien erstellen und bearbeiten',
         'stock.view' => 'Lagerbestand ansehen', 'stock.manage' => 'Zu- und Abgänge erfassen',
-        'warehouses.manage' => 'Lager erstellen und verwalten', 'stocktakes.manage' => 'Inventur',
+        'warehouses.manage' => 'Lager erstellen und verwalten', 'stocktakes.manage' => 'Inventur', 'stock_movements.purge' => 'Bewegungsprotokoll löschen',
         'purchases.view' => 'Einkäufe ansehen', 'purchases.manage' => 'Einkäufe erstellen und verwalten',
         'projects.view' => 'Projekte und Systeme ansehen', 'projects.manage' => 'Projekte verwalten',
         'system_models.manage' => 'Systemmodelle und deren Teile definieren',
@@ -17,6 +17,7 @@ return [
     ],
     'hints' => [
         'backups.settings' => 'Netzwerkordner und Zeitplan für automatische Sicherungen konfigurieren.',
+        'stock_movements.purge' => 'Gefährlich: löscht dauerhaft die gesamte Lagerbewegungshistorie (Kardex); der aktuelle Bestand bleibt unberührt.',
         'backups.restore' => 'Gefährlich: ersetzt die aktuellen Daten durch die Dateidaten.',
         'stock.manage' => 'Ohne dies kann der Benutzer den Bestand nur ansehen, aber nicht ändern.',
         'stock.view' => 'Grundlegendster Lagerzugriff; ohne ihn sieht der Benutzer keine Lagerseite.',

@@ -23,6 +23,7 @@ enum Permission: string
     case ManageStock      = 'stock.manage';       // ثبت ورود و خروج کالا
     case ManageWarehouses = 'warehouses.manage';
     case ManageStocktakes = 'stocktakes.manage';
+    case PurgeStockMovements = 'stock_movements.purge'; // پاک‌سازیِ کاملِ لاگِ تراکنش‌های انبار
 
     // خرید و واردات
     case ViewPurchases   = 'purchases.view';
@@ -81,7 +82,8 @@ enum Permission: string
         return match ($this) {
             self::ViewItems, self::ManageItems,
             self::ViewStock, self::ManageStock,
-            self::ManageWarehouses, self::ManageStocktakes => 'warehouse',
+            self::ManageWarehouses, self::ManageStocktakes,
+            self::PurgeStockMovements => 'warehouse',
 
             self::ViewPurchases, self::ManagePurchases => 'purchasing',
 

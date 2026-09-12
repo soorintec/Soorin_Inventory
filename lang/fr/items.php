@@ -13,7 +13,7 @@ return [
     'stock_intro' => 'Liste des articles de l\'entrepôt avec leur stock. Cliquez sur un article pour ouvrir ses versions, son emplacement et ses notes. Les entrées/sorties et l\'édition se font dans « Gestion de l\'entrepôt ».',
     'code' => 'Code article', 'name' => 'Nom de l\'article', 'brand' => 'Marque', 'unit' => 'Unité', 'unit_default' => 'pcs',
     'track_serial' => 'Suivi des numéros de série', 'track_serial_hint' => 'Pour les articles coûteux. Activer et enregistrer affiche le tableau « Numéros de série » en bas.',
-    'description' => 'Description', 'total_stock' => 'Stock total',
+    'description' => 'Description', 'total_stock' => 'Stock total', 'stored_in' => 'Entrepôt de stockage',
     'version_label' => 'Version', 'version_plural' => 'Versions', 'version_code' => 'Code de version', 'version_name' => 'Nom affiché',
     'location' => 'Emplacement', 'location_hint' => 'Adresse physique de l\'étagère — ex. « D3/#04 ».',
     'fx_price' => 'Prix', 'fx_price_hint' => 'Prix unitaire de cette version. Choisissez la devise dans le champ voisin. Vide = pas de prix.',

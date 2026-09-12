@@ -13,7 +13,7 @@ return [
     'stock_intro' => 'Elenco degli articoli di magazzino con la giacenza. Clicca su un articolo per aprire versioni, ubicazione e note. Carico/scarico e modifica avvengono in «Gestione magazzino».',
     'code' => 'Codice articolo', 'name' => 'Nome articolo', 'brand' => 'Marca', 'unit' => 'Unità', 'unit_default' => 'pz',
     'track_serial' => 'Traccia numeri di serie', 'track_serial_hint' => 'Per articoli costosi. Attivando e salvando compare la tabella «Numeri di serie» in fondo.',
-    'description' => 'Descrizione', 'total_stock' => 'Giacenza totale',
+    'description' => 'Descrizione', 'total_stock' => 'Giacenza totale', 'stored_in' => 'Magazzino di stoccaggio',
     'version_label' => 'Versione', 'version_plural' => 'Versioni', 'version_code' => 'Codice versione', 'version_name' => 'Nome visualizzato',
     'location' => 'Ubicazione', 'location_hint' => 'Indirizzo fisico dello scaffale — es. «D3/#04».',
     'fx_price' => 'Prezzo', 'fx_price_hint' => 'Prezzo unitario di questa versione. Scegli la valuta nel campo accanto. Vuoto = nessun prezzo.',
