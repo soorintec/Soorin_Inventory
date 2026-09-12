@@ -98,6 +98,24 @@ class StockPageTest extends TestCase
         $this->assertStringContainsString('padding:9px 22px', $html);  // فاصلهٔ ستون‌ها
     }
 
+    /**
+     * کالای با موجودیِ صفر باید در «موجودی انبار» دیده شود و دکمهٔ «ویرایش کالا»
+     * داشته باشد — تا کالایی که موجودی‌اش تمام شده همچنان قابلِ ویرایش بماند.
+     */
+    public function test_zero_stock_items_are_listed_and_editable_on_the_stock_page(): void
+    {
+        // یک کالای بدونِ هیچ موجودی (هرگز ورود نخورده)
+        $zero = Item::create([
+            'item_category_id' => $this->item->item_category_id, 'code' => 'CBL-000', 'name' => 'کابل بی‌موجودی',
+        ]);
+        $zero->versions()->create(['version_code' => 'اصلی']);
+
+        $this->stockPage()
+            ->assertSuccessful()
+            ->assertSee('کابل بی‌موجودی')            // در فهرست دیده می‌شود
+            ->assertTableActionExists('editItem');   // دکمهٔ ویرایش هست
+    }
+
     public function test_the_stock_page_can_be_filtered_by_category(): void
     {
         $other = ItemCategory::create(['name' => 'نمایشگر']);

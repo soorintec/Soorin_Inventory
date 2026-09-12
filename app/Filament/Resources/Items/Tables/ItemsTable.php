@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Items\Tables;
 
+use App\Enums\Permission;
+use App\Filament\Resources\Items\ItemResource;
 use App\Filament\Resources\Items\Pages\ItemKardex;
 use App\Models\Item;
 use App\Models\Warehouse;
@@ -103,6 +105,16 @@ class ItemsTable
                     ->sortable(),
             ])
             ->recordActions([
+                // ویرایشِ کالا از همین‌جا هم در دسترس است — چون این فهرست همهٔ
+                // کالاها را نشان می‌دهد، حتی کالای با موجودیِ صفر یا بدونِ هیچ ردیفِ
+                // موجودی. پیش از این ویرایش فقط در «مدیریت انبار» بود که بر پایهٔ
+                // ردیف‌های موجودی است، پس کالای صفر/بی‌موجودی از راهِ ویرایش می‌افتاد.
+                Action::make('editItem')
+                    ->label(__('stock.edit_item'))
+                    ->icon(Heroicon::OutlinedPencilSquare)
+                    ->visible(fn () => auth()->user()?->can(Permission::ManageItems->value) ?? false)
+                    ->url(fn (Item $record) => ItemResource::getUrl('edit', ['record' => $record])),
+
                 // ورژن‌ها در یک پنجره باز می‌شوند (با فاصله‌گذاری درست ستون‌ها)
                 Action::make('versions')
                     ->label(__('items.version_plural'))
