@@ -117,4 +117,37 @@ class AppUpdateTest extends TestCase
 
         $service->linkToGit('not-a-url');
     }
+
+    /** بدونِ نقطهٔ بازگشت، rollbackInfo باید null بدهد و دکمهٔ بازگشت پنهان باشد. */
+    public function test_rollback_button_is_hidden_without_a_rollback_point(): void
+    {
+        $this->assertNull(app(\App\Services\AppUpdateService::class)->rollbackInfo());
+
+        Livewire::actingAs($this->admin())
+            ->test(AppUpdate::class)
+            ->assertActionHidden('rollback');
+    }
+
+    /** با ثبتِ نقطهٔ بازگشت، rollbackInfo همان مقادیر را برمی‌گرداند. */
+    public function test_rollback_info_reflects_the_stored_point(): void
+    {
+        \App\Models\Setting::set('update.rollback_commit', 'abc123', 'update', 'string');
+        \App\Models\Setting::set('update.rollback_version', '1.7.9', 'update', 'string');
+        \App\Models\Setting::set('update.rollback_backup', 'PreUp_2026-09-12_101010_ab12.sql', 'update', 'string');
+
+        $info = app(\App\Services\AppUpdateService::class)->rollbackInfo();
+
+        $this->assertNotNull($info);
+        $this->assertSame('abc123', $info['commit']);
+        $this->assertSame('1.7.9', $info['version']);
+        $this->assertSame('PreUp_2026-09-12_101010_ab12.sql', $info['backup']);
+    }
+
+    /** بازگشت بدونِ نقطهٔ بازگشت باید با استثنا رد شود (نه اینکه بی‌صدا کاری کند). */
+    public function test_rollback_throws_without_a_rollback_point(): void
+    {
+        $this->expectException(\RuntimeException::class);
+
+        app(\App\Services\AppUpdateService::class)->rollback(false);
+    }
 }

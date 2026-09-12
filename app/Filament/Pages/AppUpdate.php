@@ -8,6 +8,7 @@ use App\Support\AppVersion;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Radio;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
@@ -93,9 +94,67 @@ class AppUpdate extends Page
         return [
             $this->checkAction(),
             $this->updateFromGitAction(),
+            $this->rollbackAction(),
             $this->updateFromZipAction(),
             $this->linkToGitAction(),
         ];
+    }
+
+    /**
+     * بازگشت به نسخهٔ قبلی — اگر نسخهٔ جدید مشکلی داشت. فقط برای نصبِ گیت و وقتی
+     * نقطهٔ بازگشتی از آخرین آپدیت ثبت شده باشد. کاربر همین‌جا انتخاب می‌کند که
+     * دیتابیس هم به قبل برگردد یا دست‌نخورده بماند — با توضیحِ روشنِ هر گزینه.
+     */
+    private function rollbackAction(): Action
+    {
+        $info = app(AppUpdateService::class)->rollbackInfo();
+
+        return Action::make('rollback')
+            ->label(__('updates.rollback'))
+            ->icon(Heroicon::OutlinedArrowUturnLeft)
+            ->color('warning')
+            ->visible(fn () => ($this->status['method'] ?? null) === 'git'
+                && app(AppUpdateService::class)->rollbackInfo() !== null)
+            ->modalHeading(__('updates.rollback_heading'))
+            ->modalDescription(fn () => __('updates.rollback_warning', [
+                'version' => app(AppUpdateService::class)->rollbackInfo()['version'] ?? '—',
+            ]))
+            ->modalSubmitActionLabel(__('updates.rollback_confirm_button'))
+            ->schema([
+                Radio::make('database_mode')
+                    ->label(__('updates.rollback_db_label'))
+                    ->options([
+                        'restore' => __('updates.rollback_db_restore'),
+                        'keep'    => __('updates.rollback_db_keep'),
+                    ])
+                    ->descriptions([
+                        'restore' => __('updates.rollback_db_restore_hint'),
+                        'keep'    => __('updates.rollback_db_keep_hint'),
+                    ])
+                    ->default('restore')
+                    ->required(),
+            ])
+            ->action(function (array $data): void {
+                try {
+                    $result = app(AppUpdateService::class)->rollback(($data['database_mode'] ?? 'restore') === 'restore');
+                } catch (\Throwable $e) {
+                    Notification::make()->danger()->title(__('updates.rollback_failed'))
+                        ->body($e->getMessage())->persistent()->send();
+
+                    return;
+                }
+
+                // پس از بازگشت، نسخهٔ جدید دوباره «موجود» است.
+                $this->status['current'] = $result['version'];
+                $this->status['available'] = true;
+
+                Notification::make()->success()
+                    ->title(__('updates.rollback_done', ['version' => $result['version']]))
+                    ->body($result['backup']
+                        ? __('updates.rollback_backup_note', ['file' => $result['backup']])
+                        : '')
+                    ->persistent()->send();
+            });
     }
 
     /**

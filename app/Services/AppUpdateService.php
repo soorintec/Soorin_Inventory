@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Setting;
 use App\Support\AppVersion;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
@@ -155,8 +156,14 @@ class AppUpdateService
             throw new RuntimeException('این استقرار یک مخزن گیت نیست؛ از به‌روزرسانی با فایل استفاده کن.');
         }
 
-        $backup = $this->safetyBackup();
         $root = base_path();
+
+        // نقطهٔ بازگشت: کامیت و نسخهٔ فعلی را پیش از pull نگه می‌داریم تا اگر
+        // نسخهٔ جدید مشکل داشت، بشود دقیقاً به همین‌جا برگشت.
+        $fromCommit = trim(Process::path($root)->env($this->processEnv())->run('git rev-parse HEAD')->output());
+        $fromVersion = AppVersion::current();
+
+        $backup = $this->safetyBackup();
 
         $this->run($root, 'git pull --ff-only', 180);
         $this->run($root, 'composer install --no-dev --optimize-autoloader --no-interaction', 600);
@@ -168,7 +175,115 @@ class AppUpdateService
         $version = AppVersion::current();
         $this->markUpToDate($version);
 
+        // فقط وقتی نقطهٔ بازگشت را ثبت می‌کنیم که کامیتِ مبدأ را داشته باشیم و
+        // نسخه واقعاً عوض شده باشد؛ وگرنه دکمهٔ بازگشت بی‌معنی است.
+        if ($fromCommit !== '' && $fromCommit !== trim(Process::path($root)->env($this->processEnv())->run('git rev-parse HEAD')->output())) {
+            $this->storeRollbackPoint($fromCommit, $fromVersion, $backup);
+        }
+
         return ['backup' => $backup, 'version' => $version];
+    }
+
+    // -------------------------------------------------- بازگشت به نسخهٔ قبلی
+
+    /** گروهِ تنظیماتِ نقطهٔ بازگشت در جدول settings. */
+    private const ROLLBACK_GROUP = 'update';
+
+    /**
+     * اطلاعاتِ نقطهٔ بازگشت (نسخه‌ای که آخرین آپدیت از آن آمده) یا null اگر ثبت نشده.
+     *
+     * @return array{commit: string, version: string, backup: string, at: ?string}|null
+     */
+    public function rollbackInfo(): ?array
+    {
+        $commit = (string) Setting::get('update.rollback_commit', '');
+
+        if ($commit === '') {
+            return null;
+        }
+
+        return [
+            'commit'  => $commit,
+            'version' => (string) Setting::get('update.rollback_version', ''),
+            'backup'  => (string) Setting::get('update.rollback_backup', ''),
+            'at'      => Setting::get('update.rollback_at'),
+        ];
+    }
+
+    private function storeRollbackPoint(string $commit, string $version, ?string $backup): void
+    {
+        Setting::set('update.rollback_commit', $commit, self::ROLLBACK_GROUP, 'string');
+        Setting::set('update.rollback_version', $version, self::ROLLBACK_GROUP, 'string');
+        Setting::set('update.rollback_backup', (string) $backup, self::ROLLBACK_GROUP, 'string');
+        Setting::set('update.rollback_at', now()->toIso8601String(), self::ROLLBACK_GROUP, 'string');
+    }
+
+    private function clearRollbackPoint(): void
+    {
+        Setting::set('update.rollback_commit', '', self::ROLLBACK_GROUP, 'string');
+        Setting::set('update.rollback_version', '', self::ROLLBACK_GROUP, 'string');
+        Setting::set('update.rollback_backup', '', self::ROLLBACK_GROUP, 'string');
+    }
+
+    /**
+     * بازگشت به نسخهٔ قبلی.
+     *
+     * کد با git به کامیتِ پیش از آخرین آپدیت برمی‌گردد. برای دیتابیس دو حالت هست:
+     *   - $restoreDatabase = true: دیتابیس از همان پشتیبانِ پیش‌از‌آپدیت بازیابی می‌شود
+     *     (کاملاً هماهنگ؛ داده‌های بعد از آپدیت می‌رود ولی پیش از بازگشت پشتیبان گرفته شده).
+     *   - false: دیتابیس دست‌نخورده می‌ماند (فقط وقتی امن است که آپدیت مهاجرتِ ویرانگر نداشته باشد).
+     *
+     * پیش از هر کاری یک پشتیبانِ تازه گرفته می‌شود تا خودِ بازگشت هم قابلِ برگشت باشد.
+     *
+     * @return array{version: string, backup: ?string, restored_db: bool}
+     */
+    public function rollback(bool $restoreDatabase): array
+    {
+        if (! AppVersion::isGitRepo()) {
+            throw new RuntimeException('این استقرار مخزن گیت نیست؛ بازگشت خودکار ممکن نیست.');
+        }
+
+        $info = $this->rollbackInfo();
+
+        if ($info === null || $info['commit'] === '') {
+            throw new RuntimeException(__('updates.rollback_none'));
+        }
+
+        $root = base_path();
+
+        // پشتیبانِ تازه از وضعیتِ فعلی تا بازگشت هم قابلِ برگشت باشد.
+        $preRollbackBackup = null;
+
+        try {
+            $preRollbackBackup = app(DatabaseBackupService::class)->create('پشتیبان پیش از بازگشت به نسخهٔ قبلی', 'PreRb');
+        } catch (\Throwable) {
+            // نبودِ پشتیبان نباید جلوی بازگشت را بگیرد؛ ولی هشدارش در UI هست.
+        }
+
+        // برگرداندنِ کد به کامیتِ نسخهٔ قبلی و همگام‌سازیِ وابستگی‌ها.
+        $this->run($root, 'git reset --hard ' . escapeshellarg($info['commit']), 180);
+        $this->run($root, 'composer install --no-dev --optimize-autoloader --no-interaction', 600);
+
+        // بازیابیِ دیتابیس فقط اگر کاربر خواسته و پشتیبانِ پیش‌از‌آپدیت موجود باشد.
+        if ($restoreDatabase && filled($info['backup'])) {
+            $service = app(DatabaseBackupService::class);
+
+            if ($service->exists($info['backup'])) {
+                $service->restore($service->absolutePath($info['backup']));
+            }
+        }
+
+        $this->run($root, 'php artisan optimize:clear', 120);
+
+        // نقطهٔ بازگشت مصرف شد؛ حالا نسخهٔ جدید دوباره «موجود» است.
+        $this->clearRollbackPoint();
+        Cache::forget(self::CACHE_KEY);
+
+        return [
+            'version'     => AppVersion::current(),
+            'backup'      => $preRollbackBackup,
+            'restored_db' => $restoreDatabase,
+        ];
     }
 
     /**
