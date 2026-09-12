@@ -37,7 +37,7 @@ class ScheduledBackupCommand extends Command
             return self::SUCCESS; // هنوز وقتش نرسیده یا این دوره اجرا شده
         }
 
-        $name = $backups->create(__('backups.scheduled_reason'));
+        $name = $backups->create(__('backups.scheduled_reason'), 'Auto');
         $this->info("بکاپ ساخته شد: {$name}");
 
         if (BackupSettings::networkEnabled()) {

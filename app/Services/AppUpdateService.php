@@ -261,7 +261,7 @@ class AppUpdateService
     private function safetyBackup(): ?string
     {
         try {
-            return app(DatabaseBackupService::class)->create('پشتیبان خودکار پیش از به‌روزرسانی برنامه');
+            return app(DatabaseBackupService::class)->create('پشتیبان خودکار پیش از به‌روزرسانی برنامه', 'PreUp');
         } catch (\Throwable) {
             return null;
         }

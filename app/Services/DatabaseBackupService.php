@@ -30,14 +30,23 @@ class DatabaseBackupService
     /**
      * ساخت فایل پشتیبان از کل دیتابیس.
      *
+     * نامِ فایل با پیشوندی می‌آید که منبعِ بکاپ را نشان می‌دهد تا در فهرست
+     * یک‌نگاهه معلوم باشد چه‌کسی/چه‌چیزی آن را گرفته:
+     *   - بکاپِ دستی: ۵ حرفِ اولِ نامِ کاربرِ واردشده (مثلِ `Ali_…`).
+     *   - زمان‌بندی‌شده: `Auto_…`  · پیش از به‌روزرسانی: `PreUp_…`  · پیش از بازیابی: `PreRe_…`.
+     * سپس تاریخ و ساعت و یک پسوندِ تصادفی: `Ali_2026-09-12_143000_a1b2.sql`.
+     *
+     * @param  string|null  $prefix  پیشوندِ صریحِ منبع؛ اگر null باشد از کاربرِ واردشده ساخته می‌شود.
      * @return string نام فایل ساخته‌شده
      */
-    public function create(?string $reason = null): string
+    public function create(?string $reason = null, ?string $prefix = null): string
     {
+        $prefix = $this->sanitizePrefix($prefix ?? $this->currentUserPrefix());
+
         // پسوند تصادفی لازم است: نام فقط تا ثانیه دقت دارد و بازیابی، پشتیبان
         // ایمنی را در همان ثانیه می‌گیرد. بدون این، پشتیبان ایمنی روی فایلی
         // که داریم از آن بازیابی می‌کنیم می‌نشیند و مبدأ را نابود می‌کند.
-        $name = sprintf('backup-%s-%s.sql', Carbon::now()->format('Y-m-d_His'), str()->lower(str()->random(4)));
+        $name = sprintf('%s_%s_%s.sql', $prefix, Carbon::now()->format('Y-m-d_His'), str()->lower(str()->random(4)));
         $path = $this->absolutePath($name);
 
         $this->ensureDirectory();
@@ -93,7 +102,7 @@ class DatabaseBackupService
         */
         $safetyCopy = $this->tables() === []
             ? null
-            : $this->create('پشتیبان خودکار پیش از بازیابی');
+            : $this->create('پشتیبان خودکار پیش از بازیابی', 'PreRe');
 
         $pdo = DB::connection()->getPdo();
         $pdo->exec('SET FOREIGN_KEY_CHECKS=0');
@@ -200,6 +209,42 @@ class DatabaseBackupService
         }
 
         return $name;
+    }
+
+    /**
+     * پیشوندِ نامِ فایل برای بکاپِ دستی، از روی کاربرِ واردشده: ۵ حرفِ اولِ نامِ
+     * لاتینِ کاربر، و اگر نام فارسی/غیرلاتین بود، بخشِ کاربریِ ایمیل/نام‌کاربری.
+     */
+    private function currentUserPrefix(): string
+    {
+        $user = auth()->user();
+
+        if (! $user) {
+            return 'User';
+        }
+
+        $candidates = [
+            (string) $user->name,
+            (string) str((string) $user->email)->before('@'),
+        ];
+
+        foreach ($candidates as $candidate) {
+            $clean = preg_replace('/[^A-Za-z0-9]/', '', $candidate) ?? '';
+
+            if ($clean !== '') {
+                return substr($clean, 0, 5);
+            }
+        }
+
+        return 'User';
+    }
+
+    /** پیشوند را به حروف/عددِ لاتین محدود می‌کند تا نامِ فایل روی هر سیستم‌عامل امن بماند. */
+    private function sanitizePrefix(string $prefix): string
+    {
+        $clean = preg_replace('/[^A-Za-z0-9]/', '', $prefix) ?? '';
+
+        return $clean !== '' ? substr($clean, 0, 12) : 'Backup';
     }
 
     private function ensureDirectory(): void

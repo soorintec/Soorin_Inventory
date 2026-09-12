@@ -156,14 +156,6 @@
             <div class="space-y-3">
                 @foreach ($backups as $backup)
                     <div class="flex flex-col gap-3 rounded-lg border border-gray-200 p-3 dark:border-gray-700 sm:flex-row sm:items-center sm:justify-between">
-                        @if ($this->canDeleteBackups())
-                            <input
-                                type="checkbox"
-                                wire:model.live="selected"
-                                value="{{ $backup['name'] }}"
-                                class="fi-checkbox-input mt-0.5 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-900 sm:mt-0"
-                            />
-                        @endif
                         <div class="min-w-0 sm:flex-1">
                             <div class="break-all font-mono text-xs" dir="ltr">{{ $backup['name'] }}</div>
                             <div class="mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -177,8 +169,21 @@
                             نام فایل با {{ }} داخل رشته می‌آید، نه با @js — @js داخل
                             attribute کامپوننت Blade کامپایل نمی‌شود. نام در سرویس با
                             الگوی سخت‌گیرانه اعتبارسنجی شده، پس نقل‌قول داخلش راه ندارد.
+
+                            تیکِ انتخابِ گروهی کنارِ دکمه‌های دانلود/حذفِ همین سطر است تا
+                            انتخاب و اقدام یک‌جا در دسترس باشد.
                         --}}
-                        <div class="flex shrink-0 flex-wrap gap-2">
+                        <div class="flex shrink-0 flex-wrap items-center gap-2">
+                            @if ($this->canDeleteBackups())
+                                <input
+                                    type="checkbox"
+                                    wire:model.live="selected"
+                                    value="{{ $backup['name'] }}"
+                                    title="{{ __('backups.select_all') }}"
+                                    class="fi-checkbox-input me-1 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-900"
+                                />
+                            @endif
+
                             <x-filament::button
                                 size="xs"
                                 color="gray"
