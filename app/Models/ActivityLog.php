@@ -7,7 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-/** ثبت تغییرات مهم — چه کسی، کِی، چه چیزی. این رکوردها هرگز حذف نمی‌شوند. */
+/**
+ * ثبت تغییرات مهم — چه کسی، کِی، چه چیزی.
+ *
+ * این رکوردها در جریانِ عادیِ کار حذف نمی‌شوند؛ تنها استثنا، «پاک‌سازیِ سیاههٔ
+ * قدیمی» است که مدیر با مجوزِ اختصاصی برای سبک‌نگه‌داشتنِ دیتابیس انجام می‌دهد
+ * (pruneOlderThan).
+ */
 class ActivityLog extends Model
 {
     use HasFactory;
@@ -98,5 +104,25 @@ class ActivityLog extends Model
     public function happenedAt(): string
     {
         return \App\Support\Jalali::formatDateTime($this->created_at) ?? '—';
+    }
+
+    /**
+     * پاک‌سازیِ ردیف‌های قدیمیِ سیاهه — برای سبک‌نگه‌داشتنِ دیتابیس.
+     *
+     * @param  int|null  $months  قدیمی‌تر از این تعداد ماه پاک شود؛ null یعنی همهٔ سیاهه.
+     * @return int  تعداد ردیفِ پاک‌شده
+     */
+    public static function pruneOlderThan(?int $months): int
+    {
+        $cutoff = $months !== null ? now()->subMonths($months) : null;
+
+        $query = static::query()
+            ->when($cutoff, fn ($q) => $q->where('created_at', '<', $cutoff));
+
+        $count = (clone $query)->count();
+
+        $query->delete();
+
+        return $count;
     }
 }

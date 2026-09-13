@@ -43,6 +43,7 @@ enum Permission: string
     case ManageUsers    = 'users.manage';
     case ManageSettings = 'settings.manage';
     case ViewActivity   = 'activity.view';
+    case PurgeActivityLogs = 'activity.purge'; // پاک‌سازیِ ردیف‌های قدیمیِ سیاههٔ تغییرات
 
     // گزارش
     case ViewReports = 'reports.view';
@@ -92,7 +93,8 @@ enum Permission: string
 
             self::ViewCustomers, self::ManageCustomers => 'customers',
 
-            self::ViewReports, self::ViewActivity => 'reports',
+            self::ViewReports, self::ViewActivity,
+            self::PurgeActivityLogs => 'reports',
 
             self::ViewBackups, self::CreateBackups,
             self::DeleteBackups, self::RestoreBackups,

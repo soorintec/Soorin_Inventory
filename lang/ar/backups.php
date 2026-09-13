@@ -27,6 +27,18 @@ return [
     'delete_selected_confirm' => 'حذف ملفات النسخ الاحتياطية المحددة؟ هذا الإجراء لا يمكن التراجع عنه.',
     'deleted_bulk'    => 'تم حذف :count ملف نسخ احتياطي.',
     'selected_count'  => 'تم تحديد :count',
+
+    'purge_activity_label'   => 'مسح سجل التغييرات القديم',
+    'purge_activity_heading' => 'مسح سجل التغييرات',
+    'purge_activity_warning' => 'تُحذف صفوف سجل التغييرات القديمة نهائياً لإبقاء قاعدة البيانات خفيفة. هذا الإجراء لا يمكن التراجع عنه ولا يؤثر على المخزون أو الأصناف.',
+    'purge_activity_age_label' => 'ما الصفوف التي تُحذف؟',
+    'purge_activity_age_3'   => 'أقدم من 3 أشهر',
+    'purge_activity_age_6'   => 'أقدم من 6 أشهر',
+    'purge_activity_age_12'  => 'أقدم من 12 شهراً',
+    'purge_activity_age_all' => 'كامل السجل (إفراغه تماماً)',
+    'purge_activity_confirm' => 'نعم، امسح',
+    'purge_activity_done'    => 'تم حذف :count صفاً من السجل.',
+    'purge_activity_none'    => 'لا يوجد ما يُحذف.',
     'megabyte'   => 'ميغابايت',
     'kilobyte'   => 'كيلوبايت',
 

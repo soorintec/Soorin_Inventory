@@ -82,6 +82,7 @@ class Backups extends Page
             Permission::DeleteBackups->value,
             Permission::RestoreBackups->value,
             Permission::ManageBackupSettings->value,
+            Permission::PurgeActivityLogs->value,
         ]);
     }
 
@@ -105,6 +106,11 @@ class Backups extends Page
         return auth()->user()?->can(Permission::RestoreBackups->value) ?? false;
     }
 
+    public function canPurgeActivityLogs(): bool
+    {
+        return auth()->user()?->can(Permission::PurgeActivityLogs->value) ?? false;
+    }
+
     public function mount(): void
     {
         $this->refreshList();
@@ -122,7 +128,47 @@ class Backups extends Page
             $this->restoreAction(),
             $this->settingsAction(),
             $this->testNetworkAction(),
+            $this->purgeActivityAction(),
         ];
+    }
+
+    /**
+     * پاک‌سازیِ سیاههٔ تغییراتِ قدیمی — نگهداریِ دیتابیس. کاربر بازهٔ زمانی را
+     * انتخاب می‌کند (قدیمی‌تر از N ماه، یا کلِ سیاهه). روی موجودی/کالاها اثری ندارد.
+     */
+    private function purgeActivityAction(): Action
+    {
+        return Action::make('purgeActivity')
+            ->label(__('backups.purge_activity_label'))
+            ->icon(Heroicon::OutlinedArchiveBoxXMark)
+            ->color('warning')
+            ->visible(fn () => $this->canPurgeActivityLogs())
+            ->modalHeading(__('backups.purge_activity_heading'))
+            ->modalDescription(__('backups.purge_activity_warning'))
+            ->modalSubmitActionLabel(__('backups.purge_activity_confirm'))
+            ->schema([
+                Radio::make('older_than')
+                    ->label(__('backups.purge_activity_age_label'))
+                    ->options([
+                        '3'   => __('backups.purge_activity_age_3'),
+                        '6'   => __('backups.purge_activity_age_6'),
+                        '12'  => __('backups.purge_activity_age_12'),
+                        'all' => __('backups.purge_activity_age_all'),
+                    ])
+                    ->default('6')
+                    ->required(),
+            ])
+            ->action(function (array $data): void {
+                $choice = $data['older_than'] ?? '6';
+                $count = \App\Models\ActivityLog::pruneOlderThan($choice === 'all' ? null : (int) $choice);
+
+                Notification::make()
+                    ->title($count > 0
+                        ? __('backups.purge_activity_done', ['count' => Jalali::digits((string) $count)])
+                        : __('backups.purge_activity_none'))
+                    ->success()
+                    ->send();
+            });
     }
 
     /** گرفتن پشتیبان تازه. */

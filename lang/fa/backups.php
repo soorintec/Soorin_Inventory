@@ -27,6 +27,19 @@ return [
     'delete_selected_confirm' => 'فایل‌های پشتیبانِ انتخاب‌شده حذف شوند؟ این کار برگشت‌ناپذیر است.',
     'deleted_bulk'    => ':count فایل پشتیبان حذف شد.',
     'selected_count'  => ':count مورد انتخاب شده',
+
+    // پاک‌سازیِ سیاههٔ تغییراتِ قدیمی (نگهداریِ دیتابیس)
+    'purge_activity_label'   => 'پاک‌سازیِ سیاههٔ تغییراتِ قدیمی',
+    'purge_activity_heading' => 'پاک‌سازیِ سیاههٔ تغییرات',
+    'purge_activity_warning' => 'ردیف‌های قدیمیِ سیاههٔ تغییرات برای همیشه پاک می‌شوند تا دیتابیس سبک بماند. این کار برگشت‌ناپذیر است و روی موجودی و کالاها هیچ اثری ندارد.',
+    'purge_activity_age_label' => 'کدام ردیف‌ها پاک شوند؟',
+    'purge_activity_age_3'   => 'قدیمی‌تر از ۳ ماه',
+    'purge_activity_age_6'   => 'قدیمی‌تر از ۶ ماه',
+    'purge_activity_age_12'  => 'قدیمی‌تر از ۱۲ ماه',
+    'purge_activity_age_all' => 'همهٔ سیاهه (کاملاً خالی شود)',
+    'purge_activity_confirm' => 'بله، پاک کن',
+    'purge_activity_done'    => ':count ردیفِ سیاهه پاک شد.',
+    'purge_activity_none'    => 'ردیفی برای پاک‌کردن نبود.',
     'megabyte'   => 'مگابایت',
     'kilobyte'   => 'کیلوبایت',
 

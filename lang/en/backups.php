@@ -27,6 +27,19 @@ return [
     'delete_selected_confirm' => 'Delete the selected backup files? This is irreversible.',
     'deleted_bulk'    => ':count backup files deleted.',
     'selected_count'  => ':count selected',
+
+    // Prune old activity log (database housekeeping)
+    'purge_activity_label'   => 'Purge old activity log',
+    'purge_activity_heading' => 'Purge the activity log',
+    'purge_activity_warning' => 'Old activity-log rows are permanently deleted to keep the database light. This is irreversible and has no effect on stock or items.',
+    'purge_activity_age_label' => 'Which rows to delete?',
+    'purge_activity_age_3'   => 'Older than 3 months',
+    'purge_activity_age_6'   => 'Older than 6 months',
+    'purge_activity_age_12'  => 'Older than 12 months',
+    'purge_activity_age_all' => 'The entire log (empty it completely)',
+    'purge_activity_confirm' => 'Yes, purge',
+    'purge_activity_done'    => ':count log rows deleted.',
+    'purge_activity_none'    => 'There was nothing to delete.',
     'megabyte'   => 'MB',
     'kilobyte'   => 'KB',
 

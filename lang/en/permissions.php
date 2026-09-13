@@ -25,6 +25,7 @@ return [
         'users.manage'        => 'Create and edit users',
         'settings.manage'     => 'System settings',
         'activity.view'       => 'View activity log',
+        'activity.purge'      => 'Purge activity log',
         'reports.view'        => 'View and print reports',
         'backups.view'        => 'View and download backup files',
         'backups.create'      => 'Create backups',
@@ -38,6 +39,7 @@ return [
         'stock.manage'    => 'Without this, the user can only view stock and cannot change it.',
         'stock.view'      => 'The most basic warehouse access; without it the user sees no warehouse page.',
         'stock_movements.purge' => 'Dangerous: permanently deletes the entire stock movement history (kardex); current stock remains untouched.',
+        'activity.purge'  => 'Deletes old activity-log rows to keep the database light; no effect on stock or items.',
     ],
 
     'groups' => [
