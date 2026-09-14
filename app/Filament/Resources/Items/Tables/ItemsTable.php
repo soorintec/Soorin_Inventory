@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\Items\Tables;
 
-use App\Enums\Permission;
-use App\Filament\Resources\Items\ItemResource;
 use App\Filament\Resources\Items\Pages\ItemKardex;
 use App\Models\Item;
 use App\Models\Warehouse;
@@ -105,15 +103,8 @@ class ItemsTable
                     ->sortable(),
             ])
             ->recordActions([
-                // ویرایشِ کالا از همین‌جا هم در دسترس است — چون این فهرست همهٔ
-                // کالاها را نشان می‌دهد، حتی کالای با موجودیِ صفر یا بدونِ هیچ ردیفِ
-                // موجودی. پیش از این ویرایش فقط در «مدیریت انبار» بود که بر پایهٔ
-                // ردیف‌های موجودی است، پس کالای صفر/بی‌موجودی از راهِ ویرایش می‌افتاد.
-                Action::make('editItem')
-                    ->label(__('stock.edit_item'))
-                    ->icon(Heroicon::OutlinedPencilSquare)
-                    ->visible(fn () => auth()->user()?->can(Permission::ManageItems->value) ?? false)
-                    ->url(fn (Item $record) => ItemResource::getUrl('edit', ['record' => $record])),
+                // «موجودی انبار» فقط‌خواندنی است: فقط نمایشِ کالاها و جزئیاتشان.
+                // هرگونه ویرایش/تغییر از «مدیریت انبار» انجام می‌شود (خواستهٔ مالک).
 
                 // ورژن‌ها در یک پنجره باز می‌شوند (با فاصله‌گذاری درست ستون‌ها)
                 Action::make('versions')
@@ -122,6 +113,18 @@ class ItemsTable
                     ->color('primary')
                     ->modalHeading(fn (Item $record) => $record->name . ' — ' . __('items.version_plural'))
                     ->modalContent(fn (Item $record) => view('filament.tables.item-versions-modal', ['item' => $record]))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel(__('common.close')),
+
+                // مشخصات فنی — فقط برای کالایی که تیکِ مشخصات فنی‌اش روشن است.
+                // شبیهِ دکمهٔ «ورژن‌ها»: یک پنجرهٔ فقط‌خواندنی با جدولِ مشخصات.
+                Action::make('specs')
+                    ->label(__('items.specs_label'))
+                    ->icon(Heroicon::OutlinedClipboardDocumentList)
+                    ->color('info')
+                    ->visible(fn (Item $record) => (bool) $record->has_specs)
+                    ->modalHeading(fn (Item $record) => $record->name . ' — ' . __('items.specs_label'))
+                    ->modalContent(fn (Item $record) => view('filament.tables.item-specs-modal', ['item' => $record]))
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel(__('common.close')),
 

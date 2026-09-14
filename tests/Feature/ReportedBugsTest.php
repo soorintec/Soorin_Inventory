@@ -157,10 +157,11 @@ class ReportedBugsTest extends TestCase
         $html = $this->get('/admin/backups')->assertOk()->getContent();
 
         $this->assertStringNotContainsString('@js(', $html, 'دستور بلید کامپایل‌نشده به مرورگر رفته است');
-        // دانلود حالا لینک مستقیم است (مطمئن‌تر روی گوشی)، نه اکشن Livewire
-        $this->assertMatchesRegularExpression('#href="[^"]*/backups/download/backup-[\w.\-]+\.sql"#', $html);
+        // دانلود حالا لینک مستقیم است (مطمئن‌تر روی گوشی)، نه اکشن Livewire.
+        // نامِ فایل با پیشوندِ منبع می‌آید (مثلِ User_/Auto_)، پس فقط الگوی نامِ امن سنجیده می‌شود.
+        $this->assertMatchesRegularExpression('#href="[^"]*/backups/download/[\w.\-]+\.sql"#', $html);
         // حذف همچنان اکشن Livewire است
-        $this->assertMatchesRegularExpression('/wire:click="deleteBackup\(\'backup-[\w.\-]+\.sql\'\)"/', $html);
+        $this->assertMatchesRegularExpression('/wire:click="deleteBackup\(\'[\w.\-]+\.sql\'\)"/', $html);
     }
 
     /** دکمه حذف باید فایل را واقعاً حذف کند. */

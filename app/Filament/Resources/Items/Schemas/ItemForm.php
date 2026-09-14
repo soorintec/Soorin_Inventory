@@ -4,10 +4,12 @@ namespace App\Filament\Resources\Items\Schemas;
 
 use App\Models\ItemCategory;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class ItemForm
@@ -46,6 +48,36 @@ class ItemForm
                 ->columnSpanFull(),
 
             Textarea::make('description')->label(__('items.description'))->columnSpanFull()->rows(2),
+
+            // مشخصات فنیِ اختیاری و کالا-محور: برای کالاهایی مثلِ کیس با فهرستِ
+            // قطعات. با تیک روشن می‌شود و جدولِ عنوان/مقدار زیرش ظاهر می‌شود.
+            Section::make(__('items.specs_section'))
+                ->description(__('items.specs_section_hint'))
+                ->columnSpanFull()
+                ->schema([
+                    Toggle::make('has_specs')
+                        ->label(__('items.has_specs'))
+                        ->helperText(__('items.has_specs_hint'))
+                        ->live(),
+
+                    Repeater::make('specs')
+                        ->label(__('items.specs_table'))
+                        ->addActionLabel(__('items.specs_add_row'))
+                        ->visible(fn ($get) => (bool) $get('has_specs'))
+                        ->columns(2)
+                        ->defaultItems(1)
+                        ->reorderable()
+                        ->schema([
+                            TextInput::make('label')
+                                ->label(__('items.spec_row_label'))
+                                ->placeholder(__('items.spec_row_label_ph'))
+                                ->required(),
+                            TextInput::make('value')
+                                ->label(__('items.spec_row_value'))
+                                ->placeholder(__('items.spec_row_value_ph'))
+                                ->required(),
+                        ]),
+                ]),
         ])->columns(2);
     }
 }

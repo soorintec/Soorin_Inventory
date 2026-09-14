@@ -58,12 +58,12 @@ class NewInventoryFeaturesTest extends TestCase
         // زیر حد: min=10، موجودی=3
         $low = $this->item('LOW-1', 'کالای کم‌موجود');
         $lowV = $low->versions()->create(['version_code' => 'اصلی', 'min_stock' => 10]);
-        StockBalance::create(['item_version_id' => $lowV->id, 'warehouse_id' => $this->warehouse->id, 'quantity' => 3]);
+        StockBalance::updateOrCreate(['item_version_id' => $lowV->id, 'warehouse_id' => $this->warehouse->id], ['quantity' => 3]);
 
         // بالای حد: min=5، موجودی=8
         $ok = $this->item('OK-1', 'کالای پرموجود');
         $okV = $ok->versions()->create(['version_code' => 'اصلی', 'min_stock' => 5]);
-        StockBalance::create(['item_version_id' => $okV->id, 'warehouse_id' => $this->warehouse->id, 'quantity' => 8]);
+        StockBalance::updateOrCreate(['item_version_id' => $okV->id, 'warehouse_id' => $this->warehouse->id], ['quantity' => 8]);
 
         $response = $this->actingAs($this->admin)->get(route('warehouse.print.reorder'));
 
@@ -80,7 +80,7 @@ class NewInventoryFeaturesTest extends TestCase
 
         $full = $this->item('FULL-1', 'موجود');
         $fullV = $full->versions()->create(['version_code' => 'اصلی']);
-        StockBalance::create(['item_version_id' => $fullV->id, 'warehouse_id' => $this->warehouse->id, 'quantity' => 12]);
+        StockBalance::updateOrCreate(['item_version_id' => $fullV->id, 'warehouse_id' => $this->warehouse->id], ['quantity' => 12]);
 
         Livewire::actingAs($this->admin)
             ->test(ListItems::class)
@@ -112,7 +112,7 @@ class NewInventoryFeaturesTest extends TestCase
     {
         $item = $this->item('DEL-1', 'کالای حذفی');
         $v = $item->versions()->create(['version_code' => 'اصلی']);
-        $bal = StockBalance::create(['item_version_id' => $v->id, 'warehouse_id' => $this->warehouse->id, 'quantity' => 5]);
+        $bal = StockBalance::updateOrCreate(['item_version_id' => $v->id, 'warehouse_id' => $this->warehouse->id], ['quantity' => 5]);
 
         Livewire::actingAs($this->admin)
             ->test(\App\Filament\Resources\StockBalances\Pages\ListStockBalances::class)
@@ -126,11 +126,11 @@ class NewInventoryFeaturesTest extends TestCase
     {
         $a = $this->item('B-1', 'الف');
         $va = $a->versions()->create(['version_code' => 'اصلی']);
-        $ba = StockBalance::create(['item_version_id' => $va->id, 'warehouse_id' => $this->warehouse->id, 'quantity' => 2]);
+        $ba = StockBalance::updateOrCreate(['item_version_id' => $va->id, 'warehouse_id' => $this->warehouse->id], ['quantity' => 2]);
 
         $b = $this->item('B-2', 'ب');
         $vb = $b->versions()->create(['version_code' => 'اصلی']);
-        $bb = StockBalance::create(['item_version_id' => $vb->id, 'warehouse_id' => $this->warehouse->id, 'quantity' => 3]);
+        $bb = StockBalance::updateOrCreate(['item_version_id' => $vb->id, 'warehouse_id' => $this->warehouse->id], ['quantity' => 3]);
 
         Livewire::actingAs($this->admin)
             ->test(\App\Filament\Resources\StockBalances\Pages\ListStockBalances::class)

@@ -99,21 +99,48 @@ class StockPageTest extends TestCase
     }
 
     /**
-     * کالای با موجودیِ صفر باید در «موجودی انبار» دیده شود و دکمهٔ «ویرایش کالا»
-     * داشته باشد — تا کالایی که موجودی‌اش تمام شده همچنان قابلِ ویرایش بماند.
+     * کالای صفرِ تازه (هرگز ورود نخورده) باید در هر دو صفحه دیده شود، و «موجودی
+     * انبار» فقط‌خواندنی باشد (دکمهٔ ویرایش نداشته باشد؛ ویرایش فقط در «مدیریت انبار»).
      */
-    public function test_zero_stock_items_are_listed_and_editable_on_the_stock_page(): void
+    public function test_zero_stock_items_show_on_both_pages_and_stock_page_is_read_only(): void
     {
-        // یک کالای بدونِ هیچ موجودی (هرگز ورود نخورده)
+        // در setUp انبارِ مرکزی ساخته شده، پس هوکِ ورژن یک ردیفِ موجودیِ صفر می‌سازد
+        // و کالا در «مدیریت انبار» هم دیده می‌شود (رفعِ باگ).
         $zero = Item::create([
             'item_category_id' => $this->item->item_category_id, 'code' => 'CBL-000', 'name' => 'کابل بی‌موجودی',
         ]);
         $zero->versions()->create(['version_code' => 'اصلی']);
 
+        // موجودی انبار: دیده می‌شود، ولی بدونِ دکمهٔ ویرایش (فقط‌خواندنی).
         $this->stockPage()
             ->assertSuccessful()
-            ->assertSee('کابل بی‌موجودی')            // در فهرست دیده می‌شود
-            ->assertTableActionExists('editItem');   // دکمهٔ ویرایش هست
+            ->assertSee('کابل بی‌موجودی')
+            ->assertTableActionDoesNotExist('editItem');
+
+        // مدیریت انبار: کالای صفرِ تازه هم دیده می‌شود.
+        Livewire::actingAs($this->admin)
+            ->test(\App\Filament\Resources\StockBalances\Pages\ListStockBalances::class)
+            ->assertSuccessful()
+            ->assertSee('کابل بی‌موجودی');
+    }
+
+    /** کالای دارای مشخصات فنی در «موجودی انبار» دکمهٔ «مشخصات فنی» دارد؛ بقیه ندارند. */
+    public function test_items_with_specs_show_a_specs_action(): void
+    {
+        $withSpecs = Item::create([
+            'item_category_id' => $this->item->item_category_id, 'code' => 'PC-1', 'name' => 'کیس کامپیوتر',
+            'has_specs' => true, 'specs' => [['label' => 'پردازنده', 'value' => 'Core i7']],
+        ]);
+        $withSpecs->versions()->create(['version_code' => 'اصلی']);
+
+        $page = $this->stockPage()->assertSuccessful();
+        // دکمهٔ مشخصات فنی برای کالای دارای مشخصات، روی رکوردِ همان کالا موجود است.
+        $page->assertTableActionExists('specs');
+
+        // مودالِ مشخصات، جدول را نشان می‌دهد.
+        $html = view('filament.tables.item-specs-modal', ['item' => $withSpecs])->render();
+        $this->assertStringContainsString('پردازنده', $html);
+        $this->assertStringContainsString('Core i7', $html);
     }
 
     public function test_the_stock_page_can_be_filtered_by_category(): void
@@ -412,7 +439,7 @@ class StockPageTest extends TestCase
         // ساختِ دسته از خودِ صفحهٔ «دسته‌بندی‌ها» (میان‌بر «دسته‌بندی جدید» در عملیات حذف شد).
         Livewire::actingAs($this->admin)
             ->test(\App\Filament\Resources\ItemCategories\Pages\ListItemCategories::class)
-            ->callAction('create', ['name' => 'برد الکترونیکی', 'code' => 'PCB', 'spec_template' => []])
+            ->callAction('create', ['name' => 'برد الکترونیکی', 'code' => 'PCB'])
             ->assertHasNoActionErrors();
 
         $this->assertTrue(ItemCategory::where('name', 'برد الکترونیکی')->exists());

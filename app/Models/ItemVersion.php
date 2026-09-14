@@ -35,6 +35,37 @@ class ItemVersion extends Model
         ];
     }
 
+    /**
+     * تازه که ورژنی ساخته می‌شود، یک ردیفِ موجودیِ صفر در انبارِ پیش‌فرض
+     * (MAIN یا اولین انبارِ فعال) برایش ساخته می‌شود.
+     *
+     * چرا: صفحهٔ «مدیریت انبار» بر پایهٔ ردیف‌های stock_balances است؛ کالای
+     * تازه که هنوز هیچ موجودی نگرفته ردیفی ندارد و آنجا دیده نمی‌شد (باگ:
+     * کالای صفرِ تازه در «موجودی انبار» بود ولی در «مدیریت انبار» نه). این ردیفِ
+     * صفر کاری با موجودی نمی‌کند و فقط کالا را در فهرستِ مدیریت آشکار می‌کند.
+     *
+     * اگر هنوز هیچ انباری ساخته نشده، بی‌سروصدا رد می‌شود (ردیف بعداً با اولین
+     * ورود ساخته می‌شود).
+     */
+    protected static function booted(): void
+    {
+        static::created(function (ItemVersion $version): void {
+            $warehouse = Warehouse::where('is_active', true)
+                ->orderByRaw("CASE WHEN code = 'MAIN' THEN 0 ELSE 1 END")
+                ->orderBy('id')
+                ->first();
+
+            if ($warehouse === null) {
+                return;
+            }
+
+            StockBalance::firstOrCreate([
+                'item_version_id' => $version->id,
+                'warehouse_id'    => $warehouse->id,
+            ]);
+        });
+    }
+
     public function item(): BelongsTo
     {
         return $this->belongsTo(Item::class);

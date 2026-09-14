@@ -14,6 +14,7 @@ use App\Services\StockMovementService;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -520,6 +521,27 @@ class ListStockBalances extends ListRecords
                     ->helperText(__('items.track_serial_hint')),
 
                 Textarea::make('description')->label(__('items.description'))->rows(2)->columnSpanFull(),
+
+                // مشخصات فنیِ اختیاری — برای کالاهایی که جدولِ قطعات دارند.
+                Toggle::make('has_specs')
+                    ->label(__('items.has_specs'))
+                    ->helperText(__('items.has_specs_hint'))
+                    ->live()
+                    ->columnSpanFull(),
+
+                Repeater::make('specs')
+                    ->label(__('items.specs_table'))
+                    ->addActionLabel(__('items.specs_add_row'))
+                    ->visible(fn ($get) => (bool) $get('has_specs'))
+                    ->columnSpanFull()
+                    ->columns(2)
+                    ->defaultItems(1)
+                    ->schema([
+                        TextInput::make('label')->label(__('items.spec_row_label'))
+                            ->placeholder(__('items.spec_row_label_ph'))->required(),
+                        TextInput::make('value')->label(__('items.spec_row_value'))
+                            ->placeholder(__('items.spec_row_value_ph'))->required(),
+                    ]),
             ])
             ->action(function (array $data) {
                 $item = Item::create([
@@ -529,6 +551,8 @@ class ListStockBalances extends ListRecords
                     'unit'             => $data['unit'],
                     'brand'            => $data['brand'] ?? null,
                     'track_serial'     => $data['track_serial'] ?? false,
+                    'has_specs'        => $data['has_specs'] ?? false,
+                    'specs'            => ($data['has_specs'] ?? false) ? ($data['specs'] ?? []) : null,
                     'description'      => $data['description'] ?? null,
                 ]);
 

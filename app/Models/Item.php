@@ -19,12 +19,13 @@ class Item extends Model
 
     protected $fillable = [
         'item_category_id', 'code', 'name', 'image', 'brand', 'unit',
-        'track_serial', 'is_active', 'description',
+        'track_serial', 'has_specs', 'specs', 'is_active', 'description',
     ];
 
     protected $attributes = [
         'unit'         => 'عدد',
         'track_serial' => false,
+        'has_specs'    => false,
         'is_active'    => true,
     ];
 
@@ -32,8 +33,16 @@ class Item extends Model
     {
         return [
             'track_serial' => 'boolean',
+            'has_specs'    => 'boolean',
+            'specs'        => 'array',
             'is_active'    => 'boolean',
         ];
+    }
+
+    /** آیا این کالا جدولِ مشخصات فنیِ پرشده دارد؟ */
+    public function hasSpecs(): bool
+    {
+        return $this->has_specs && filled($this->specs);
     }
 
     /**

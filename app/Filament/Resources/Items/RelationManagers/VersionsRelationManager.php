@@ -21,8 +21,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * ورژن‌های یک کالا — سطح سوم و جایی که موجودی و قیمت واقعاً ثبت می‌شود.
  *
- * فرم مشخصات فنی (specs) به‌صورت پویا از spec_template دسته همین کالا
- * ساخته می‌شود — نه فیلد ثابت، نه آزاد بی‌ساختار.
+ * مشخصات فنی دیگر اینجا نیست: کالا-محور شد و در فرمِ خودِ کالا (با تیکِ
+ * «مشخصات فنی») وارد می‌شود، نه روی هر ورژن.
  */
 class VersionsRelationManager extends RelationManager
 {
@@ -35,11 +35,7 @@ class VersionsRelationManager extends RelationManager
 
     public function form(Schema $schema): Schema
     {
-        /** @var Item $item */
-        $item = $this->getOwnerRecord();
-        $specTemplate = $item->category?->spec_template ?? [];
-
-        $fields = [
+        return $schema->components([
             TextInput::make('version_code')->label(__('items.version_code'))->required()->maxLength(40),
             TextInput::make('name')->label(__('items.version_name'))->maxLength(255),
             TextInput::make('location')->label(__('items.location'))
@@ -59,19 +55,7 @@ class VersionsRelationManager extends RelationManager
                 ->native(false),
             Textarea::make('notes')->label(__('items.notes'))
                 ->helperText(__('items.notes_hint'))->rows(2)->columnSpanFull(),
-        ];
-
-        // فیلد پویا برای هر کلید تعریف‌شده در قالب مشخصات فنی دسته
-        foreach ($specTemplate as $spec) {
-            if (empty($spec['key'])) {
-                continue;
-            }
-
-            $fields[] = TextInput::make("specs.{$spec['key']}")
-                ->label($spec['label'] ?? $spec['key']);
-        }
-
-        return $schema->components($fields)->columns(2);
+        ])->columns(2);
     }
 
     public function table(Table $table): Table

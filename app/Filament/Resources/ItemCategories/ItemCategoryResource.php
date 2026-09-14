@@ -9,11 +9,9 @@ use BackedEnum;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Notifications\Notification;
-use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -77,24 +75,8 @@ class ItemCategoryResource extends Resource
                 ->label(__('items.code'))
                 ->maxLength(20),
 
-            Section::make(__('items.spec_template'))
-                ->description(__('items.spec_template_hint'))
-                ->schema([
-                    Repeater::make('spec_template')
-                        ->hiddenLabel()
-                        ->schema([
-                            TextInput::make('key')
-                                ->label(__('items.spec_key'))
-                                ->required()
-                                ->alphaDash(),
-                            TextInput::make('label')
-                                ->label(__('items.spec_label'))
-                                ->required(),
-                        ])
-                        ->columns(2)
-                        ->addActionLabel(__('common.create'))
-                        ->reorderable(false),
-                ]),
+            // قالبِ مشخصات فنی از اینجا حذف شد و کالا-محور شد: هر کالا در فرمِ خودش
+            // تیکِ «مشخصات فنی» را روشن می‌کند و جدولش را وارد می‌کند (ItemForm).
         ])->columns(2);
     }
 

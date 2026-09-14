@@ -67,11 +67,10 @@ class VersionPriceTest extends TestCase
         // ۱۰ عدد ریالی ۵۰۰٬۰۰۰ و ۴ عدد دلاری ۱۲٫۵ — نباید با هم جمع شوند
         foreach ([[500_000, 'IRR', 10], [12.5, 'USD', 4], [3, 'CNY', 2]] as [$price, $cur, $qty]) {
             $version = $this->version($price, $cur);
-            StockBalance::create([
+            StockBalance::updateOrCreate([
                 'item_version_id' => $version->id,
                 'warehouse_id'    => $warehouse->id,
-                'quantity'        => $qty,
-            ]);
+            ], ['quantity' => $qty]);
         }
 
         $totals = app(InventoryReportService::class)->stockValueByCurrency();
