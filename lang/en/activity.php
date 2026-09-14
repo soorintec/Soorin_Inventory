@@ -35,6 +35,8 @@ return [
         'backup_restored'   => 'Backup restored',
         'backup_deleted'    => 'Backup deleted',
         'stock_movements_purged' => 'Stock log purged',
+        'system_model_duplicated' => 'System model duplicated',
+        'system_version_duplicated' => 'System version duplicated',
     ],
 
     'subjects' => [

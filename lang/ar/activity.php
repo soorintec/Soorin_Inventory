@@ -35,6 +35,8 @@ return [
         'backup_restored'   => 'استعادة نسخة احتياطية',
         'backup_deleted'    => 'حذف نسخة احتياطية',
         'stock_movements_purged' => 'مسح سجل الحركات',
+        'system_model_duplicated' => 'نسخ نموذج النظام',
+        'system_version_duplicated' => 'نسخ إصدار النظام',
     ],
 
     'subjects' => [

@@ -16,6 +16,17 @@ return [
     'version_code'       => 'کد نسخه',
     'version_code_hint'  => 'مثل «۱۴۰۴» یا «S2-A». هر سال یا هر تغییر قطعات، یک نسخه جدید.',
     'version_add'        => 'نسخه جدید',
+
+    // کپیِ مدل و نسخه
+    'duplicate_model'          => 'کپی از کل مدل',
+    'duplicate_model_hint'     => 'یک کپیِ کامل از این مدل با همهٔ نسخه‌ها و قطعاتشان ساخته می‌شود؛ فقط نامِ تازه را وارد کن. کد به‌صورت خودکار یکتا می‌شود.',
+    'duplicate_new_name'       => 'نامِ مدلِ جدید',
+    'duplicate_done'           => 'کپی ساخته شد: :name',
+    'duplicate_suffix'         => '(کپی)',
+    'duplicate_version'        => 'کپی از نسخه',
+    'duplicate_version_hint'   => 'یک کپی از این نسخه با همهٔ قطعاتش در همین مدل ساخته می‌شود؛ فقط نامِ نسخهٔ جدید را وارد کن.',
+    'duplicate_new_version_code' => 'نامِ نسخهٔ جدید',
+    'duplicate_version_done'   => 'کپیِ نسخه ساخته شد.',
     'year'               => 'سال',
     'notes'              => 'یادداشت',
     'empty_versions'      => 'برای این مدل هنوز نسخه‌ای تعریف نشده است.',

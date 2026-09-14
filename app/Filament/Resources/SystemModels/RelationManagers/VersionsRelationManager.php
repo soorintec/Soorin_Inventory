@@ -7,11 +7,13 @@ use App\Filament\Resources\SystemVersions\SystemVersionResource;
 use App\Models\Item;
 use App\Models\ItemVersion;
 use App\Models\SystemVersion;
+use App\Services\SystemDuplicationService;
 use App\Support\Jalali;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Notifications\Notification;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -153,6 +155,30 @@ class VersionsRelationManager extends RelationManager
                     ->url(fn (SystemVersion $record) => SystemVersionResource::getUrl('view', ['record' => $record])),
                 EditAction::make()
                     ->visible(fn () => auth()->user()?->can(Permission::ManageSystemModels->value) ?? false),
+
+                // کپیِ نسخه در همین مدل — با همهٔ قطعاتش و یک کد نسخهٔ تازه.
+                Action::make('duplicateVersion')
+                    ->label(__('systems.duplicate_version'))
+                    ->icon(Heroicon::OutlinedDocumentDuplicate)
+                    ->color('gray')
+                    ->visible(fn () => auth()->user()?->can(Permission::ManageSystemModels->value) ?? false)
+                    ->modalHeading(__('systems.duplicate_version'))
+                    ->modalDescription(__('systems.duplicate_version_hint'))
+                    ->schema([
+                        TextInput::make('version_code')
+                            ->label(__('systems.duplicate_new_version_code'))
+                            ->default(fn (SystemVersion $record) => $record->version_code . ' ' . __('systems.duplicate_suffix'))
+                            ->required()
+                            ->maxLength(40),
+                    ])
+                    ->action(function (SystemVersion $record, array $data): void {
+                        app(SystemDuplicationService::class)->duplicateVersion($record, $data['version_code']);
+
+                        Notification::make()->success()
+                            ->title(__('systems.duplicate_version_done'))
+                            ->send();
+                    }),
+
                 DeleteAction::make()
                     ->visible(fn () => auth()->user()?->can(Permission::ManageSystemModels->value) ?? false),
             ])

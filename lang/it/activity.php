@@ -13,7 +13,7 @@ return [
         'warehouse_created' => 'Magazzino creato', 'warehouse_updated' => 'Magazzino modificato',
         'purchase_received' => 'Acquisto ricevuto',
         'stocktake_started' => 'Inventario avviato', 'stocktake_closed' => 'Inventario finalizzato',
-        'backup_created' => 'Backup creato', 'backup_restored' => 'Backup ripristinato', 'backup_deleted' => 'Backup eliminato', 'stock_movements_purged' => 'Registro movimenti svuotato',
+        'backup_created' => 'Backup creato', 'backup_restored' => 'Backup ripristinato', 'backup_deleted' => 'Backup eliminato', 'stock_movements_purged' => 'Registro movimenti svuotato', 'system_model_duplicated' => 'Modello di sistema duplicato', 'system_version_duplicated' => 'Versione di sistema duplicata',
     ],
     'subjects' => [
         'Item' => 'Articolo (eliminato)', 'ItemVersion' => 'Versione (eliminata)', 'ItemCategory' => 'Categoria (eliminata)',

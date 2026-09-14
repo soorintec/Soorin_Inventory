@@ -35,6 +35,8 @@ return [
         'backup_restored'   => 'بازیابی پشتیبان',
         'backup_deleted'    => 'حذف فایل پشتیبان',
         'stock_movements_purged' => 'پاک‌سازیِ لاگِ تراکنش‌ها',
+        'system_model_duplicated' => 'کپیِ مدل سامانه',
+        'system_version_duplicated' => 'کپیِ نسخهٔ سامانه',
     ],
 
     'subjects' => [

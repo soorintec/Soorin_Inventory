@@ -6,13 +6,16 @@ use App\Enums\Permission;
 use App\Filament\Resources\SystemModels\Pages\ListSystemModels;
 use App\Filament\Resources\SystemModels\RelationManagers\VersionsRelationManager;
 use App\Models\SystemModel;
+use App\Services\SystemDuplicationService;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -78,9 +81,43 @@ class SystemModelResource extends Resource
 
                 IconColumn::make('is_active')->label(__('common.active'))->boolean(),
             ])
-            ->recordActions([ViewAction::make(), EditAction::make(), DeleteAction::make()])
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
+                static::duplicateAction(),
+                DeleteAction::make(),
+            ])
             ->emptyStateHeading(__('systems.empty_models'))
             ->emptyStateDescription(__('systems.model_hint'));
+    }
+
+    /**
+     * کپیِ کاملِ مدل — با همهٔ نسخه‌ها و قطعاتشان. فقط نامِ تازه پرسیده می‌شود؛
+     * کد خودکار یکتا می‌شود. برای ساختِ مدلِ شبیهِ نمونهٔ قبلی بدونِ کارِ از صفر.
+     */
+    private static function duplicateAction(): Action
+    {
+        return Action::make('duplicate')
+            ->label(__('systems.duplicate_model'))
+            ->icon(Heroicon::OutlinedDocumentDuplicate)
+            ->color('gray')
+            ->visible(fn () => auth()->user()?->can(Permission::ManageSystemModels->value) ?? false)
+            ->modalHeading(__('systems.duplicate_model'))
+            ->modalDescription(__('systems.duplicate_model_hint'))
+            ->schema([
+                TextInput::make('name')
+                    ->label(__('systems.duplicate_new_name'))
+                    ->default(fn (SystemModel $record) => $record->name . ' ' . __('systems.duplicate_suffix'))
+                    ->required()
+                    ->maxLength(255),
+            ])
+            ->action(function (SystemModel $record, array $data): void {
+                $copy = app(SystemDuplicationService::class)->duplicateModel($record, $data['name']);
+
+                Notification::make()->success()
+                    ->title(__('systems.duplicate_done', ['name' => $copy->name]))
+                    ->send();
+            });
     }
 
     public static function getRelations(): array

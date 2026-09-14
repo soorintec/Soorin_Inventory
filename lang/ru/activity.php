@@ -15,7 +15,7 @@ return [
         'warehouse_created' => 'Склад создан', 'warehouse_updated' => 'Склад изменён',
         'purchase_received' => 'Закупка получена',
         'stocktake_started' => 'Инвентаризация начата', 'stocktake_closed' => 'Инвентаризация завершена',
-        'backup_created' => 'Резервная копия создана', 'backup_restored' => 'Резервная копия восстановлена', 'backup_deleted' => 'Резервная копия удалена', 'stock_movements_purged' => 'Журнал движений очищен',
+        'backup_created' => 'Резервная копия создана', 'backup_restored' => 'Резервная копия восстановлена', 'backup_deleted' => 'Резервная копия удалена', 'stock_movements_purged' => 'Журнал движений очищен', 'system_model_duplicated' => 'Модель системы продублирована', 'system_version_duplicated' => 'Версия системы продублирована',
     ],
     'subjects' => [
         'Item' => 'Товар (удалён)', 'ItemVersion' => 'Версия (удалена)', 'ItemCategory' => 'Категория (удалена)',

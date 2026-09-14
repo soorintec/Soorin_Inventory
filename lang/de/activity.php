@@ -13,7 +13,7 @@ return [
         'warehouse_created' => 'Lager erstellt', 'warehouse_updated' => 'Lager geändert',
         'purchase_received' => 'Einkauf erhalten',
         'stocktake_started' => 'Inventur gestartet', 'stocktake_closed' => 'Inventur abgeschlossen',
-        'backup_created' => 'Sicherung erstellt', 'backup_restored' => 'Sicherung wiederhergestellt', 'backup_deleted' => 'Sicherung gelöscht', 'stock_movements_purged' => 'Bewegungsprotokoll gelöscht',
+        'backup_created' => 'Sicherung erstellt', 'backup_restored' => 'Sicherung wiederhergestellt', 'backup_deleted' => 'Sicherung gelöscht', 'stock_movements_purged' => 'Bewegungsprotokoll gelöscht', 'system_model_duplicated' => 'Systemmodell dupliziert', 'system_version_duplicated' => 'Systemversion dupliziert',
     ],
     'subjects' => [
         'Item' => 'Artikel (gelöscht)', 'ItemVersion' => 'Version (gelöscht)', 'ItemCategory' => 'Kategorie (gelöscht)',

@@ -13,7 +13,7 @@ return [
         'warehouse_created' => '创建仓库', 'warehouse_updated' => '编辑仓库',
         'purchase_received' => '采购收货',
         'stocktake_started' => '开始盘点', 'stocktake_closed' => '完成盘点',
-        'backup_created' => '创建备份', 'backup_restored' => '恢复备份', 'backup_deleted' => '删除备份', 'stock_movements_purged' => '清空移动日志',
+        'backup_created' => '创建备份', 'backup_restored' => '恢复备份', 'backup_deleted' => '删除备份', 'stock_movements_purged' => '清空移动日志', 'system_model_duplicated' => '复制系统型号', 'system_version_duplicated' => '复制系统版本',
     ],
     'subjects' => [
         'Item' => '商品（已删除）', 'ItemVersion' => '版本（已删除）', 'ItemCategory' => '分类（已删除）',

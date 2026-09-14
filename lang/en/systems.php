@@ -16,6 +16,17 @@ return [
     'version_code'       => 'Version code',
     'version_code_hint'  => 'Like "1404" or "S2-A". A new version for each year or each parts change.',
     'version_add'        => 'New version',
+
+    // Duplicating a model / version
+    'duplicate_model'          => 'Duplicate whole model',
+    'duplicate_model_hint'     => 'A full copy of this model is created, with all its versions and their parts; just enter a new name. The code is made unique automatically.',
+    'duplicate_new_name'       => 'New model name',
+    'duplicate_done'           => 'Copy created: :name',
+    'duplicate_suffix'         => '(copy)',
+    'duplicate_version'        => 'Duplicate version',
+    'duplicate_version_hint'   => 'A copy of this version with all its parts is created in the same model; just enter a new version name.',
+    'duplicate_new_version_code' => 'New version name',
+    'duplicate_version_done'   => 'Version copy created.',
     'year'               => 'Year',
     'notes'              => 'Note',
     'empty_versions'      => 'No version has been defined for this model yet.',
