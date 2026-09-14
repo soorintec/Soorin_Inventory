@@ -24,7 +24,11 @@
             </thead>
             <tbody>
                 @foreach ($rows as $row)
-                    <tr class="border-b border-gray-100 last:border-0 dark:border-gray-800">
+                    {{-- ردیف‌های یک‌درمیان سفید/خاکستری برای خواناییِ بهتر --}}
+                    <tr @class([
+                        'border-b border-gray-100 last:border-0 dark:border-gray-800',
+                        'bg-gray-50 dark:bg-gray-800' => $loop->odd,
+                    ])>
                         <td style="{{ $cell }} font-weight:500;">{{ $row['label'] ?? '—' }}</td>
                         <td style="{{ $cell }}" class="text-gray-600 dark:text-gray-400">{{ $row['value'] ?? '—' }}</td>
                     </tr>
