@@ -43,7 +43,7 @@ class StockMovementService
             throw new InvalidArgumentException('تعداد ورودی باید بزرگ‌تر از صفر باشد.');
         }
 
-        return DB::transaction(function () use (
+        return DB::connection('tenant')->transaction(function () use (
             $itemVersion, $warehouse, $quantity, $unitCost, $reason,
             $referenceType, $referenceId, $purchaseItemId, $lotCode, $receivedAt, $notes,
         ) {
@@ -102,7 +102,7 @@ class StockMovementService
             throw new InvalidArgumentException('تعداد خروجی باید بزرگ‌تر از صفر باشد.');
         }
 
-        return DB::transaction(function () use (
+        return DB::connection('tenant')->transaction(function () use (
             $itemVersion, $warehouse, $quantity, $reason, $referenceType, $referenceId, $notes,
         ) {
             $balance = StockBalance::firstOrCreate(
@@ -179,7 +179,7 @@ class StockMovementService
             throw new InvalidArgumentException('انبار مبدأ و مقصد نمی‌تواند یکی باشد.');
         }
 
-        return DB::transaction(function () use ($itemVersion, $from, $to, $quantity, $notes) {
+        return DB::connection('tenant')->transaction(function () use ($itemVersion, $from, $to, $quantity, $notes) {
             $outMovements = $this->recordOut($itemVersion, $from, $quantity, StockMovement::REASON_TRANSFER, notes: $notes);
 
             $inMovements = [];
@@ -209,7 +209,7 @@ class StockMovementService
      */
     public function removeFromWarehouse(ItemVersion $itemVersion, Warehouse $warehouse, ?string $notes = null): void
     {
-        DB::transaction(function () use ($itemVersion, $warehouse, $notes) {
+        DB::connection('tenant')->transaction(function () use ($itemVersion, $warehouse, $notes) {
             $balance = StockBalance::where('item_version_id', $itemVersion->id)
                 ->where('warehouse_id', $warehouse->id)
                 ->lockForUpdate()

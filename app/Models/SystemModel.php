@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Concerns\UsesTenantConnection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  */
 class SystemModel extends Model
 {
-    use HasFactory;
+    use HasFactory, UsesTenantConnection;
 
     protected $fillable = ['code', 'name', 'description', 'is_active'];
 

@@ -29,7 +29,7 @@ class ProjectChecklistService
             return;
         }
 
-        DB::transaction(function () use ($project, $version) {
+        DB::connection('tenant')->transaction(function () use ($project, $version) {
             $this->releaseReservations($project);
             $project->checklistLines()->delete();
 
@@ -51,7 +51,7 @@ class ProjectChecklistService
      */
     public function releaseReservations(Project $project): void
     {
-        DB::transaction(function () use ($project) {
+        DB::connection('tenant')->transaction(function () use ($project) {
             foreach ($project->checklistLines()->get() as $line) {
                 $remaining = (float) $line->quantity_reserved;
 

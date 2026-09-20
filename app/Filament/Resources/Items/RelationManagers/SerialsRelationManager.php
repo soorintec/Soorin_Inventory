@@ -202,7 +202,7 @@ class SerialsRelationManager extends RelationManager
 
                 $new = $lines->reject(fn (string $s) => in_array($s, $existing, true));
 
-                DB::transaction(function () use ($new, $data) {
+                DB::connection('tenant')->transaction(function () use ($new, $data) {
                     foreach ($new as $serial) {
                         ItemSerial::create([
                             'item_version_id' => $data['item_version_id'],

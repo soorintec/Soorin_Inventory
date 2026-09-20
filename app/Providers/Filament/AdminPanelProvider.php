@@ -76,6 +76,11 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::FOOTER,
                 fn () => view('components.footer'),
             )
+            // سوییچِ کسب‌وکارِ فعال (چند-کسب‌وکاری) — در نوار بالا، کنارِ سوییچِ زبان.
+            ->renderHook(
+                PanelsRenderHook::TOPBAR_END,
+                fn () => view('components.business-switcher'),
+            )
             // سوییچ زبان — در نوار بالا و روی صفحهٔ ورود.
             ->renderHook(
                 PanelsRenderHook::TOPBAR_END,
@@ -105,6 +110,9 @@ class AdminPanelProvider extends PanelProvider
                 // پس از StartSession تا زبانِ کاربر/نشست خوانده شود؛ جهت RTL/LTR و
                 // ترجمهٔ خودِ فیلامنت هم به همین locale وابسته است.
                 \App\Http\Middleware\SetLocale::class,
+                // کسب‌وکارِ فعال (چند-کسب‌وکاری) را روی اتصالِ tenant سوار می‌کند —
+                // پس از StartSession تا انتخابِ ذخیره‌شده در نشست خوانده شود.
+                \App\Http\Middleware\SetActiveBusiness::class,
                 ShareErrorsFromSession::class,
                 // پس از خواندن نشست و زبان: قفلِ لایسنس (پس از پایان مهلت).
                 \App\Http\Middleware\EnsureLicensed::class,

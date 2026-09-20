@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Concerns\UsesTenantConnection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /** سریال اقلام گران + گارانتی تأمین‌کننده. */
 class ItemSerial extends Model
 {
-    use HasFactory;
+    use HasFactory, UsesTenantConnection;
 
     public const STATUS_IN_STOCK  = 'in_stock';
     public const STATUS_INSTALLED = 'installed';

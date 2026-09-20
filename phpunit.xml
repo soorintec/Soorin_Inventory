@@ -20,6 +20,12 @@
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
+        <!--
+            چند-کسب‌وکاری: مدل‌های عملیاتی روی اتصالِ «tenant» هستند. در تست، اتصالِ
+            پیش‌فرض هم «tenant» می‌شود تا مرکزی و tenant روی یک دیتابیسِ تست/یک اتصال
+            باشند و RefreshDatabase و تراکنش‌ها یکدست کار کنند.
+        -->
+        <env name="DB_CONNECTION" value="tenant"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_STORE" value="array"/>
         <!--

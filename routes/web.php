@@ -51,6 +51,18 @@ Route::middleware('auth')->group(function () {
 
         return response()->noContent();
     })->name('theme.save');
+
+    // تعویضِ کسب‌وکارِ فعال (چند-کسب‌وکاری) — فقط بینِ کسب‌وکارهای مجازِ کاربر.
+    Route::post('/business', function (Illuminate\Http\Request $request) {
+        $id = (int) $request->validate(['business' => ['required', 'integer']])['business'];
+
+        // فقط کسب‌وکاری که کاربر به آن دسترسی دارد پذیرفته می‌شود.
+        if ($request->user()->accessibleBusinesses()->firstWhere('id', $id)) {
+            $request->session()->put('active_business_id', $id);
+        }
+
+        return back();
+    })->name('business.save');
 });
 
 // تعویض زبان — هم برای کاربر واردشده (ذخیره در پروفایل) و هم مهمان (نشست).

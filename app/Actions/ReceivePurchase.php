@@ -32,7 +32,7 @@ class ReceivePurchase
             throw new RuntimeException('سند خرید هیچ ردیفی ندارد.');
         }
 
-        return DB::transaction(function () use ($purchase, $items) {
+        return DB::connection('tenant')->transaction(function () use ($purchase, $items) {
             // ۱. قیمت ریالی هر واحد (بدون هزینه جانبی) از نرخ ارز روز حواله
             foreach ($items as $item) {
                 $unitPriceIrr = (int) round((float) $item->fx_unit_price * $purchase->rate_to_irr);

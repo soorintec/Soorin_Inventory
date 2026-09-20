@@ -47,6 +47,27 @@ class User extends Authenticatable implements FilamentUser
         return $this->is_active;
     }
 
+    /** کسب‌وکارهایی که این کاربر به آن‌ها دسترسی دارد (چند-کسب‌وکاری). */
+    public function businesses(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Business::class);
+    }
+
+    /**
+     * کسب‌وکارهای در دسترسِ کاربر. اگر هیچ دسترسیِ صریحی ثبت نشده باشد (نصب‌های
+     * قدیمی/تک‌کسب‌وکاری)، همهٔ کسب‌وکارهای فعال در دسترس‌اند تا کسی پشتِ در نماند.
+     *
+     * @return \Illuminate\Support\Collection<int, Business>
+     */
+    public function accessibleBusinesses(): \Illuminate\Support\Collection
+    {
+        $own = $this->businesses()->where('is_active', true)->get();
+
+        return $own->isNotEmpty()
+            ? $own
+            : Business::query()->where('is_active', true)->orderBy('id')->get();
+    }
+
     /**
      * تم کاربر به زبان فیلامنت. فیلامنت با light/dark/system کار می‌کند و
      * کلاس dark را روی <html> می‌گذارد؛ ما همان انتخاب را با نام خودمان

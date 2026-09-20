@@ -145,7 +145,7 @@ class ImportAnbarExcel extends Command
             return self::SUCCESS;
         }
 
-        $result = DB::transaction(fn () => $this->write($plan, $warehouse, $stock));
+        $result = DB::connection('tenant')->transaction(fn () => $this->write($plan, $warehouse, $stock));
 
         $this->newLine();
         $this->info('دسته ساخته‌شده: ' . $result['categories']);

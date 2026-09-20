@@ -32,7 +32,7 @@ class StocktakeService
      */
     public function start(Warehouse $warehouse, ?string $notes = null): Stocktake
     {
-        return DB::transaction(function () use ($warehouse, $notes) {
+        return DB::connection('tenant')->transaction(function () use ($warehouse, $notes) {
             $stocktake = Stocktake::create([
                 'code'         => $this->nextCode(),
                 'warehouse_id' => $warehouse->id,
@@ -106,7 +106,7 @@ class StocktakeService
             throw new RuntimeException('این انبارگردانی یا هنوز بسته نشده یا موجودی قبلاً با آن به‌روز شده است.');
         }
 
-        return DB::transaction(function () use ($stocktake) {
+        return DB::connection('tenant')->transaction(function () use ($stocktake) {
             $stock = app(StockMovementService::class);
             $warehouse = $stocktake->warehouse;
 

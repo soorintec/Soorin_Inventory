@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Concerns\UsesTenantConnection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /** یک سطر شمارش انبارگردانی: موجودی سامانه در برابر شمارش واقعی. */
 class StocktakeLine extends Model
 {
-    use HasFactory;
+    use HasFactory, UsesTenantConnection;
 
     protected $fillable = [
         'stocktake_id', 'item_version_id', 'system_quantity', 'counted_quantity', 'notes',

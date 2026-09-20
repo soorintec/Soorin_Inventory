@@ -26,7 +26,7 @@ class SystemDuplicationService
      */
     public function duplicateModel(SystemModel $model, string $newName): SystemModel
     {
-        return DB::transaction(function () use ($model, $newName) {
+        return DB::connection('tenant')->transaction(function () use ($model, $newName) {
             $copy = SystemModel::create([
                 'code'        => $this->uniqueModelCode($model->code),
                 'name'        => $newName,
@@ -52,7 +52,7 @@ class SystemDuplicationService
      */
     public function duplicateVersion(SystemVersion $version, string $newVersionCode): SystemVersion
     {
-        return DB::transaction(function () use ($version, $newVersionCode) {
+        return DB::connection('tenant')->transaction(function () use ($version, $newVersionCode) {
             $version->loadMissing('bomLines');
 
             $copy = $this->cloneVersionInto($version->system_model_id, $version, $newVersionCode);
