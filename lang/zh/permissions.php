@@ -10,7 +10,7 @@ return [
         'projects.view' => '查看项目和系统', 'projects.manage' => '管理项目',
         'system_models.manage' => '定义系统型号及其部件',
         'customers.view' => '查看客户', 'customers.manage' => '创建和编辑客户',
-        'users.view' => '查看用户', 'users.manage' => '创建和编辑用户',
+        'users.view' => '查看用户', 'users.manage' => '创建和编辑用户', 'businesses.manage' => '管理业务',
         'settings.manage' => '系统设置', 'activity.view' => '查看活动日志', 'activity.purge' => '清理变更日志',
         'reports.view' => '查看和打印报表', 'backups.view' => '查看和下载备份文件',
         'backups.create' => '创建备份', 'backups.delete' => '删除备份文件', 'backups.restore' => '从备份恢复数据库',

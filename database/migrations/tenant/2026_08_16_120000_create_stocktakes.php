@@ -23,8 +23,8 @@ return new class extends Migration
             $t->string('code', 30)->unique();          // ANB-1405-01
             $t->foreignId('warehouse_id')->constrained();
             $t->enum('status', ['open', 'counting', 'closed', 'cancelled'])->default('open');
-            $t->foreignId('started_by')->nullable()->constrained('users')->nullOnDelete();
-            $t->foreignId('closed_by')->nullable()->constrained('users')->nullOnDelete();
+            $t->unsignedBigInteger('started_by')->nullable()->index(); // مرجعِ نرم به users مرکزی
+            $t->unsignedBigInteger('closed_by')->nullable()->index();  // مرجعِ نرم به users مرکزی
             $t->timestamp('started_at')->nullable();
             $t->timestamp('closed_at')->nullable();
             $t->text('notes')->nullable();

@@ -25,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // مهاجرت‌های tenant (دیتای عملیاتیِ هر کسب‌وکار) در پوشهٔ جدا هستند تا
+        // هنگامِ ساختِ کسب‌وکارِ تازه فقط همین‌ها روی دیتابیس/پیشوندِ آن اجرا شوند.
+        // این ثبت باعث می‌شود migrateِ عادی (نصب/به‌روزرسانی/تست) هم آن‌ها را ببیند.
+        $this->loadMigrationsFrom(database_path('migrations/tenant'));
+
         Purchase::observe(PurchaseObserver::class);
         Project::observe(ProjectObserver::class);
 

@@ -19,7 +19,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('stocktakes', function (Blueprint $t) {
-            $t->foreignId('applied_by')->nullable()->after('closed_by')->constrained('users')->nullOnDelete();
+            $t->unsignedBigInteger('applied_by')->nullable()->after('closed_by')->index(); // مرجعِ نرم به users مرکزی
             $t->timestamp('applied_at')->nullable()->after('closed_at');
         });
     }
@@ -27,7 +27,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('stocktakes', function (Blueprint $t) {
-            $t->dropConstrainedForeignId('applied_by');
+            $t->dropColumn('applied_by');
             $t->dropColumn('applied_at');
         });
     }

@@ -86,7 +86,7 @@ return new class extends Migration
             $t->unsignedBigInteger('unit_cost')->default(0);
             $t->string('reference_type')->nullable();     // Project | Ticket | Purchase
             $t->unsignedBigInteger('reference_id')->nullable();
-            $t->foreignId('user_id')->nullable()->constrained()->nullOnDelete();  // چه کسی ثبت کرد
+            $t->unsignedBigInteger('user_id')->nullable()->index();  // چه کسی ثبت کرد — مرجعِ نرم به users مرکزی (چند-کسب‌وکاری)
             $t->text('notes')->nullable();
             $t->timestamps();
             $t->index(['reference_type', 'reference_id']);

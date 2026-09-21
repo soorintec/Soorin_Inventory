@@ -56,23 +56,13 @@ return new class extends Migration
             $t->integer('last_activity')->index();
         });
 
-        // ثبت تمام تغییرات — چه کسی، کِی، چه چیزی را تغییر داد
-        Schema::create('activity_logs', function (Blueprint $t) {
-            $t->id();
-            $t->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
-            $t->string('action', 50);          // created | updated | deleted | login | stock_out ...
-            $t->string('subject_type')->nullable();
-            $t->unsignedBigInteger('subject_id')->nullable();
-            $t->json('changes')->nullable();
-            $t->string('ip_address', 45)->nullable();
-            $t->timestamps();
-            $t->index(['subject_type', 'subject_id']);
-        });
+        // نکته: جدولِ activity_logs از این مهاجرتِ مرکزی خارج شد و به مهاجرتِ tenant
+        // منتقل شد (سیاههٔ هر کسب‌وکار جداست). نصب‌های موجود که این جدول را دارند،
+        // در مهاجرتِ tenant با hasTable رد می‌شوند.
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('activity_logs');
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('users');

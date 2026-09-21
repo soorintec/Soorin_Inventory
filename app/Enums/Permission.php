@@ -41,6 +41,7 @@ enum Permission: string
     // کاربران و تنظیمات
     case ViewUsers      = 'users.view';
     case ManageUsers    = 'users.manage';
+    case ManageBusinesses = 'businesses.manage'; // ساخت/مدیریتِ کسب‌وکارها (چند-کسب‌وکاری)
     case ManageSettings = 'settings.manage';
     case ViewActivity   = 'activity.view';
     case PurgeActivityLogs = 'activity.purge'; // پاک‌سازیِ ردیف‌های قدیمیِ سیاههٔ تغییرات
@@ -100,7 +101,7 @@ enum Permission: string
             self::DeleteBackups, self::RestoreBackups,
             self::ManageBackupSettings => 'backups',
 
-            self::ViewUsers, self::ManageUsers, self::ManageSettings => 'system',
+            self::ViewUsers, self::ManageUsers, self::ManageBusinesses, self::ManageSettings => 'system',
         };
     }
 

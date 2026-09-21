@@ -23,6 +23,7 @@ return [
         'customers.manage'    => 'تعریف و ویرایش مشتریان',
         'users.view'          => 'مشاهده کاربران',
         'users.manage'        => 'ساخت و ویرایش کاربران',
+        'businesses.manage'   => 'مدیریتِ کسب‌وکارها',
         'settings.manage'     => 'تنظیمات سامانه',
         'activity.view'       => 'مشاهده سیاهه تغییرات',
         'activity.purge'      => 'پاک‌سازیِ سیاههٔ تغییرات',

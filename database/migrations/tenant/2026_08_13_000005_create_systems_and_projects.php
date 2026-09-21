@@ -53,7 +53,7 @@ return new class extends Migration
             $t->enum('status', ['draft', 'planning', 'in_progress', 'delivered', 'cancelled'])->default('draft');
             $t->unsignedBigInteger('total_cost')->default(0);   // قیمت تمام‌شده محاسبه‌شده
             $t->unsignedBigInteger('sale_price')->default(0);
-            $t->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $t->unsignedBigInteger('created_by')->nullable()->index(); // مرجعِ نرم به users مرکزی
             $t->text('notes')->nullable();
             $t->timestamps();
         });

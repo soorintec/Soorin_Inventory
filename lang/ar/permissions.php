@@ -23,6 +23,7 @@ return [
         'customers.manage'    => 'تعريف وتعديل العملاء',
         'users.view'          => 'عرض المستخدمين',
         'users.manage'        => 'إنشاء وتعديل المستخدمين',
+        'businesses.manage'   => 'إدارة الأنشطة التجارية',
         'settings.manage'     => 'إعدادات النظام',
         'activity.view'       => 'عرض سجل الأنشطة',
         'activity.purge'      => 'مسح سجل التغييرات',

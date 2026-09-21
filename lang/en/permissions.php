@@ -23,6 +23,7 @@ return [
         'customers.manage'    => 'Create and edit customers',
         'users.view'          => 'View users',
         'users.manage'        => 'Create and edit users',
+        'businesses.manage'   => 'Manage businesses',
         'settings.manage'     => 'System settings',
         'activity.view'       => 'View activity log',
         'activity.purge'      => 'Purge activity log',

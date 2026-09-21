@@ -53,7 +53,7 @@ return new class extends Migration
             $t->unsignedBigInteger('goods_value_irr')->default(0); // ارزش کالا به ریال
             $t->unsignedBigInteger('total_cost_irr')->default(0);  // ارزش کالا + همه هزینه‌ها
             $t->enum('status', ['draft', 'ordered', 'received', 'cancelled'])->default('draft');
-            $t->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $t->unsignedBigInteger('created_by')->nullable()->index(); // مرجعِ نرم به users مرکزی
             $t->text('notes')->nullable();
             $t->timestamps();
         });

@@ -10,7 +10,7 @@ return [
         'projects.view' => 'Visualizza progetti e sistemi', 'projects.manage' => 'Gestisci progetti',
         'system_models.manage' => 'Definisci modelli di sistema e relative parti',
         'customers.view' => 'Visualizza clienti', 'customers.manage' => 'Crea e modifica clienti',
-        'users.view' => 'Visualizza utenti', 'users.manage' => 'Crea e modifica utenti',
+        'users.view' => 'Visualizza utenti', 'users.manage' => 'Crea e modifica utenti', 'businesses.manage' => 'Gestisci attività',
         'settings.manage' => 'Impostazioni di sistema', 'activity.view' => 'Visualizza registro attività', 'activity.purge' => 'Svuota il registro attività',
         'reports.view' => 'Visualizza e stampa report', 'backups.view' => 'Visualizza e scarica i backup',
         'backups.create' => 'Crea backup', 'backups.delete' => 'Elimina file di backup', 'backups.restore' => 'Ripristina il database da un backup',
