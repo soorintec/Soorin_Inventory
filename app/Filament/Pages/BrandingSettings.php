@@ -3,7 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Enums\Permission;
-use App\Models\Setting;
+use App\Models\TenantSetting;
 use App\Support\Branding;
 use BackedEnum;
 use Filament\Actions\Action;
@@ -71,7 +71,7 @@ class BrandingSettings extends Page
         $state = Branding::formState();
 
         foreach (self::LOGO_FIELDS as $field) {
-            $state[$field] = Setting::get(Branding::GROUP . '.' . $field);
+            $state[$field] = TenantSetting::get(Branding::GROUP . '.' . $field);
         }
 
         $this->form->fill($state);
@@ -203,19 +203,19 @@ class BrandingSettings extends Page
         $data = $this->form->getState();
 
         // فیلدهای متنی
-        Setting::set(Branding::GROUP . '.company_name', $data['company_name'] ?? '', Branding::GROUP);
-        Setting::set(Branding::GROUP . '.company_name_en', $data['company_name_en'] ?? '', Branding::GROUP);
-        Setting::set(Branding::GROUP . '.app_title', $data['app_title'] ?? '', Branding::GROUP);
-        Setting::set(Branding::GROUP . '.website', $data['website'] ?? '', Branding::GROUP);
-        Setting::set(Branding::GROUP . '.website_label', $data['website_label'] ?? '', Branding::GROUP);
-        Setting::set(Branding::GROUP . '.founded_year', (int) ($data['founded_year'] ?? 0), Branding::GROUP, 'int');
-        Setting::set(Branding::GROUP . '.phone', $data['phone'] ?? '', Branding::GROUP);
-        Setting::set(Branding::GROUP . '.address', $data['address'] ?? '', Branding::GROUP);
+        TenantSetting::set(Branding::GROUP . '.company_name', $data['company_name'] ?? '', Branding::GROUP);
+        TenantSetting::set(Branding::GROUP . '.company_name_en', $data['company_name_en'] ?? '', Branding::GROUP);
+        TenantSetting::set(Branding::GROUP . '.app_title', $data['app_title'] ?? '', Branding::GROUP);
+        TenantSetting::set(Branding::GROUP . '.website', $data['website'] ?? '', Branding::GROUP);
+        TenantSetting::set(Branding::GROUP . '.website_label', $data['website_label'] ?? '', Branding::GROUP);
+        TenantSetting::set(Branding::GROUP . '.founded_year', (int) ($data['founded_year'] ?? 0), Branding::GROUP, 'int');
+        TenantSetting::set(Branding::GROUP . '.phone', $data['phone'] ?? '', Branding::GROUP);
+        TenantSetting::set(Branding::GROUP . '.address', $data['address'] ?? '', Branding::GROUP);
 
         // فیلدهای فایل — مقدار، مسیرِ فایلِ ذخیره‌شده روی دیسک است (یا خالی اگر حذف شده).
         foreach (self::LOGO_FIELDS as $field) {
             $path = $this->normalizePath($data[$field] ?? null);
-            Setting::set(Branding::GROUP . '.' . $field, $path ?? '', Branding::GROUP, 'file');
+            TenantSetting::set(Branding::GROUP . '.' . $field, $path ?? '', Branding::GROUP, 'file');
         }
 
         Notification::make()
@@ -235,7 +235,7 @@ class BrandingSettings extends Page
 
         // فایل‌های آپلودی پاک می‌شوند تا فضای دیسک اشغال نماند.
         foreach (self::LOGO_FIELDS as $field) {
-            $path = Setting::get(Branding::GROUP . '.' . $field);
+            $path = TenantSetting::get(Branding::GROUP . '.' . $field);
 
             if (filled($path) && Storage::disk(Branding::DISK)->exists($path)) {
                 Storage::disk(Branding::DISK)->delete($path);
@@ -243,7 +243,7 @@ class BrandingSettings extends Page
         }
 
         // حذفِ تک‌تک (نه mass-delete) تا رویدادِ deletedِ مدل، کشِ هر کلید را هم پاک کند.
-        Setting::where('group', Branding::GROUP)->get()->each->delete();
+        TenantSetting::where('group', Branding::GROUP)->get()->each->delete();
 
         Notification::make()->success()->title(__('branding.reset_done'))->send();
 

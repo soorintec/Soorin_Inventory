@@ -2,7 +2,7 @@
 
 namespace App\Support;
 
-use App\Models\Setting;
+use App\Models\TenantSetting;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -52,21 +52,21 @@ class Branding
 
     public static function foundedYear(): int
     {
-        $value = Setting::get(self::key('founded_year'));
+        $value = TenantSetting::get(self::key('founded_year'));
 
         return filled($value) ? (int) $value : (int) config('branding.company.founded_year');
     }
 
     public static function phone(): ?string
     {
-        $value = Setting::get(self::key('phone'));
+        $value = TenantSetting::get(self::key('phone'));
 
         return filled($value) ? (string) $value : config('branding.company.phone');
     }
 
     public static function address(): ?string
     {
-        $value = Setting::get(self::key('address'));
+        $value = TenantSetting::get(self::key('address'));
 
         return filled($value) ? (string) $value : config('branding.company.address');
     }
@@ -79,7 +79,7 @@ class Branding
      */
     public static function logo(string $variant): string
     {
-        $path = Setting::get(self::key('logo_' . $variant));
+        $path = TenantSetting::get(self::key('logo_' . $variant));
 
         if (filled($path) && Storage::disk(self::DISK)->exists($path)) {
             // نسخه‌دهی با زمانِ تغییر فایل تا مرورگر نسخهٔ قدیمی را کش نکند.
@@ -97,7 +97,7 @@ class Branding
      */
     public static function logoPath(string $variant): ?string
     {
-        $path = Setting::get(self::key('logo_' . $variant));
+        $path = TenantSetting::get(self::key('logo_' . $variant));
 
         if (filled($path) && Storage::disk(self::DISK)->exists($path)) {
             return Storage::disk(self::DISK)->path($path);
@@ -138,7 +138,7 @@ class Branding
     /** آیا مدیر برای این واریانت لوگوی سفارشی گذاشته؟ */
     public static function hasCustomLogo(string $variant): bool
     {
-        $path = Setting::get(self::key('logo_' . $variant));
+        $path = TenantSetting::get(self::key('logo_' . $variant));
 
         return filled($path) && Storage::disk(self::DISK)->exists($path);
     }
@@ -183,7 +183,7 @@ class Branding
 
     private static function text(string $key, string $configKey): string
     {
-        $value = Setting::get(self::key($key));
+        $value = TenantSetting::get(self::key($key));
 
         return filled($value) ? (string) $value : (string) config($configKey);
     }
