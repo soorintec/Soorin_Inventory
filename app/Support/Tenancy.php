@@ -19,12 +19,37 @@ use Illuminate\Support\Facades\DB;
  */
 class Tenancy
 {
-    /** حالتِ نصب: prefix (پیش‌فرض) یا database. */
+    public const MODE_KEY = 'tenancy.mode';
+
+    /**
+     * حالتِ نصب: prefix (پیش‌فرض) یا database.
+     *
+     * اول از تنظیماتِ دیتابیس خوانده می‌شود (کاربر از UI انتخاب می‌کند)، بعد از
+     * env، و در نهایت prefix. پس دیگر نیازی به ویرایشِ دستیِ .env نیست.
+     */
     public static function mode(): string
     {
+        try {
+            $stored = \App\Models\Setting::get(self::MODE_KEY);
+
+            if (in_array($stored, ['prefix', 'database'], true)) {
+                return $stored;
+            }
+        } catch (\Throwable) {
+            // پیش از آماده‌بودنِ دیتابیس/جدولِ settings — به env برمی‌گردیم.
+        }
+
         $mode = (string) env('TENANCY_MODE', 'prefix');
 
         return in_array($mode, ['prefix', 'database'], true) ? $mode : 'prefix';
+    }
+
+    /** ذخیرهٔ حالتِ نصب از UI (به‌جای ویرایشِ دستیِ .env). */
+    public static function setMode(string $mode): void
+    {
+        $mode = in_array($mode, ['prefix', 'database'], true) ? $mode : 'prefix';
+
+        \App\Models\Setting::set(self::MODE_KEY, $mode, 'tenancy');
     }
 
     private static ?Business $active = null;

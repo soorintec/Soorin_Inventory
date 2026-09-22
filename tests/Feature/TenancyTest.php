@@ -81,6 +81,21 @@ class TenancyTest extends TestCase
         $this->assertNull(session('active_business_id'));
     }
 
+    public function test_tenancy_mode_reads_from_setting_and_defaults_to_prefix(): void
+    {
+        // بدونِ تنظیمِ ذخیره‌شده و بدونِ env، پیش‌فرض prefix است.
+        $this->assertSame('prefix', \App\Support\Tenancy::mode());
+
+        // انتخابِ کاربر از UI در دیتابیس ذخیره می‌شود و خوانده می‌شود — بدونِ .env.
+        \App\Support\Tenancy::setMode('database');
+        $this->assertSame('database', \App\Support\Tenancy::mode());
+        $this->assertDatabaseHas('settings', ['key' => \App\Support\Tenancy::MODE_KEY, 'value' => 'database']);
+
+        // مقدارِ نامعتبر به prefix تبدیل می‌شود.
+        \App\Support\Tenancy::setMode('nonsense');
+        $this->assertSame('prefix', \App\Support\Tenancy::mode());
+    }
+
     public function test_creating_an_item_still_works_under_the_default_business(): void
     {
         // رفتارِ تک‌کسب‌وکاری دست‌نخورده: ساخت کالا روی اتصالِ tenant (=همان دیتابیس).

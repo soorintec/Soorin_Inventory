@@ -161,13 +161,17 @@ class DatabaseBackupService
      */
     private function writeDump($handle, ?Business $business): void
     {
-        $useDb = Tenancy::mode() === 'database';
-
         if ($business !== null) {
-            $this->dumpBusiness($handle, $business, $useDb);
+            // فقط همین کسب‌وکار؛ USE فقط اگر خودش دیتابیسِ جدا داشته باشد.
+            $this->dumpBusiness($handle, $business, filled($business->database));
 
             return;
         }
+
+        // کامل: USE لازم است اگر «هر» کسب‌وکاری دیتابیسِ جدا داشته باشد (حالتِ ترکیبی
+        // هم ممکن است، چون کاربر می‌تواند حالت را از UI عوض کند). داده‌محور، نه بر
+        // اساسِ حالتِ سراسری — تا مسیردهیِ بخش‌ها همیشه درست باشد.
+        $useDb = Business::query()->whereNotNull('database')->exists();
 
         // کامل: بخشِ مرکزی (جدول‌های مرکزی، بدونِ جدول‌های tenant) + هر کسب‌وکار.
         $central = DB::connection();

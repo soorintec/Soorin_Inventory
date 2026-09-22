@@ -32,6 +32,8 @@
             @if ($this->isDatabaseMode())
                 <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('backups.db_access_note') }}</p>
             @endif
+
+            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('backups.mode_change_hint') }}</p>
         </div>
     </x-filament::section>
 

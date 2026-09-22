@@ -129,9 +129,53 @@ class Backups extends Page
             $this->restoreAction(),
             $this->settingsAction(),
             $this->testNetworkAction(),
+            $this->tenancyModeAction(),
             $this->checkDbAccessAction(),
             $this->purgeActivityAction(),
         ];
+    }
+
+    /**
+     * انتخابِ حالتِ ذخیره‌سازیِ کسب‌وکارها از UI — تا نیازی به ویرایشِ دستیِ .env نباشد.
+     *
+     * این انتخاب فقط رفتارِ ساختِ کسب‌وکارهای «تازه» را تعیین می‌کند:
+     *   - prefix: جدول‌های کسب‌وکارِ تازه با پیشوند در همان دیتابیس (هاستِ اشتراکی).
+     *   - database: برای هر کسب‌وکارِ تازه یک دیتابیسِ فیزیکیِ جدا (VPS).
+     * کسب‌وکارهای موجود دست‌نخورده می‌مانند (هرکدام مقصدِ خودش را ذخیره کرده)، پس
+     * تغییرِ حالت امن است و داده‌ای جابه‌جا نمی‌شود.
+     */
+    private function tenancyModeAction(): Action
+    {
+        return Action::make('tenancyMode')
+            ->label(__('backups.mode_change'))
+            ->icon(Heroicon::OutlinedAdjustmentsHorizontal)
+            ->color('gray')
+            ->visible(fn () => $this->canManageBackupSettings())
+            ->modalHeading(__('backups.mode_change'))
+            ->modalDescription(__('backups.mode_change_hint'))
+            ->fillForm(fn () => ['mode' => $this->tenancyMode()])
+            ->schema([
+                Radio::make('mode')
+                    ->label(__('backups.mode_change_label'))
+                    ->options([
+                        'prefix'   => __('backups.mode_prefix'),
+                        'database' => __('backups.mode_database'),
+                    ])
+                    ->descriptions([
+                        'prefix'   => __('backups.mode_prefix_hint'),
+                        'database' => __('backups.mode_database_hint'),
+                    ])
+                    ->default('prefix')
+                    ->required(),
+            ])
+            ->action(function (array $data): void {
+                \App\Support\Tenancy::setMode($data['mode'] ?? 'prefix');
+
+                Notification::make()
+                    ->success()
+                    ->title(__('backups.mode_saved', ['mode' => $this->tenancyModeLabel()]))
+                    ->send();
+            });
     }
 
     /**
