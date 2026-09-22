@@ -170,6 +170,8 @@ class AppUpdateService
 
         // مهاجرت و پاک‌سازی در پروسهٔ تازه تا کدِ به‌روزشده اجرا شود
         $this->run($root, 'php artisan migrate --force', 300);
+        // مهاجرت‌های tenant روی همهٔ کسب‌وکارها (چند-کسب‌وکاری).
+        $this->run($root, 'php artisan soorin:migrate-tenants', 300);
         $this->run($root, 'php artisan optimize:clear', 120);
 
         $version = AppVersion::current();
@@ -331,6 +333,7 @@ class AppUpdateService
         $root = base_path();
         $this->run($root, 'composer install --no-dev --optimize-autoloader --no-interaction', 600);
         $this->run($root, 'php artisan migrate --force', 300);
+        $this->run($root, 'php artisan soorin:migrate-tenants', 300);
         $this->run($root, 'php artisan optimize:clear', 120);
 
         $version = AppVersion::current();

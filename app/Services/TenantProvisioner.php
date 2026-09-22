@@ -57,9 +57,20 @@ class TenantProvisioner
     }
 
     /**
-     * اجرای مهاجرت‌های tenant + seedِ دادهٔ پایه روی هدفِ این کسب‌وکار.
+     * اجرای مهاجرت‌های tenant + seedِ دادهٔ پایه روی هدفِ این کسب‌وکار (ساختِ اولیه).
      */
     public function provision(Business $business): void
+    {
+        $this->runTenantMigrations($business);
+
+        // اتصالِ tenant پس از migrate روی همین کسب‌وکار است؛ دادهٔ پایه را بریز.
+        $this->seedBaseData();
+    }
+
+    /**
+     * فقط اجرای مهاجرت‌های tenant روی هدفِ کسب‌وکار (بدونِ seed) — برای به‌روزرسانی.
+     */
+    public function runTenantMigrations(Business $business): void
     {
         // در حالتِ database اگر دیتابیس نیست، ساخته شود.
         if (Tenancy::mode() === 'database' && filled($business->database)) {
@@ -78,18 +89,24 @@ class TenantProvisioner
         $originalDefault = DB::getDefaultConnection();
 
         try {
-            // فقط مهاجرت‌های tenant، روی اتصالِ tenant.
             Artisan::call('migrate', [
                 '--database' => 'tenant',
                 '--path'     => 'database/migrations/tenant',
                 '--force'    => true,
             ]);
-
-            DB::setDefaultConnection($originalDefault);
-
-            $this->seedBaseData();
         } finally {
             DB::setDefaultConnection($originalDefault);
+        }
+    }
+
+    /**
+     * اجرای مهاجرت‌های tenant روی همهٔ کسب‌وکارها — برای به‌روزرسانیِ برنامه، تا
+     * مهاجرت‌های تازه روی دیتابیس/پیشوندِ هر کسب‌وکار هم اعمال شود.
+     */
+    public function migrateAll(): void
+    {
+        foreach (Business::query()->where('is_active', true)->get() as $business) {
+            $this->runTenantMigrations($business);
         }
     }
 

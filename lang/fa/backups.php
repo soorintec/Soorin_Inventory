@@ -40,6 +40,15 @@ return [
     'purge_activity_confirm' => 'بله، پاک کن',
     'purge_activity_done'    => ':count ردیفِ سیاهه پاک شد.',
     'purge_activity_none'    => 'ردیفی برای پاک‌کردن نبود.',
+
+    // بکاپ/ری‌استورِ per-business (چند-کسب‌وکاری)
+    'create_business'      => 'پشتیبانِ یک کسب‌وکار',
+    'create_business_hint' => 'فقط دیتای کسب‌وکارِ انتخاب‌شده پشتیبان گرفته می‌شود (نه کلِ سامانه).',
+    'which_business'       => 'کدام کسب‌وکار؟',
+    'business_not_found'   => 'کسب‌وکار پیدا نشد.',
+    'restore_target'       => 'بازیابی در کجا؟',
+    'restore_target_hint'  => 'کامل: کلِ سامانه. یا فقط یک کسب‌وکار (فایل باید بکاپِ همان کسب‌وکار باشد).',
+    'restore_target_full'  => 'کامل (همهٔ کسب‌وکارها)',
     'megabyte'   => 'مگابایت',
     'kilobyte'   => 'کیلوبایت',
 

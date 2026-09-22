@@ -3,49 +3,55 @@
 namespace App\Services;
 
 use App\Models\ActivityLog;
+use App\Models\Business;
+use App\Support\Tenancy;
+use Illuminate\Database\Connection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use PDO;
 use RuntimeException;
 
 /**
- * پشتیبان‌گیری و بازیابی دیتابیس.
+ * پشتیبان‌گیری و بازیابی دیتابیس (چند-کسب‌وکاری).
  *
- * عمداً از mysqldump استفاده نمی‌کند: روی ویندوز مالک پروژه و روی هاست
- * اشتراکی، اجرای فرمان بیرونی معمولاً در دسترس نیست یا مسیرش فرق دارد.
- * این پیاده‌سازی فقط به خود اتصال دیتابیس نیاز دارد و همه‌جا کار می‌کند.
+ * عمداً از mysqldump استفاده نمی‌کند: روی ویندوز و هاست اشتراکی معمولاً در دسترس
+ * نیست. فقط به خودِ اتصال نیاز دارد و خروجی‌اش SQL استاندارد است.
  *
- * فایل خروجی SQL استاندارد است، پس با phpMyAdmin و mysql هم قابل بازیابی است.
+ * دو نوع بکاپ:
+ *   - کامل (business = null): جدول‌های مرکزی + جدول‌های همهٔ کسب‌وکارها، یک فایل.
+ *   - یک کسب‌وکار (business داده‌شده): فقط جدول‌های همان کسب‌وکار.
+ * در حالتِ database (دیتابیسِ جدا برای هر کسب‌وکار)، بخش‌ها با «USE `db`;» مسیردهی
+ * می‌شوند تا بازیابی هر بخش را به دیتابیسِ درستش برساند.
  */
 class DatabaseBackupService
 {
-    /** دیسک و پوشه نگهداری — بیرون از public تا از وب قابل دانلود مستقیم نباشد. */
     private const DISK = 'local';
     private const DIR  = 'backups';
-
-    /** برای جلوگیری از پر شدن دیسک، فقط این تعداد پشتیبان نگه داشته می‌شود. */
     private const KEEP = 20;
 
+    /** جدول‌های دیتای عملیاتیِ هر کسب‌وکار (tenant) — پایه، بدونِ پیشوند. */
+    private const TENANT_TABLES = [
+        'item_categories', 'items', 'item_versions', 'item_serials',
+        'warehouses', 'stock_balances', 'stock_lots', 'stock_movements',
+        'stocktakes', 'stocktake_lines',
+        'customers', 'customer_systems', 'customer_system_parts',
+        'suppliers', 'purchases', 'purchase_items',
+        'system_models', 'system_versions', 'system_bom_lines',
+        'projects', 'project_checklist_lines',
+        'currencies', 'activity_logs',
+    ];
+
     /**
-     * ساخت فایل پشتیبان از کل دیتابیس.
+     * ساخت فایل پشتیبان.
      *
-     * نامِ فایل با پیشوندی می‌آید که منبعِ بکاپ را نشان می‌دهد تا در فهرست
-     * یک‌نگاهه معلوم باشد چه‌کسی/چه‌چیزی آن را گرفته:
-     *   - بکاپِ دستی: ۵ حرفِ اولِ نامِ کاربرِ واردشده (مثلِ `Ali_…`).
-     *   - زمان‌بندی‌شده: `Auto_…`  · پیش از به‌روزرسانی: `PreUp_…`  · پیش از بازیابی: `PreRe_…`.
-     * سپس تاریخ و ساعت و یک پسوندِ تصادفی: `Ali_2026-09-12_143000_a1b2.sql`.
-     *
-     * @param  string|null  $prefix  پیشوندِ صریحِ منبع؛ اگر null باشد از کاربرِ واردشده ساخته می‌شود.
+     * @param  string|null   $prefix    پیشوندِ نامِ فایل (منبع)؛ null یعنی از کاربرِ واردشده.
+     * @param  Business|null $business  اگر داده شود، فقط همان کسب‌وکار؛ وگرنه بکاپِ کامل.
      * @return string نام فایل ساخته‌شده
      */
-    public function create(?string $reason = null, ?string $prefix = null): string
+    public function create(?string $reason = null, ?string $prefix = null, ?Business $business = null): string
     {
         $prefix = $this->sanitizePrefix($prefix ?? $this->currentUserPrefix());
 
-        // پسوند تصادفی لازم است: نام فقط تا ثانیه دقت دارد و بازیابی، پشتیبان
-        // ایمنی را در همان ثانیه می‌گیرد. بدون این، پشتیبان ایمنی روی فایلی
-        // که داریم از آن بازیابی می‌کنیم می‌نشیند و مبدأ را نابود می‌کند.
         $name = sprintf('%s_%s_%s.sql', $prefix, Carbon::now()->format('Y-m-d_His'), str()->lower(str()->random(4)));
         $path = $this->absolutePath($name);
 
@@ -57,23 +63,29 @@ class DatabaseBackupService
             throw new RuntimeException('نوشتن فایل پشتیبان ممکن نشد: ' . $path);
         }
 
+        // چون در حینِ بکاپ اتصالِ tenant بینِ کسب‌وکارها جابه‌جا می‌شود، کسب‌وکارِ
+        // فعالِ درخواست را نگه می‌داریم و در پایان برمی‌گردانیم.
+        $original = Tenancy::active();
+
         try {
-            fwrite($handle, $this->header($reason));
+            fwrite($handle, $this->header($reason, $business));
             fwrite($handle, "SET FOREIGN_KEY_CHECKS=0;\n");
             fwrite($handle, "SET NAMES utf8mb4;\n\n");
 
-            foreach ($this->tables() as $table) {
-                $this->writeTable($handle, $table);
-            }
+            $this->writeDump($handle, $business);
 
             fwrite($handle, "SET FOREIGN_KEY_CHECKS=1;\n");
         } finally {
             fclose($handle);
+
+            if ($original !== null) {
+                Tenancy::use($original);
+            }
         }
 
         $this->pruneOldBackups();
 
-        $this->logQuietly('backup_created', ['file' => $name, 'reason' => $reason]);
+        $this->logQuietly('backup_created', ['file' => $name, 'reason' => $reason, 'business' => $business?->id]);
 
         return $name;
     }
@@ -81,30 +93,25 @@ class DatabaseBackupService
     /**
      * بازیابی از یک فایل SQL.
      *
-     * پیش از هر کاری یک پشتیبان از وضعیت فعلی گرفته می‌شود — اگر فایل ورودی
-     * خراب باشد یا نیمه‌کاره اجرا شود، راه برگشت وجود دارد.
-     *
-     * @return string|null نام فایل پشتیبانِ پیش از بازیابی، یا null اگر
-     *                     دیتابیس خالی بوده و چیزی برای محافظت نبوده است
+     * @param  Business|null $business  اگر داده شود، روی اتصالِ همان کسب‌وکار بازیابی
+     *                                  می‌شود؛ وگرنه روی اتصالِ مرکزی (بکاپِ کامل).
+     * @return string|null نام فایلِ پشتیبانِ ایمنیِ پیش از بازیابی (یا null).
      */
-    public function restore(string $sqlPath): ?string
+    public function restore(string $sqlPath, ?Business $business = null): ?string
     {
         if (! is_file($sqlPath)) {
             throw new RuntimeException('فایل پشتیبان پیدا نشد: ' . $sqlPath);
         }
 
-        /*
-        | پشتیبان ایمنی فقط وقتی معنی دارد که چیزی برای از دست دادن باشد.
-        |
-        | مهم‌ترین سناریوی بازیابی همان است که دیتابیس خالی یا خراب است؛ اگر
-        | اینجا اصرار می‌کردیم پشتیبان بگیریم، بازیابی روی دیتابیس پاک‌شده
-        | اصلاً انجام نمی‌شد — یعنی درست در بدترین لحظه از کار می‌افتاد.
-        */
-        $safetyCopy = $this->tables() === []
-            ? null
-            : $this->create('پشتیبان خودکار پیش از بازیابی', 'PreRe');
+        $original = Tenancy::active();
 
-        $pdo = DB::connection()->getPdo();
+        // پشتیبانِ ایمنی فقط وقتی چیزی برای از دست دادن باشد.
+        $safetyCopy = $this->targetHasData($business)
+            ? $this->create('پشتیبان خودکار پیش از بازیابی', 'PreRe', $business)
+            : null;
+
+        $connection = $business !== null ? $this->businessConnection($business) : DB::connection();
+        $pdo = $connection->getPdo();
         $pdo->exec('SET FOREIGN_KEY_CHECKS=0');
 
         $executed = 0;
@@ -117,32 +124,145 @@ class DatabaseBackupService
         } catch (\Throwable $e) {
             $pdo->exec('SET FOREIGN_KEY_CHECKS=1');
 
+            if ($original !== null) {
+                Tenancy::use($original);
+            }
+
             throw new RuntimeException(
                 "بازیابی در دستور شماره {$executed} متوقف شد: {$e->getMessage()}"
-                . ($safetyCopy
-                    ? " — پشتیبان وضعیت پیش از بازیابی در فایل «{$safetyCopy}» موجود است."
-                    : ''),
+                . ($safetyCopy ? " — پشتیبان وضعیت پیش از بازیابی در فایل «{$safetyCopy}» موجود است." : ''),
                 previous: $e,
             );
         }
 
         $pdo->exec('SET FOREIGN_KEY_CHECKS=1');
 
+        if ($original !== null) {
+            Tenancy::use($original);
+        }
+
         $this->logQuietly('backup_restored', [
             'source'     => basename($sqlPath),
             'statements' => $executed,
             'safety'     => $safetyCopy,
+            'business'   => $business?->id,
         ]);
 
         return $safetyCopy;
     }
 
+    // ---------------------------------------------------------------- بخش‌ها
+
     /**
-     * ثبت در سیاهه تغییرات، بدون اینکه شکستش کل عملیات را از بین ببرد.
+     * نوشتنِ درجای دامپ. هر کسب‌وکار درجا (پس از سوییچِ اتصال) dump می‌شود تا
+     * اتصالِ tenant که بینِ کسب‌وکارها repoint می‌شود، بخش‌های قبلی را بی‌اعتبار نکند.
      *
-     * بازیابی روی دیتابیسی انجام می‌شود که ممکن است جدول activity_logs
-     * نداشته باشد؛ نبودِ یک سطر سیاهه نباید مانع برگرداندن داده شرکت شود.
+     * @param  resource  $handle
      */
+    private function writeDump($handle, ?Business $business): void
+    {
+        $useDb = Tenancy::mode() === 'database';
+
+        if ($business !== null) {
+            $this->dumpBusiness($handle, $business, $useDb);
+
+            return;
+        }
+
+        // کامل: بخشِ مرکزی (جدول‌های مرکزی، بدونِ جدول‌های tenant) + هر کسب‌وکار.
+        $central = DB::connection();
+        $tenantPhysicalAll = $this->allTenantPhysicalTables();
+        $centralTables = array_values(array_filter(
+            $this->baseTablesOf($central),
+            fn (string $t) => ! in_array($t, $tenantPhysicalAll, true),
+        ));
+
+        if ($useDb) {
+            fwrite($handle, "USE `{$central->getDatabaseName()}`;\n\n");
+        }
+
+        foreach ($centralTables as $table) {
+            $this->writeTable($handle, $central, $table);
+        }
+
+        foreach (Business::query()->orderBy('id')->get() as $b) {
+            $this->dumpBusiness($handle, $b, $useDb);
+        }
+    }
+
+    /** @param resource $handle */
+    private function dumpBusiness($handle, Business $business, bool $useDb): void
+    {
+        $conn = $this->businessConnection($business);
+
+        if ($useDb) {
+            fwrite($handle, "USE `{$conn->getDatabaseName()}`;\n\n");
+        }
+
+        foreach ($this->businessTables($conn) as $table) {
+            $this->writeTable($handle, $conn, $table);
+        }
+    }
+
+    /** نام‌های فیزیکیِ جدول‌های tenantِ موجود روی این اتصال. */
+    private function businessTables(Connection $conn): array
+    {
+        $prefix = $conn->getTablePrefix();
+        $existing = $this->baseTablesOf($conn);
+
+        $tables = [];
+        foreach (self::TENANT_TABLES as $base) {
+            $physical = $prefix . $base;
+            if (in_array($physical, $existing, true)) {
+                $tables[] = $physical;
+            }
+        }
+
+        return $tables;
+    }
+
+    /** اتصالِ آمادهٔ یک کسب‌وکار (اتصالِ tenant که رویش سوار شده). */
+    private function businessConnection(Business $business): Connection
+    {
+        Tenancy::use($business);
+
+        return DB::connection('tenant');
+    }
+
+    /** همهٔ نام‌های فیزیکیِ جدول‌های tenant در همهٔ کسب‌وکارها (برای کنارگذاشتن از بخشِ مرکزی). */
+    private function allTenantPhysicalTables(): array
+    {
+        $all = [];
+
+        foreach (Business::query()->get() as $b) {
+            $prefix = (string) ($b->table_prefix ?? '');
+
+            foreach (self::TENANT_TABLES as $base) {
+                $all[] = $prefix . $base;
+            }
+        }
+
+        return $all;
+    }
+
+    /**
+     * آیا هدفِ بازیابی چیزی برای پشتیبانِ ایمنی دارد؟
+     *
+     * مهم: اگر دیتابیس خالی/wipe شده باشد (هیچ جدولی نیست)، پشتیبانِ ایمنی نباید
+     * گرفته شود — چون create() برای هدر به جدولِ settings سر می‌زند و روی دیتابیسِ
+     * خالی خطا می‌دهد. این همان محافظِ نسخهٔ قبلی است.
+     */
+    private function targetHasData(?Business $business): bool
+    {
+        if ($business === null) {
+            return $this->baseTablesOf(DB::connection()) !== [];
+        }
+
+        return $this->businessTables($this->businessConnection($business)) !== [];
+    }
+
+    // ---------------------------------------------------------------- عمومی
+
     private function logQuietly(string $action, array $changes): void
     {
         try {
@@ -153,8 +273,6 @@ class DatabaseBackupService
     }
 
     /**
-     * فهرست فایل‌های پشتیبان، تازه‌ترین اول.
-     *
      * @return array<int, array{name: string, size: int, created_at: Carbon}>
      */
     public function list(): array
@@ -199,7 +317,6 @@ class DatabaseBackupService
 
     // ------------------------------------------------------------------ داخلی
 
-    /** نام فایل از ورودی کاربر می‌آید؛ هر چیزی جز نام ساده رد می‌شود. */
     private function safeName(string $name): string
     {
         $name = basename($name);
@@ -211,10 +328,6 @@ class DatabaseBackupService
         return $name;
     }
 
-    /**
-     * پیشوندِ نامِ فایل برای بکاپِ دستی، از روی کاربرِ واردشده: ۵ حرفِ اولِ نامِ
-     * لاتینِ کاربر، و اگر نام فارسی/غیرلاتین بود، بخشِ کاربریِ ایمیل/نام‌کاربری.
-     */
     private function currentUserPrefix(): string
     {
         $user = auth()->user();
@@ -239,7 +352,6 @@ class DatabaseBackupService
         return 'User';
     }
 
-    /** پیشوند را به حروف/عددِ لاتین محدود می‌کند تا نامِ فایل روی هر سیستم‌عامل امن بماند. */
     private function sanitizePrefix(string $prefix): string
     {
         $clean = preg_replace('/[^A-Za-z0-9]/', '', $prefix) ?? '';
@@ -254,44 +366,43 @@ class DatabaseBackupService
         }
     }
 
-    /** @return array<int, string> */
-    private function tables(): array
+    /** نام جدول‌های BASE TABLE یک اتصال. */
+    private function baseTablesOf(Connection $conn): array
     {
-        $database = DB::connection()->getDatabaseName();
+        $database = $conn->getDatabaseName();
 
         return array_map(
             fn (object $row) => array_values((array) $row)[0],
-            DB::select('SHOW FULL TABLES FROM `' . $database . '` WHERE Table_type = "BASE TABLE"'),
+            $conn->select('SHOW FULL TABLES FROM `' . $database . '` WHERE Table_type = "BASE TABLE"'),
         );
     }
 
-    private function header(?string $reason): string
+    private function header(?string $reason, ?Business $business): string
     {
         return implode("\n", [
             '-- پشتیبان دیتابیس — ' . \App\Support\Branding::appTitle(),
-            '-- دیتابیس: ' . DB::connection()->getDatabaseName(),
             '-- تاریخ: ' . Carbon::now()->toDateTimeString(),
+            $business ? '-- کسب‌وکار: ' . $business->name . ' (#' . $business->id . ')' : '-- بکاپِ کامل (همهٔ کسب‌وکارها)',
             $reason ? '-- علت: ' . $reason : '-- علت: پشتیبان دستی',
             '', '',
         ]);
     }
 
     /** @param resource $handle */
-    private function writeTable($handle, string $table): void
+    private function writeTable($handle, Connection $conn, string $table): void
     {
-        $create = (array) DB::selectOne('SHOW CREATE TABLE `' . $table . '`');
+        $create = (array) $conn->selectOne('SHOW CREATE TABLE `' . $table . '`');
         $createSql = $create['Create Table'] ?? array_values($create)[1] ?? null;
 
         fwrite($handle, "-- ساختار جدول {$table}\n");
         fwrite($handle, "DROP TABLE IF EXISTS `{$table}`;\n");
         fwrite($handle, $createSql . ";\n\n");
 
-        $pdo = DB::connection()->getPdo();
+        $pdo = $conn->getPdo();
         $columns = null;
         $buffer = [];
 
-        // ردیف‌ها به‌صورت جریانی خوانده می‌شوند تا جدول بزرگ حافظه را پر نکند
-        foreach (DB::cursor('SELECT * FROM `' . $table . '`') as $row) {
+        foreach ($conn->cursor('SELECT * FROM `' . $table . '`') as $row) {
             $row = (array) $row;
             $columns ??= '`' . implode('`, `', array_keys($row)) . '`';
 
@@ -302,7 +413,6 @@ class DatabaseBackupService
 
             $buffer[] = '(' . implode(', ', $values) . ')';
 
-            // هر ۱۰۰ ردیف یک INSERT — فایل کوچک‌تر و بازیابی سریع‌تر
             if (count($buffer) >= 100) {
                 $this->flushInsert($handle, $table, $columns, $buffer);
             }
@@ -328,11 +438,6 @@ class DatabaseBackupService
     }
 
     /**
-     * تقسیم فایل SQL به دستورهای جدا.
-     *
-     * ساده‌ترین راه (split روی «;») روی داده‌ای که خودش «;» دارد خراب می‌شود،
-     * پس وضعیت داخل رشته و کاراکتر فرار دنبال می‌شود.
-     *
      * @return \Generator<int, string>
      */
     private function statements(string $path): \Generator
@@ -344,12 +449,11 @@ class DatabaseBackupService
         }
 
         $statement = '';
-        $quote = null;          // ' یا " وقتی داخل رشته‌ایم
+        $quote = null;
         $escaped = false;
 
         try {
             while (($chunk = fgets($handle)) !== false) {
-                // خط توضیح فقط وقتی نادیده گرفته می‌شود که داخل رشته نباشیم
                 if ($quote === null && $statement === '' && preg_match('/^\s*(--|#|\/\*)/', $chunk)) {
                     continue;
                 }
@@ -408,7 +512,6 @@ class DatabaseBackupService
         }
     }
 
-    /** فایل‌های قدیمی‌تر از سقف نگهداری حذف می‌شوند. */
     private function pruneOldBackups(): void
     {
         $files = $this->list();

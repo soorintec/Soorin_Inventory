@@ -125,11 +125,28 @@ class Backups extends Page
     {
         return [
             $this->createAction(),
+            $this->createBusinessAction(),
             $this->restoreAction(),
             $this->settingsAction(),
             $this->testNetworkAction(),
             $this->purgeActivityAction(),
         ];
+    }
+
+    /** کسب‌وکارهای در دسترسِ کاربرِ فعلی — برای انتخاب‌گرِ بکاپ/ری‌استورِ per-business. */
+    private function businessOptions(): array
+    {
+        return \App\Models\Business::query()
+            ->where('is_active', true)
+            ->orderBy('id')
+            ->pluck('name', 'id')
+            ->all();
+    }
+
+    /** آیا بیش از یک کسب‌وکار هست؟ (گزینه‌های per-business فقط آن وقت معنی دارند) */
+    private function hasMultipleBusinesses(): bool
+    {
+        return \App\Models\Business::query()->count() > 1;
     }
 
     /**
@@ -196,6 +213,44 @@ class Backups extends Page
                         ->title($result['message'])
                         ->{$result['ok'] ? 'success' : 'warning'}()
                         ->send();
+                }
+            });
+    }
+
+    /** بکاپِ فقط یک کسب‌وکار (چند-کسب‌وکاری) — با انتخابِ کسب‌وکار. */
+    private function createBusinessAction(): Action
+    {
+        return Action::make('createBusiness')
+            ->label(__('backups.create_business'))
+            ->icon(Heroicon::OutlinedBuildingOffice2)
+            ->color('gray')
+            ->visible(fn () => $this->canCreateBackups() && $this->hasMultipleBusinesses())
+            ->modalHeading(__('backups.create_business'))
+            ->modalDescription(__('backups.create_business_hint'))
+            ->schema([
+                Select::make('business_id')
+                    ->label(__('backups.which_business'))
+                    ->options(fn () => $this->businessOptions())
+                    ->required()
+                    ->native(false),
+            ])
+            ->action(function (array $data, DatabaseBackupService $service): void {
+                $business = \App\Models\Business::find($data['business_id']);
+
+                if ($business === null) {
+                    Notification::make()->danger()->title(__('backups.business_not_found'))->send();
+
+                    return;
+                }
+
+                $name = $service->create(null, null, $business);
+                $this->refreshList();
+
+                Notification::make()->success()->title(__('backups.created', ['file' => $name]))->send();
+
+                if (BackupSettings::networkEnabled()) {
+                    $result = app(NetworkBackupService::class)->push($service->absolutePath($name), $name);
+                    Notification::make()->title($result['message'])->{$result['ok'] ? 'success' : 'warning'}()->send();
                 }
             });
     }
@@ -477,6 +532,16 @@ class Backups extends Page
                     ->preserveFilenames()
                     ->storeFiles(false),
 
+                // در چند-کسب‌وکاری: بازیابیِ کامل یا فقط یک کسب‌وکار. اگر یک کسب‌وکار
+                // انتخاب شود، فایل باید بکاپِ همان کسب‌وکار باشد و فقط دیتای آن برمی‌گردد.
+                \Filament\Forms\Components\Select::make('target_business')
+                    ->label(__('backups.restore_target'))
+                    ->helperText(__('backups.restore_target_hint'))
+                    ->options(fn () => ['' => __('backups.restore_target_full')] + $this->businessOptions())
+                    ->default('')
+                    ->native(false)
+                    ->visible(fn () => $this->hasMultipleBusinesses()),
+
                 Checkbox::make('understood')
                     ->label(__('backups.restore_understood'))
                     ->accepted()
@@ -508,8 +573,12 @@ class Backups extends Page
                     return;
                 }
 
+                $targetBusiness = filled($data['target_business'] ?? null)
+                    ? \App\Models\Business::find($data['target_business'])
+                    : null;
+
                 try {
-                    $safety = $service->restore($path);
+                    $safety = $service->restore($path, $targetBusiness);
                 } catch (\Throwable $e) {
                     Notification::make()
                         ->title(__('backups.restore_failed'))

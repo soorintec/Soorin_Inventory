@@ -40,6 +40,15 @@ return [
     'purge_activity_confirm' => 'Yes, purge',
     'purge_activity_done'    => ':count log rows deleted.',
     'purge_activity_none'    => 'There was nothing to delete.',
+
+    // Per-business backup/restore (multi-tenancy)
+    'create_business'      => 'Back up one business',
+    'create_business_hint' => 'Only the selected business\'s data is backed up (not the whole system).',
+    'which_business'       => 'Which business?',
+    'business_not_found'   => 'Business not found.',
+    'restore_target'       => 'Restore into?',
+    'restore_target_hint'  => 'Full: the whole system. Or a single business (the file must be that business\'s backup).',
+    'restore_target_full'  => 'Full (all businesses)',
     'megabyte'   => 'MB',
     'kilobyte'   => 'KB',
 

@@ -16,8 +16,15 @@ class LocalizationTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** هر زبانِ تعریف‌شده باید دقیقاً همان کلیدهای فارسی را داشته باشد — تا چیزی جا نیفتد. */
-    public function test_all_locales_have_the_same_keys_as_persian(): void
+    /**
+     * زبان‌های دیگر نباید کلیدی «اضافه» یا غلط داشته باشند که در فارسی نیست.
+     *
+     * از v1.15.0 (مرزِ همگام‌سازیِ چندزبانه) به بعد، فارسی «منبعِ حقیقت» است و
+     * می‌تواند جلوتر باشد: کلیدهای تازه فقط به fa افزوده می‌شوند و بعداً یک‌جا به
+     * زبان‌های دیگر ترجمه می‌شوند (نشانه و روش در lang/I18N-SYNC.md). پس این تست
+     * فقط زیرمجموعه‌بودن را می‌سنجد (زبانِ دیگر ⊆ فارسی)، نه برابریِ کامل را.
+     */
+    public function test_other_locales_have_no_keys_beyond_persian(): void
     {
         $faFiles = glob(lang_path('fa/*.php'));
         $this->assertNotEmpty($faFiles);
@@ -32,10 +39,12 @@ class LocalizationTest extends TestCase
 
                 $this->assertFileExists($file, "ترجمهٔ «{$locale}» برای {$name} وجود ندارد.");
 
+                $stray = array_diff($this->flatten(require $file), $this->flatten(require $faFile));
+
                 $this->assertSame(
-                    $this->flatten(require $faFile),
-                    $this->flatten(require $file),
-                    "کلیدهای {$name} بین fa و {$locale} یکسان نیستند.",
+                    [],
+                    array_values($stray),
+                    "زبانِ «{$locale}» در {$name} کلیدهایی دارد که در فارسی نیست (اضافه/غلط).",
                 );
             }
         }

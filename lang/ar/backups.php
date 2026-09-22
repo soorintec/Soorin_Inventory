@@ -39,6 +39,14 @@ return [
     'purge_activity_confirm' => 'نعم، امسح',
     'purge_activity_done'    => 'تم حذف :count صفاً من السجل.',
     'purge_activity_none'    => 'لا يوجد ما يُحذف.',
+
+    'create_business'      => 'نسخة احتياطية لنشاط واحد',
+    'create_business_hint' => 'يتم نسخ بيانات النشاط المحدد فقط (وليس النظام كله).',
+    'which_business'       => 'أي نشاط؟',
+    'business_not_found'   => 'النشاط غير موجود.',
+    'restore_target'       => 'الاستعادة إلى؟',
+    'restore_target_hint'  => 'كامل: النظام كله. أو نشاط واحد (يجب أن يكون الملف نسخة ذلك النشاط).',
+    'restore_target_full'  => 'كامل (كل الأنشطة)',
     'megabyte'   => 'ميغابايت',
     'kilobyte'   => 'كيلوبايت',
 
