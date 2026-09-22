@@ -10,6 +10,31 @@
         </ul>
     </x-filament::section>
 
+    {{-- وضعیتِ چند-کسب‌وکاری: حالتِ نصب (تک‌دیتابیس/دیتابیسِ جدا) و تعدادِ کسب‌وکارها. --}}
+    <x-filament::section>
+        <x-slot name="heading">{{ __('backups.tenancy_status') }}</x-slot>
+
+        <div class="space-y-2 text-sm">
+            <div class="flex items-center gap-2">
+                <span class="font-medium">{{ __('backups.tenancy_mode') }}:</span>
+                <x-filament::badge :color="$this->isDatabaseMode() ? 'info' : 'gray'">
+                    {{ $this->tenancyModeLabel() }}
+                </x-filament::badge>
+            </div>
+
+            <p class="text-gray-500 dark:text-gray-400">{{ $this->tenancyModeHint() }}</p>
+
+            <div>
+                <span class="font-medium">{{ __('backups.tenancy_count') }}:</span>
+                {{ \App\Support\Jalali::digits((string) $this->businessCount()) }}
+            </div>
+
+            @if ($this->isDatabaseMode())
+                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('backups.db_access_note') }}</p>
+            @endif
+        </div>
+    </x-filament::section>
+
     @if ($this->canManageBackupSettings())
         @php
             $schedOn = $this->scheduleIsOn();

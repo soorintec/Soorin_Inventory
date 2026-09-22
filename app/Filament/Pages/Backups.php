@@ -129,8 +129,44 @@ class Backups extends Page
             $this->restoreAction(),
             $this->settingsAction(),
             $this->testNetworkAction(),
+            $this->checkDbAccessAction(),
             $this->purgeActivityAction(),
         ];
+    }
+
+    /**
+     * بررسیِ دسترسیِ ساختِ دیتابیس — فقط در حالتِ database معنی دارد (VPS).
+     * یک دیتابیسِ آزمایشی می‌سازد و بلافاصله حذف می‌کند تا معلوم شود کاربرِ
+     * دیتابیس اجازهٔ ساختِ دیتابیسِ کسب‌وکارِ تازه را دارد یا نه — بدونِ اینکه
+     * وسطِ ساختِ کسب‌وکار با خطای مبهم روبه‌رو شوی.
+     */
+    private function checkDbAccessAction(): Action
+    {
+        return Action::make('checkDbAccess')
+            ->label(__('backups.db_access_check'))
+            ->icon(Heroicon::OutlinedCircleStack)
+            ->color('gray')
+            ->visible(fn () => $this->isDatabaseMode() && $this->canManageBackupSettings())
+            ->action(function (): void {
+                $probe = 'soorin_dbcheck_' . str()->lower(str()->random(6));
+
+                try {
+                    $conn = \Illuminate\Support\Facades\DB::connection(config('database.default'));
+                    $conn->statement("CREATE DATABASE `{$probe}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+                    $conn->statement("DROP DATABASE `{$probe}`");
+
+                    Notification::make()->success()
+                        ->title(__('backups.db_access_ok'))
+                        ->persistent()
+                        ->send();
+                } catch (\Throwable $e) {
+                    Notification::make()->danger()
+                        ->title(__('backups.db_access_fail'))
+                        ->body($e->getMessage())
+                        ->persistent()
+                        ->send();
+                }
+            });
     }
 
     /** کسب‌وکارهای در دسترسِ کاربرِ فعلی — برای انتخاب‌گرِ بکاپ/ری‌استورِ per-business. */
@@ -147,6 +183,40 @@ class Backups extends Page
     private function hasMultipleBusinesses(): bool
     {
         return \App\Models\Business::query()->count() > 1;
+    }
+
+    // ---------------------------------------------- وضعیتِ چند-کسب‌وکاری
+
+    /** حالتِ نصب: prefix (تک‌دیتابیس) یا database (دیتابیسِ جدا). */
+    public function tenancyMode(): string
+    {
+        return \App\Support\Tenancy::mode();
+    }
+
+    public function isDatabaseMode(): bool
+    {
+        return $this->tenancyMode() === 'database';
+    }
+
+    /** برچسبِ خواناِ حالتِ نصب. */
+    public function tenancyModeLabel(): string
+    {
+        return $this->isDatabaseMode()
+            ? __('backups.mode_database')
+            : __('backups.mode_prefix');
+    }
+
+    /** توضیحِ حالتِ نصب. */
+    public function tenancyModeHint(): string
+    {
+        return $this->isDatabaseMode()
+            ? __('backups.mode_database_hint')
+            : __('backups.mode_prefix_hint');
+    }
+
+    public function businessCount(): int
+    {
+        return \App\Models\Business::query()->count();
     }
 
     /**
